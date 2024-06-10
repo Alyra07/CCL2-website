@@ -1,12 +1,10 @@
 module.exports = {
-    mode: 'jit',
-    purge: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
-    darkMode: false,
-    theme: {
-      extend: {},
-    },
-    variants: {
-      extend: {},
-    },
-    plugins: [],
-  };
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}

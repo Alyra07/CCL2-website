@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import MyComponent from './components/MyComponent';
+import './index.css';
 
 const App = () => {
   const [data, setData] = useState('');
@@ -21,8 +22,8 @@ const App = () => {
   };
 
   return (
-    <div className="">
-      <h1>Hello World!</h1>
+    <div className="flex">
+      <h1 className='text-3xl text-red-500'>Hello World!</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" value={data} onChange={handleChange} />
         <button type="submit">Send</button>
