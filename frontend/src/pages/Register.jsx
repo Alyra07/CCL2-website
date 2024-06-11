@@ -11,7 +11,7 @@ const Register = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const { data, error } = await signUp(email, password);
+    const { error } = await signUp(email, password);
 
     if (error) {
       setMessage(`Sign up failed: ${error.message}`);
@@ -20,13 +20,13 @@ const Register = () => {
       if (user && user.id) {
         // Creating a profile
         try {
-          const response = await axios.post('/profile', {
+          await axios.post('/profile', {
             id: user.id,
             email: user.email,
             name: name,
             surname: surname
           });
-
+        
           setMessage(`Sign up successful: ${user.email}`);
         } catch (profileError) {
           setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);

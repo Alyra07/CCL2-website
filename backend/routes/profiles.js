@@ -7,29 +7,19 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const express = require('express');
 const router = express.Router();
-const { v4: uuidv4 } = require('uuid'); // Import UUID library for generating unique IDs
 
 // Endpoint to create a profile
 router.post('/', async (req, res) => {
-  try {
-    const { email, name, surname } = req.body;
+  const { id, email, name, surname } = req.body;
 
-    // Generate a unique ID for the profile
-    const id = uuidv4();
+  const { data, error } = await supabase
+    .from('users')
+    .insert([{ id, email, name, surname }]);
 
-    // Insert the new profile into the database
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert([{ id, email, name, surname, favorites: [] }]);
-
-    if (error) {
-      throw error;
-    }
-
+  if (error) {
+    res.status(500).json({ error: error.message });
+  } else {
     res.status(200).json({ message: 'Profile created successfully', data });
-  } catch (error) {
-    console.error('Error creating profile:', error.message);
-    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

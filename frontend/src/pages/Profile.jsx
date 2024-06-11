@@ -1,37 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { supabase } from '../supabaseClient';
+import { getUser } from '../auth';
 
 const Profile = () => {
-  const { id } = useParams();
-  const [profile, setProfile] = useState(null);
+  const [user, setUser] = useState(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(`/profile/${id}`);
-        setProfile(response.data);
-      } catch (error) {
-        setMessage(`Failed to fetch profile: ${error.message}`);
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    const session = await getUser();
+    if (session) {
+      const userEmail = session.user.email;
+  
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', userEmail)
+        .single();
+  
+      if (error) {
+        console.error('Error fetching profile:', error.message);
+        setMessage('Error fetching profile.');
+      } else {
+        setUser(data);
+        setMessage('Profile fetched successfully');
       }
-    };
+    } else {
+      setMessage('No user session found.');
+    }
+  };
 
-    fetchProfile();
-  }, [id]);
-
-  if (!profile) {
+  if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
     <div>
       <h2>Profile</h2>
-      <p>Email: {profile.email}</p>
-      <p>Name: {profile.name}</p>
-      <p>Surname: {profile.surname}</p>
-      {/* Display other profile info as needed */}
       <p>{message}</p>
+      <div>
+        <p>Email: {user.email}</p>
+        <p>Name: {user.name}</p>
+        <p>Surname: {user.surname}</p>
+      </div>
     </div>
   );
 };
