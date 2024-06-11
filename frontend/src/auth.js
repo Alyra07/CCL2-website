@@ -8,8 +8,8 @@ export const signIn = async (email, password) => {
   return await supabase.auth.signInWithPassword({ email, password });
 };
 
-export const signOut = async () => {
-  return supabase.auth.signOut();
+export const signOut = async (email, password) => {
+  return await supabase.auth.signOut({ email, password });
 };
 
 export const getUser = () => {
