@@ -1,14 +1,11 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const verifyToken = require('./middleware/auth');
-// routers
-const indexRouter = require('./routes/index.js');
 
 const app = express();
 const port = 3000;
@@ -25,7 +22,13 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Routers
+const indexRouter = require('./routes/index.js');
+const profilesRouter = require('./routes/profiles.js');
+
+// Use routers
 app.use('/', indexRouter);
+app.use('/profile', profilesRouter);
 
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);
