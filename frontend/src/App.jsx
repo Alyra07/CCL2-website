@@ -1,36 +1,32 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import MyComponent from './components/MyComponent';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 
+// components
+import MyComponent from './components/MyComponent';
+import NavBar from './components/NavBar';
+import Register from './pages/Register';
+import Login from './pages/Login';
+
 const App = () => {
-  const [data, setData] = useState('');
-  const [response, setResponse] = useState('');
-
-  const handleChange = (e) => {
-    setData(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('http://localhost:3000/', { data });
-      setResponse(res.data);
-    } catch (error) {
-      console.error('Error sending data', error);
-    }
-  };
-
   return (
-    <div className="flex">
-      <h1 className='text-3xl text-red-500'>Hello World!</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="text" value={data} onChange={handleChange} />
-        <button type="submit">Send</button>
-      </form>
-      <p>Response: {response}</p>
-      <MyComponent />
-    </div>
+    <Router>
+      <div className="flex flex-col h-screen">
+        <NavBar />
+        <div className="flex-grow">
+          <Routes>
+            <Route exact path="/" element={
+              <div className="flex flex-col items-center">
+                <h1 className="text-3xl text-red-500">Hello World!</h1>
+                <MyComponent />
+              </div>
+            } />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 };
 
