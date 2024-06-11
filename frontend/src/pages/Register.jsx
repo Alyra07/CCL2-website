@@ -11,25 +11,24 @@ const Register = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const { error } = await signUp(email, password);
+    const { data, error } = await signUp(email, password);
 
     if (error) {
       setMessage(`Sign up failed: ${error.message}`);
     } else {
-      const user = data.user; // Accessing the user object properly
+      const user = data.user;
       if (user && user.id) {
-        // Creating a profile
         try {
-          await axios.post('/profile', {
+          const response = await axios.post('http://localhost:3000/profile', {
             id: user.id,
             email: user.email,
             name: name,
             surname: surname
           });
-        
+
           setMessage(`Sign up successful: ${user.email}`);
         } catch (profileError) {
-          setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);
+          setMessage(`Sign up successful, but profile creation failed: ${profileError.response?.data?.error || profileError.message}`);
         }
       } else {
         setMessage('Sign up successful, but user ID is missing.');

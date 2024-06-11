@@ -1,11 +1,11 @@
 import { supabase } from "./supabaseClient";
 
 export const signUp = async (email, password) => {
-  return supabase.auth.signUp({ email, password });
+  return await supabase.auth.signUp({ email, password });
 };
 
 export const signIn = async (email, password) => {
-  return supabase.auth.signInWithPassword({ email, password });
+  return await supabase.auth.signInWithPassword({ email, password });
 };
 
 export const signOut = async () => {

@@ -1,39 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { getUser } from '../auth';
+import { useUser } from '../assets/UserContext';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
+  const [profile, setProfile] = useState(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (user) {
+      fetchUserProfile();
+    }
+  }, [user]);
 
   const fetchUserProfile = async () => {
-    const session = await getUser();
-    if (session) {
-      const userEmail = session.user.email;
-  
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('email', userEmail)
-        .single();
-  
-      if (error) {
-        console.error('Error fetching profile:', error.message);
-        setMessage('Error fetching profile.');
-      } else {
-        setUser(data);
-        setMessage('Profile fetched successfully');
-      }
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', user.email)
+      .single();
+
+    if (error) {
+      console.error('Error fetching profile:', error.message);
+      setMessage('Error fetching profile.');
     } else {
-      setMessage('No user session found.');
+      setProfile(data);
+      setMessage('Profile fetched successfully');
     }
   };
 
-  if (!user) {
+  if (!profile) {
     return <div>Loading...</div>;
   }
 
@@ -42,9 +38,9 @@ const Profile = () => {
       <h2>Profile</h2>
       <p>{message}</p>
       <div>
-        <p>Email: {user.email}</p>
-        <p>Name: {user.name}</p>
-        <p>Surname: {user.surname}</p>
+        <p>Email: {profile.email}</p>
+        <p>Name: {profile.name}</p>
+        <p>Surname: {profile.surname}</p>
       </div>
     </div>
   );
