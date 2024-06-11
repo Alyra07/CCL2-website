@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
-
 // components
 import MyComponent from './components/MyComponent';
 import NavBar from './components/NavBar';

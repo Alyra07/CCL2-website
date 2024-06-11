@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { useUser } from '../assets/UserContext';
+import { useUser } from '../UserContext';
 
 const Profile = () => {
   const { user } = useUser();
