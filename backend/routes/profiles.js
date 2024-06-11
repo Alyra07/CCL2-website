@@ -7,55 +7,30 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const express = require('express');
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid'); // Import UUID library for generating unique IDs
 
 // Endpoint to create a profile
 router.post('/', async (req, res) => {
-  const { id, email, name, surname } = req.body;
+  try {
+    const { email, name, surname } = req.body;
 
-  const { error } = await supabase
-    .from('profiles')
-    .insert([
-      { id, email, name, surname, favorites: [] } // Initialize favorites as an empty array
-    ]);
+    // Generate a unique ID for the profile
+    const id = uuidv4();
 
-  if (error) {
-    return res.status(400).json({ error: error.message });
+    // Insert the new profile into the database
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert([{ id, email, name, surname, favorites: [] }]);
+
+    if (error) {
+      throw error;
+    }
+
+    res.status(200).json({ message: 'Profile created successfully', data });
+  } catch (error) {
+    console.error('Error creating profile:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  res.status(200).json({ message: 'Profile created successfully' });
-});
-
-// Endpoint to get a profile by user id
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    return res.status(400).json({ error: error.message });
-  }
-
-  res.status(200).json(data);
-});
-
-// Endpoint to update favorites
-router.put('/favorites', async (req, res) => {
-  const { id, favorites } = req.body;
-
-  const { error } = await supabase
-    .from('profiles')
-    .update({ favorites })
-    .eq('id', id);
-
-  if (error) {
-    return res.status(400).json({ error: error.message });
-  }
-
-  res.status(200).json({ message: 'Favorites updated successfully' });
 });
 
 module.exports = router;
