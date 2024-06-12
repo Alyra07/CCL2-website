@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
+import axios from 'axios';
 import '../index.css';
 
 const Profile = () => {
   const { user } = useUser();
   const [profile, setProfile] = useState(null);
+  const [listings, setListings] = useState([]);
   const [message, setMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
   const [isEditingName, setIsEditingName] = useState(false);
@@ -27,6 +29,7 @@ const Profile = () => {
   useEffect(() => {
     if (user) {
       fetchUserProfile();
+      fetchUserListings();
     }
   }, [user]);
 
@@ -45,6 +48,16 @@ const Profile = () => {
       setNewName(data.name);
       setNewSurname(data.surname);
       setMessage('Profile fetched successfully');
+    }
+  };
+
+  const fetchUserListings = async () => {
+    try {
+      const response = await axios.get(`/api/listings/user/${user.id}`);
+      setListings(response.data);
+    } catch (error) {
+      console.error('Error fetching listings:', error.message);
+      setMessage('Error fetching listings.');
     }
   };
 
@@ -169,7 +182,21 @@ const Profile = () => {
       </div>
       <div>
         <h2 className='font-bold'>Your Places</h2>
-
+        {Array.isArray(listings) && listings.length > 0 ? (
+          listings.map(listing => (
+            <div key={listing.id} className="p-4 border-b">
+              <h3>{listing.name}</h3>
+              <p>{listing.address}</p>
+              <p>${listing.price} per night</p>
+              <p>{listing.description}</p>
+            </div>
+          ))
+        ) : (
+          <div>
+            <p>You have no listings yet...</p>
+            <Link to="/add">Add a listing</Link>
+          </div>
+        )}
       </div>
     </div>
   );

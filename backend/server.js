@@ -30,7 +30,7 @@ const listingsRoute = require('./routes/listings.js');
 // Use routers
 app.use('/', indexRoute);
 app.use('/profile', profilesRoute);
-app.use('/list', listingsRoute);
+app.use('/api/listings', listingsRoute);
 
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);
