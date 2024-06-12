@@ -9,7 +9,7 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row content-center justify-center mb-6">
+    <div className="sm:flex-row content-center justify-center">
       <input
         type="text"
         placeholder="Search place..."
@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch }) => {
         value={searchValue}
         onChange={handleSearchChange}
       />
-      <button className="ml-4">
+      <button className="ml-2 p-2">
         Search
       </button>
     </div>

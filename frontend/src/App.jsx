@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 // components
-import MyComponent from './components/MyComponent';
 import NavBar from './components/NavBar';
 // pages
 import Register from './pages/Register';
@@ -22,7 +21,6 @@ const App = () => {
             <Route exact path="/" element={
               <div className="flex flex-col items-center">
                 <h1 className="text-3xl text-red-500">Hello World!</h1>
-                <MyComponent />
               </div>
             } />
             <Route path="/list" element={<ListMain />} />
