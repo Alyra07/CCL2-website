@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { signIn } from '../auth';
+import { signIn } from '../assets/auth';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -37,6 +38,7 @@ const Login = () => {
         <button type="submit" className="p-2 bg-blue-500 text-white">Sign In</button>
       </form>
       <p className="mt-4">{message}</p>
+      <Link to="/register" className="mt-4">Don't have an account? Register here.</Link>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { useUser } from '../UserContext';
+import { useUser } from '../assets/UserContext.jsx';
 import '../index.css';
 
 const Profile = () => {

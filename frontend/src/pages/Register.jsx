@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signUp } from '../auth';
+import { signUp } from '../assets/auth';
 import axios from 'axios';
 
 const Register = () => {

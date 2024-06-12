@@ -4,11 +4,15 @@ import './index.css';
 // components
 import MyComponent from './components/MyComponent';
 import NavBar from './components/NavBar';
+// pages
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import ListMain from './pages/ListMain';
+import DetailsPage from './pages/DetailsPage';
 
 const App = () => {
+
   return (
     <Router>
       <div className="flex flex-col h-screen">
@@ -21,6 +25,8 @@ const App = () => {
                 <MyComponent />
               </div>
             } />
+            <Route path="/list" element={<ListMain />} />
+            <Route path="/stay" element={<DetailsPage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
