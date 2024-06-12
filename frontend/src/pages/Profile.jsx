@@ -58,7 +58,7 @@ const Profile = () => {
       if (error) {
         throw error;
       }
-
+      // Update profile image in state
       setMessage('Profile image updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, image: selectedImage }));
     } catch (error) {
@@ -110,7 +110,7 @@ const Profile = () => {
   if (!profile) {
     return (
       <div>
-        <h2>Profile</h2>
+        <h2 className='font-bold'>Profile</h2>
         <p>
           You are not logged in. Please sign in here: 
           <Link to="/login">Login</Link>
@@ -121,7 +121,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h2>Profile</h2>
+      <h2 className='font-bold'>Profile</h2>
       <p>{message}</p>
       <div>
         <p>Profile Picture:</p>
@@ -135,6 +135,7 @@ const Profile = () => {
         </select>
         <button onClick={handleImageChange}>Set Profile Picture</button>
       </div>
+      {/* User Data Display */}
       <div>
         <p>Email: {profile.email}</p>
         <p>
@@ -165,6 +166,10 @@ const Profile = () => {
             {isEditingSurname ? 'Save' : 'Edit'}
           </button>
         </p>
+      </div>
+      <div>
+        <h2 className='font-bold'>My Accommodations</h2>
+
       </div>
     </div>
   );

@@ -1,19 +1,46 @@
-  import React, { useState } from 'react';
-  import SearchBar from '../components/SearchBar';
+import React, { useEffect, useState } from 'react';
+import { fetchListings } from '../assets/apiListings';
+import SearchBar from '../components/SearchBar';
   
   const ListMain = () => {
     // search in list
     const [searchTerm, setSearchTerm] = useState('');
-    const [list] = useState([]);
+    const [listings, setListings] = useState([]);
+
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const data = await fetchListings();
+          setListings(data); // Adjust based on the structure of the API response
+          console.log(data);
+        } catch (error) {
+          console.error("Error fetching listings:", error);
+        }
+      };
   
-    const searchResults = list.filter(result => 
-      (result.title ? result.title.toLowerCase().includes(searchTerm.toLowerCase()) : false)
-    );
+      getData();
+    }, []);
   
     return (
-      <div className="flex flex-col items-center">
-        <h1 className="text-3xl text-red-500">List Main</h1>
-        <SearchBar onSearch={setSearchTerm}/>
+      <div>
+        <div className="flex flex-col items-center">
+          <h1 className="text-3xl text-red-500">List Main</h1>
+          <SearchBar onSearch={setSearchTerm}/>
+        </div>
+        <div>
+          {listings.length === 0 ? (
+            <p>No listings available</p>
+          ) : (
+            listings.map((listing, index) => (
+              <div key={index} className="listing">
+                <h2>{listing.name}</h2>
+                <p>{listing.address}</p>
+                <p>{listing.price}</p>
+                <p>{listing.description}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     );
   }

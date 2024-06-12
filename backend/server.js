@@ -5,10 +5,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
-const verifyToken = require('./middleware/auth');
+const verifyToken = require('./middleware/verifyToken');
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.use(cors());
 app.use(fileUpload({ createParentPath: true }));
@@ -23,12 +23,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routers
-const indexRouter = require('./routes/index.js');
-const profilesRouter = require('./routes/profiles.js');
+const indexRoute = require('./routes/index.js');
+const profilesRoute = require('./routes/profiles.js');
+const listingsRoute = require('./routes/listings.js');
 
 // Use routers
-app.use('/', indexRouter);
-app.use('/profile', profilesRouter);
+app.use('/', indexRoute);
+app.use('/profile', profilesRoute);
+app.use('/list', listingsRoute);
 
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);
