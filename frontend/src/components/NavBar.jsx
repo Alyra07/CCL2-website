@@ -11,7 +11,7 @@ const NavBar = () => {
         alt="hotel room icon" />
         </a>
         <Link className="mx-4" to="/list">Find Stays</Link>
-        <Link className="mr-4" to="/">Become Host</Link>
+        <Link className="mr-4" to="/add">Become A Host</Link>
       </div>
       <div className='flex flex-row items-center justify-right'>
         <Link className="mr-4" to="/">Home</Link>

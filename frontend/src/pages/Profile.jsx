@@ -168,7 +168,7 @@ const Profile = () => {
         </p>
       </div>
       <div>
-        <h2 className='font-bold'>My Accommodations</h2>
+        <h2 className='font-bold'>Your Places</h2>
 
       </div>
     </div>

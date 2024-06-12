@@ -9,6 +9,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import ListMain from './pages/ListMain';
 import DetailsPage from './pages/DetailsPage';
+import AddListing from './pages/AddListing';
 
 const App = () => {
 
@@ -16,7 +17,7 @@ const App = () => {
     <Router>
       <div className="flex flex-col h-screen">
         <NavBar />
-        <div className="flex-grow">
+        <div className="flex-grow p-4">
           <Routes>
             <Route exact path="/" element={
               <div className="flex flex-col items-center">
@@ -25,6 +26,7 @@ const App = () => {
             } />
             <Route path="/list" element={<ListMain />} />
             <Route path="/stay" element={<DetailsPage />} />
+            <Route path="/add" element={<AddListing />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
