@@ -14,7 +14,7 @@ router.get('/user/:userId', async (req, res) => {
     const { data: listings, error } = await supabase
       .from('listings')
       .select('*')
-      .eq('userId', userId);
+      .eq('user_id', userId);
 
     if (error) {
       throw error;

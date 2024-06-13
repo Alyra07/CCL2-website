@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
-import axios from 'axios';
 import '../index.css';
 
 const Profile = () => {
@@ -15,7 +14,7 @@ const Profile = () => {
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
   const [newSurname, setNewSurname] = useState('');
-
+  // profile image paths (predefined for simplicity)
   const imagePaths = [
     '/img/profile-img1.png',
     '/img/profile-img2.png',
@@ -26,6 +25,7 @@ const Profile = () => {
     '/img/profile-img-meme.jpeg',
   ];
 
+  // fetch user profile and listings on user change
   useEffect(() => {
     if (user) {
       fetchUserProfile();
@@ -53,15 +53,25 @@ const Profile = () => {
 
   const fetchUserListings = async () => {
     try {
-      const response = await axios.get(`/api/listings/user/${user.id}`);
+      const response = await supabase
+        .from('listings')
+        .select('*')
+        .eq('user_id', user.id);
+
+      if (response.error) {
+        throw response.error;
+      }
+
       setListings(response.data);
+
     } catch (error) {
       console.error('Error fetching listings:', error.message);
       setMessage('Error fetching listings.');
     }
   };
-
+  
   const handleImageChange = async () => {
+    // Update profile image in the database
     try {
       const { data, error } = await supabase
         .from('users')
@@ -71,7 +81,7 @@ const Profile = () => {
       if (error) {
         throw error;
       }
-      // Update profile image in state
+      // Update profile image in the state
       setMessage('Profile image updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, image: selectedImage }));
     } catch (error) {
@@ -119,7 +129,7 @@ const Profile = () => {
       setMessage('Error updating profile surname.');
     }
   };
-
+  // if not logged in, display message to sign in
   if (!profile) {
     return (
       <div>
@@ -136,6 +146,7 @@ const Profile = () => {
     <div>
       <h2 className='font-bold'>Profile</h2>
       <p>{message}</p>
+      {/* Profile Picture */}
       <div>
         <p>Profile Picture:</p>
         <img src={profile.image} alt="Profile" style={{ width: '300px', height: '300px' }} />
@@ -148,7 +159,7 @@ const Profile = () => {
         </select>
         <button onClick={handleImageChange}>Set Profile Picture</button>
       </div>
-      {/* User Data Display */}
+      {/* User Data Display with Edit */}
       <div>
         <p>Email: {profile.email}</p>
         <p>
@@ -180,6 +191,7 @@ const Profile = () => {
           </button>
         </p>
       </div>
+      {/* User Listings */}
       <div>
         <h2 className='font-bold'>Your Places</h2>
         {Array.isArray(listings) && listings.length > 0 ? (
@@ -188,6 +200,7 @@ const Profile = () => {
               <h3>{listing.name}</h3>
               <p>{listing.address}</p>
               <p>${listing.price} per night</p>
+              <p>{listing.guests}</p>
             </div>
           ))
         ) : (
@@ -196,6 +209,7 @@ const Profile = () => {
             <Link to="/add">Add a listing</Link>
           </div>
         )}
+        <Link to="/add">Add a listing</Link>
       </div>
     </div>
   );
