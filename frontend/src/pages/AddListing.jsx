@@ -50,12 +50,6 @@ const AddListing = () => {
         }
     };
 
-    // const handleImageChange = (index, e) => {
-    //     const newImages = [...form.images];
-    //     newImages[index] = e.target.files[0];
-    //     setForm({ ...form, images: newImages });
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -63,30 +57,6 @@ const AddListing = () => {
             setMessage('User is not logged in.');
             return;
         }
-
-        // const bucketName = 'images';
-
-        // const imageUrls = await Promise.all(
-        //     form.images.map(async (image) => {
-        //         if (image) {
-        //             const { data, error } = await supabase
-        //                 .storage
-        //                 .from(bucketName)
-        //                 .upload(`public/${image.name}`, image);
-
-        //             if (error) {
-        //                 console.error('Error uploading image:', error.message);
-        //                 setMessage('Error uploading image.');
-        //                 return '';
-        //             }
-        //             const { publicURL } = supabase.storage
-        //                 .from(bucketName)
-        //                 .getPublicUrl(`public/${image.name}`);
-        //             return publicURL;
-        //         }
-        //         return '';
-        //     })
-        // );
 
         const listingData = {
             ...form,

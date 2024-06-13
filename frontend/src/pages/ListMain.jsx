@@ -11,7 +11,7 @@ import SearchBar from '../components/SearchBar';
       const getData = async () => {
         try {
           const data = await fetchAllListings();
-          setListings(data); // Adjust based on the structure of the API response
+          setListings(data);
         } catch (error) {
           console.error("Error fetching listings:", error);
         }

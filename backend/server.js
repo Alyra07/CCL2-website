@@ -23,11 +23,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routers
-const indexRoute = require('./routes/index.js');
 const profilesRoute = require('./routes/profiles.js');
 
 // Use routers
-app.use('/', indexRoute);
 app.use('/profile', profilesRoute);
 
 app.get('/protected', verifyToken, (req, res) => {
