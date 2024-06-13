@@ -39,8 +39,11 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-3xl text-red-500">Hello World!</h1>
-      <SearchBar onSearch={handleSearch} countries={countries} />
+      <h1 className="text-4xl text-red-500 mb-4">Hello World!</h1>
+      <div className="text-center">
+        <h3 className='text-lg'>Search for your next stay now!</h3>
+        <SearchBar onSearch={handleSearch} countries={countries} />
+      </div>
     </div>
   );
 }

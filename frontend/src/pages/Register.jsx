@@ -37,36 +37,47 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Surname"
-          value={surname}
-          onChange={(e) => setSurname(e.target.value)}
-        />
-        <button type="submit">Sign Up</button>
-      </form>
-      <p>{message}</p>
+    <div className="flex items-center justify-center bg-background">
+      <div className="w-full max-w-md min-w-sm bg-white rounded-lg shadow-lg mt-20 p-8">
+        <h2 className="text-2xl font-bold text-primary mb-6 text-center">Register</h2>
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <input
+            type="text"
+            placeholder="Surname"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <button
+            type="submit"
+            className="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition duration-300"
+          >
+            Sign Up
+          </button>
+        </form>
+        {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+      </div>
     </div>
   );
 };
