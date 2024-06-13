@@ -63,7 +63,7 @@ const AddListing = () => {
             return;
         }
 
-        const bucketName = 'listings';
+        const bucketName = 'images';
 
         const imageUrls = await Promise.all(
             form.images.map(async (image) => {
