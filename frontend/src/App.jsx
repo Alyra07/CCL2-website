@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import ListMain from './pages/ListMain';
 import DetailsPage from './pages/DetailsPage';
 import AddListing from './pages/AddListing';
+import DetailsListing from './pages/DetailsListing';
 
 const App = () => {
 
@@ -23,10 +24,11 @@ const App = () => {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/list" element={<ListMain />} />
             <Route path="/list/:id" element={<DetailsPage />} />
-            <Route path="/add" element={<AddListing />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/add" element={<AddListing />} />
+            <Route path="/profile/listing/:id" element={<DetailsListing />} />
           </Routes>
         </div>
       </div>
