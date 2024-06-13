@@ -37,3 +37,21 @@ export const fetchListingById = async (id) => {
       throw new Error(`Error fetching listing with ID ${id}.`);
   }
 };
+
+export const updateListing = async (id, updatedFields) => {
+  try {
+    const { data, error } = await supabase
+      .from('listings')
+      .update(updatedFields)
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Error updating listing with ID ${id}:`, error.message);
+    throw new Error(`Error updating listing with ID ${id}.`);
+  }
+};

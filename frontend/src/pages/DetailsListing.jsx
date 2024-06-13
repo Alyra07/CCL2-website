@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { updateListing } from '../assets/listings';
 
 const DetailsListing = () => {
   const { id } = useParams();
@@ -31,8 +32,16 @@ const DetailsListing = () => {
     }
   };
 
-  const handleEdit = () => {
-    navigate.push(`/profile/listing/${id}/edit`);
+  const handleEdit = async (updatedFields) => {
+    try {
+      await updateListing(id, updatedFields);
+      setMessage('Listing updated successfully');
+      // Refresh the listing or navigate as needed
+      fetchListing();
+    } catch (error) {
+      console.error('Error updating listing:', error.message);
+      setMessage('Error updating listing.');
+    }
   };
 
   const handleDelete = async () => {
@@ -47,8 +56,7 @@ const DetailsListing = () => {
       }
 
       setMessage('Listing deleted successfully');
-      // Optionally, navigate back to profile or another page after deletion
-      navigate.push('/profile');
+      navigate('/profile'); // Corrected navigation
     } catch (error) {
       console.error('Error deleting listing:', error.message);
       setMessage('Error deleting listing.');
