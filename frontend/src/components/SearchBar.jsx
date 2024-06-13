@@ -6,11 +6,22 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
   const [startDate, setStartDate] = useState(initialValues?.startDate || '');
   const [endDate, setEndDate] = useState(initialValues?.endDate || '');
 
+  // Handle initialization of country when countries array changes
   useEffect(() => {
     if (countries.length > 0 && country === '') {
-      setCountry('all'); // Default to 'Just take me away'
+      setCountry('all'); // Default to 'Just take me away' when countries are available
     }
   }, [countries]);
+
+  // Update state when initialValues change
+  useEffect(() => {
+    if (initialValues) {
+      setCountry(initialValues.country || '');
+      setGuests(initialValues.guests || '');
+      setStartDate(initialValues.startDate || '');
+      setEndDate(initialValues.endDate || '');
+    }
+  }, [initialValues]);
 
   const handleSearch = () => {
     onSearch({ country, guests, startDate, endDate });
