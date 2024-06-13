@@ -25,12 +25,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routers
 const indexRoute = require('./routes/index.js');
 const profilesRoute = require('./routes/profiles.js');
-const listingsRoute = require('./routes/listings.js');
 
 // Use routers
 app.use('/', indexRoute);
 app.use('/profile', profilesRoute);
-app.use('/api/listings', listingsRoute);
 
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);

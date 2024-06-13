@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchListings } from '../assets/apiListings';
+import { fetchListings } from '../assets/listings';
 import SearchBar from '../components/SearchBar';
   
   const ListMain = () => {
