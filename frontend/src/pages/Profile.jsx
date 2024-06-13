@@ -204,10 +204,7 @@ const Profile = () => {
             </div>
           ))
         ) : (
-          <div>
-            <p>You have no listings yet...</p>
-            <Link to="/add">Add a listing</Link>
-          </div>
+          <p>You have no listings yet...</p>
         )}
         <Link to="/add">Add a listing</Link>
       </div>

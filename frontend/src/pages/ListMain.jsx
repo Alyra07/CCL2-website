@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchListings } from '../assets/listings';
+import { fetchAllListings } from '../assets/listings';
 import SearchBar from '../components/SearchBar';
   
   const ListMain = () => {
@@ -10,7 +10,7 @@ import SearchBar from '../components/SearchBar';
     useEffect(() => {
       const getData = async () => {
         try {
-          const data = await fetchListings();
+          const data = await fetchAllListings();
           setListings(data); // Adjust based on the structure of the API response
         } catch (error) {
           console.error("Error fetching listings:", error);
