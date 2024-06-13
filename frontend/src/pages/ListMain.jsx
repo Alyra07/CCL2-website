@@ -1,47 +1,80 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
 import SearchBar from '../components/SearchBar';
-  
-  const ListMain = () => {
-    // search in list
-    const [searchTerm, setSearchTerm] = useState('');
-    const [listings, setListings] = useState([]);
 
-    useEffect(() => {
-      const getData = async () => {
-        try {
-          const data = await fetchAllListings();
-          setListings(data);
-        } catch (error) {
-          console.error("Error fetching listings:", error);
+const ListMain = () => {
+  const location = useLocation();
+  const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
+  const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await fetchAllListings();
+        setListings(data);
+
+        // Extract unique countries from the listings
+        const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
+        setCountries(uniqueCountries);
+
+        if (!location.state?.filteredListings) {
+          setFilteredListings(data);
         }
-      };
-  
-      getData();
-    }, []);
-  
-    return (
-      <div>
-        <div className="flex flex-col items-center">
-          <h1 className="text-3xl text-red-500">List Main</h1>
-          <SearchBar onSearch={setSearchTerm}/>
-        </div>
-        <div>
-          {listings.length === 0 ? (
-            <p>No listings available</p>
-          ) : (
-            listings.map((listing, index) => (
-              <div key={index} className="listing">
-                <h2>{listing.name}</h2>
-                <p>{listing.address}</p>
-                <p>{listing.price}</p>
-                <p>{listing.description}</p>
-              </div>
-            ))
-          )}
-        </div>
+      } catch (error) {
+        console.error("Error fetching listings:", error);
+      }
+    };
+
+    getData();
+  }, [location.state?.filteredListings]);
+
+  useEffect(() => {
+    // Always filter listings based on the current search criteria
+    filterListings();
+  }, [searchCriteria, listings]);
+
+  const filterListings = () => {
+    const { country, guests, startDate, endDate } = searchCriteria;
+
+    const filtered = listings.filter((listing) => {
+      const matchesCountry = country === 'all' || (country ? (listing.country?.toLowerCase().includes(country.toLowerCase()) ?? false) : true);
+      const matchesGuests = guests ? listing.guests >= guests : true;
+      const matchesStartDate = startDate ? new Date(listing.availability.start) <= new Date(startDate) : true;
+      const matchesEndDate = endDate ? new Date(listing.availability.end) >= new Date(endDate) : true;
+
+      return matchesCountry && matchesGuests && matchesStartDate && matchesEndDate;
+    });
+
+    setFilteredListings(filtered);
+  };
+
+  return (
+    <div>
+      <div className="flex flex-col items-center">
+        <h1 className="text-3xl text-red-500">List Main</h1>
+        <SearchBar onSearch={setSearchCriteria} countries={countries} initialValues={searchCriteria} />
       </div>
-    );
-  }
-  
-  export default ListMain;
+      <div>
+        {filteredListings.length === 0 ? (
+          <p>No listings available</p>
+        ) : (
+          filteredListings.map((listing, index) => (
+            <div key={index} className="listing">
+              <h2>{listing.name}</h2>
+              <p>{listing.address}</p>
+              <p>{listing.country}</p>
+              <p>{listing.price}</p>
+              <p>{listing.guests}</p>
+              <p>Available from {listing.availability.start} to {listing.availability.end}</p>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ListMain;

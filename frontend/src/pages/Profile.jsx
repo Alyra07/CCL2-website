@@ -199,6 +199,7 @@ const Profile = () => {
             <div key={listing.id} className="p-4 border-b">
               <h3>{listing.name}</h3>
               <p>{listing.address}</p>
+              <p>{listing.country}</p>
               <p>${listing.price} per night</p>
               <p>{listing.guests}</p>
             </div>
