@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
 import SearchBar from '../components/SearchBar';
 
 const ListMain = () => {
-  const [searchCriteria, setSearchCriteria] = useState({});
+  const location = useLocation();
+  const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
   const [listings, setListings] = useState([]);
-  const [filteredListings, setFilteredListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -13,20 +15,24 @@ const ListMain = () => {
       try {
         const data = await fetchAllListings();
         setListings(data);
-        setFilteredListings(data);
 
         // Extract unique countries from the listings
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
         setCountries(uniqueCountries);
+
+        if (!location.state?.filteredListings) {
+          setFilteredListings(data);
+        }
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
     };
 
     getData();
-  }, []);
+  }, [location.state?.filteredListings]);
 
   useEffect(() => {
+    // Always filter listings based on the current search criteria
     filterListings();
   }, [searchCriteria, listings]);
 
@@ -49,11 +55,11 @@ const ListMain = () => {
     <div>
       <div className="flex flex-col items-center">
         <h1 className="text-3xl text-red-500">List Main</h1>
-        <SearchBar onSearch={setSearchCriteria} countries={countries} />
+        <SearchBar onSearch={setSearchCriteria} countries={countries} initialValues={searchCriteria} />
       </div>
       <div>
         {filteredListings.length === 0 ? (
-          <p>Sorry, no listings available for your search criteria...</p>
+          <p>No listings available</p>
         ) : (
           filteredListings.map((listing, index) => (
             <div key={index} className="listing">

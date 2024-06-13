@@ -4,6 +4,7 @@ import './index.css';
 // components
 import NavBar from './components/NavBar';
 // pages
+import HomePage from './pages/HomePage';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
@@ -19,11 +20,7 @@ const App = () => {
         <NavBar />
         <div className="flex-grow p-4">
           <Routes>
-            <Route exact path="/" element={
-              <div className="flex flex-col items-center">
-                <h1 className="text-3xl text-red-500">Hello World!</h1>
-              </div>
-            } />
+            <Route exact path="/" element={<HomePage />} />
             <Route path="/list" element={<ListMain />} />
             <Route path="/stay" element={<DetailsPage />} />
             <Route path="/add" element={<AddListing />} />
