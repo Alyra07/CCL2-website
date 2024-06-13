@@ -7,6 +7,7 @@ const AddListing = () => {
     const [form, setForm] = useState({
         name: '',
         address: '',
+        country: '',
         price: '',
         guests: '',
         description: '',
@@ -76,6 +77,7 @@ const AddListing = () => {
             setForm({
                 name: '',
                 address: '',
+                country: '',
                 price: '',
                 guests: '',
                 description: '',
@@ -105,6 +107,8 @@ const AddListing = () => {
                     <input type="text" name="name" id="name" value={form.name} onChange={handleChange} />
                     <label htmlFor="address">Address:</label>
                     <input type="text" name="address" id="address" value={form.address} onChange={handleChange} />
+                    <label htmlFor="country">Country:</label>
+                    <input type="text" name="country" id="country" value={form.country} onChange={handleChange} />
                     <label htmlFor="price">Price/night:</label>
                     <input type="text" name="price" id="price" value={form.price} onChange={handleChange} />
                     <label htmlFor="guests">Guests:</label>
