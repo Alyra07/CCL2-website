@@ -23,10 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routers
-const profilesRoute = require('./routes/profiles.js');
+const usersRoute = require('./routes/users.js');
 
 // Use routers
-app.use('/profile', profilesRoute);
+app.use('/profile', usersRoute);
 
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);

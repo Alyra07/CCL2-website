@@ -11,7 +11,7 @@ const AddListing = () => {
         price: '',
         guests: '',
         description: '',
-        // images: ['', '', ''],
+        images: ['', '', ''],
         amenities: {
             wifi: false,
             kitchen: false,
@@ -51,24 +51,32 @@ const AddListing = () => {
         }
     };
 
+    const handleImageChange = (index, e) => {
+        const newImages = [...form.images];
+        newImages[index] = e.target.files[0];
+        setForm({ ...form, images: newImages });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (!user) {
             setMessage('User is not logged in.');
             return;
         }
-
+    
+        const imageUrls = []; // Store image URLs to be saved in the database
+    
         const listingData = {
             ...form,
-            // images: imageUrls,
+            images: imageUrls.filter(url => url !== ''), // Filter out any empty strings
             user_id: user.id,
         };
-
+    
         const { data, error } = await supabase
             .from('listings')
             .insert([listingData]);
-
+    
         if (error) {
             console.error('Error adding listing:', error.message);
             setMessage('Error adding listing.');
@@ -81,7 +89,7 @@ const AddListing = () => {
                 price: '',
                 guests: '',
                 description: '',
-                // images: ['', '', ''],
+                images: ['', '', ''],
                 amenities: {
                     wifi: false,
                     kitchen: false,
@@ -116,7 +124,7 @@ const AddListing = () => {
                     <label htmlFor="description">Description:</label>
                     <textarea name="description" id="description" value={form.description} onChange={handleChange} />
                 </div>
-                {/* <div className="flex flex-col md:w-96 p-2">
+                <div className="flex flex-col md:w-96 p-2">
                     <h2 className="text-xl">Images</h2>
                     <hr className="mt-2 mb-4" />
                     {form.images.map((image, index) => (
@@ -125,7 +133,7 @@ const AddListing = () => {
                             <input type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
                         </div>
                     ))}
-                </div> */}
+                </div>
                 <div className="flex flex-col md:w-96 p-2">
                     <h2 className="text-xl">Amenities</h2>
                     <hr className="mt-2 mb-4" />

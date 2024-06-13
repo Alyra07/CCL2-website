@@ -42,6 +42,14 @@ const DetailsPage = () => {
             <p>{listing.price}</p>
             <p>{listing.guests}</p>
             <p>Available from {listing.availability.start} to {listing.availability.end}</p>
+            <p>Amenities: 
+                {listing.amenities.wifi && 'Wifi'} 
+                {listing.amenities.kitchen && 'Kitchen'} 
+                {listing.amenities.parking && 'Parking'} 
+                {listing.amenities.pool && 'Pool'}
+            </p>
+            <p>{listing.description}</p>
+            <p>{listing.images}</p>
             <button onClick={handleBack}>Back</button>
         </div>
     );

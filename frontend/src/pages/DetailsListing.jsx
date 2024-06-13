@@ -112,6 +112,12 @@ const DetailsListing = () => {
       <p>${listing.price} per night</p>
       <p>{listing.guests}</p>
       <p>Available from {listing.availability.start} to {listing.availability.end}</p>
+      <p>Amenities:
+        {listing.amenities.wifi && 'Wifi'}
+        {listing.amenities.kitchen && 'Kitchen'}
+        {listing.amenities.parking && 'Parking'}
+        {listing.amenities.pool && 'Pool'}
+      </p>
 
       {editMode ? (
         <div>
