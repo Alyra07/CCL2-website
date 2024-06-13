@@ -1,22 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 
-// Mock data store, replace with your database logic
 let listings = [];
 
 const addListing = async (req, res) => {
     try {
         const { userId, name, address, price, description, amenities, startDate, endDate } = req.body;
         // const images = req.files ? req.files.images : [];
-
-        // Upload images to Supabase Storage
-        // const imageUrls = await Promise.all(images.map(async (image) => {
-        //     const { data, error } = await supabase.storage.from('images').upload(image.name, image.data);
-        //     if (error) {
-        //         console.error('Error uploading image:', error.message);
-        //         throw new Error('Error uploading image to storage');
-        //     }
-        //     return `${process.env.SUPABASE_URL}/storage/v1/object/images/public/${data.Key}`;
-        // }));
 
         // Create new listing object with image URLs
         const newListing = {

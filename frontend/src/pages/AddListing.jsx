@@ -143,6 +143,16 @@ const AddListing = () => {
                     <textarea name="description" id="description" value={form.description} onChange={handleChange} />
                 </div>
                 {/* <div className="flex flex-col md:w-96 p-2">
+                    <h2 className="text-xl">Images</h2>
+                    <hr className="mt-2 mb-4" />
+                    {form.images.map((image, index) => (
+                        <div key={index}>
+                            <label htmlFor={`image${index}`}>Image {index + 1}:</label>
+                            <input type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
+                        </div>
+                    ))}
+                </div> */}
+                <div className="flex flex-col md:w-96 p-2">
                     <h2 className="text-xl">Amenities</h2>
                     <hr className="mt-2 mb-4" />
                     {Object.keys(form.amenities).map(amenity => (
@@ -151,7 +161,7 @@ const AddListing = () => {
                             <input type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
                         </div>
                     ))}
-                </div> */}
+                </div>
                 <div className="flex flex-col md:w-80 p-2">
                     <h2 className="text-xl">Availability</h2>
                     <hr className="mt-2 mb-4" />
