@@ -53,17 +53,16 @@ const Profile = () => {
 
   const fetchUserListings = async () => {
     try {
-      const response = await supabase
+      const { data, error } = await supabase
         .from('listings')
         .select('*')
         .eq('user_id', user.id);
 
-      if (response.error) {
-        throw response.error;
+      if (error) {
+        throw error;
       }
 
-      setListings(response.data);
-
+      setListings(data);
     } catch (error) {
       console.error('Error fetching listings:', error.message);
       setMessage('Error fetching listings.');
@@ -202,6 +201,7 @@ const Profile = () => {
               <p>{listing.country}</p>
               <p>${listing.price} per night</p>
               <p>{listing.guests}</p>
+              <Link to={`/profile/listing/${listing.id}`}>View Details</Link>
             </div>
           ))
         ) : (

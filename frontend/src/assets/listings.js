@@ -17,3 +17,41 @@ export const fetchAllListings = async () => {
       setMessage('Error fetching listings.');
     }
 };
+
+export const fetchListingById = async (id) => {
+  try {
+      const { data, error } = await supabase
+          .from('listings')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+      if (error) {
+          throw error;
+      }
+
+      return data;
+
+  } catch (error) {
+      console.error(`Error fetching listing with ID ${id}:`, error.message);
+      throw new Error(`Error fetching listing with ID ${id}.`);
+  }
+};
+
+export const updateListing = async (id, updatedFields) => {
+  try {
+    const { data, error } = await supabase
+      .from('listings')
+      .update(updatedFields)
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
+    return data; // Return updated data if needed
+  } catch (error) {
+    console.error(`Error updating listing with ID ${id}:`, error.message);
+    throw new Error(`Error updating listing with ID ${id}.`);
+  }
+};
