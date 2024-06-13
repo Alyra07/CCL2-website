@@ -8,8 +8,9 @@ const AddListing = () => {
         name: '',
         address: '',
         price: '',
+        guests: '',
         description: '',
-        images: ['', '', ''],
+        // images: ['', '', ''],
         amenities: {
             wifi: false,
             kitchen: false,
@@ -49,11 +50,11 @@ const AddListing = () => {
         }
     };
 
-    const handleImageChange = (index, e) => {
-        const newImages = [...form.images];
-        newImages[index] = e.target.files[0];
-        setForm({ ...form, images: newImages });
-    };
+    // const handleImageChange = (index, e) => {
+    //     const newImages = [...form.images];
+    //     newImages[index] = e.target.files[0];
+    //     setForm({ ...form, images: newImages });
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,33 +64,33 @@ const AddListing = () => {
             return;
         }
 
-        const bucketName = 'images';
+        // const bucketName = 'images';
 
-        const imageUrls = await Promise.all(
-            form.images.map(async (image) => {
-                if (image) {
-                    const { data, error } = await supabase
-                        .storage
-                        .from(bucketName)
-                        .upload(`public/${image.name}`, image);
+        // const imageUrls = await Promise.all(
+        //     form.images.map(async (image) => {
+        //         if (image) {
+        //             const { data, error } = await supabase
+        //                 .storage
+        //                 .from(bucketName)
+        //                 .upload(`public/${image.name}`, image);
 
-                    if (error) {
-                        console.error('Error uploading image:', error.message);
-                        setMessage('Error uploading image.');
-                        return '';
-                    }
-                    const { publicURL } = supabase.storage
-                        .from(bucketName)
-                        .getPublicUrl(`public/${image.name}`);
-                    return publicURL;
-                }
-                return '';
-            })
-        );
+        //             if (error) {
+        //                 console.error('Error uploading image:', error.message);
+        //                 setMessage('Error uploading image.');
+        //                 return '';
+        //             }
+        //             const { publicURL } = supabase.storage
+        //                 .from(bucketName)
+        //                 .getPublicUrl(`public/${image.name}`);
+        //             return publicURL;
+        //         }
+        //         return '';
+        //     })
+        // );
 
         const listingData = {
             ...form,
-            images: imageUrls,
+            // images: imageUrls,
             user_id: user.id,
         };
 
@@ -106,8 +107,9 @@ const AddListing = () => {
                 name: '',
                 address: '',
                 price: '',
+                guests: '',
                 description: '',
-                images: ['', '', ''],
+                // images: ['', '', ''],
                 amenities: {
                     wifi: false,
                     kitchen: false,
@@ -135,20 +137,12 @@ const AddListing = () => {
                     <input type="text" name="address" id="address" value={form.address} onChange={handleChange} />
                     <label htmlFor="price">Price/night:</label>
                     <input type="text" name="price" id="price" value={form.price} onChange={handleChange} />
+                    <label htmlFor="guests">Guests:</label>
+                    <input type="number" name="guests" id="guests" value={form.guests} onChange={handleChange} />
                     <label htmlFor="description">Description:</label>
                     <textarea name="description" id="description" value={form.description} onChange={handleChange} />
                 </div>
-                <div className="flex flex-col md:w-80 p-2">
-                    <h2 className="text-xl">Upload images</h2>
-                    <hr className="mt-2 mb-4" />
-                    {form.images.map((image, index) => (
-                        <div key={index}>
-                            <label htmlFor={`image-${index}`}>Image:</label>
-                            <input type="file" name={`image-${index}`} id={`image-${index}`} onChange={(e) => handleImageChange(index, e)} />
-                        </div>
-                    ))}
-                </div>
-                <div className="flex flex-col md:w-96 p-2">
+                {/* <div className="flex flex-col md:w-96 p-2">
                     <h2 className="text-xl">Amenities</h2>
                     <hr className="mt-2 mb-4" />
                     {Object.keys(form.amenities).map(amenity => (
@@ -157,7 +151,7 @@ const AddListing = () => {
                             <input type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
                         </div>
                     ))}
-                </div>
+                </div> */}
                 <div className="flex flex-col md:w-80 p-2">
                     <h2 className="text-xl">Availability</h2>
                     <hr className="mt-2 mb-4" />

@@ -188,7 +188,6 @@ const Profile = () => {
               <h3>{listing.name}</h3>
               <p>{listing.address}</p>
               <p>${listing.price} per night</p>
-              <p>{listing.description}</p>
             </div>
           ))
         ) : (
