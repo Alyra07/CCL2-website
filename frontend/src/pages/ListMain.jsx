@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
 import SearchBar from '../components/SearchBar';
 
 const ListMain = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
   const [listings, setListings] = useState([]);
   const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
@@ -51,6 +52,10 @@ const ListMain = () => {
     setFilteredListings(filtered);
   };
 
+  const handleListingClick = (id) => {
+    navigate(`/list/${id}`);
+  };
+
   return (
     <div>
       <div className="flex flex-col items-center">
@@ -62,7 +67,7 @@ const ListMain = () => {
           <p>No listings available</p>
         ) : (
           filteredListings.map((listing, index) => (
-            <div key={index} className="listing">
+            <div key={index} className="listing" onClick={() => handleListingClick(listing.id)}>
               <h2>{listing.name}</h2>
               <p>{listing.address}</p>
               <p>{listing.country}</p>
