@@ -18,34 +18,49 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <h2 className="text-3xl mb-8">Login</h2>
-      <form onSubmit={handleSignIn} className="flex flex-col">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="mb-2 p-2 border border-gray-400 rounded-md"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="mb-2 p-2 border border-gray-400 rounded-md"
-        />
-        <button 
-          type="submit" 
-          className="p-2 mt-2 bg-primary hover:bg-secondary text-white rounded-md">
-            Sign In
-        </button>
-      </form>
-      <p className="mt-8">{message}</p>
-      <Link to="/register" className="mt-4">
-      Don't have an account yet?{' '}
-      <span className='text-bold text-primary'>Sign up!</span>
-      </Link>
+    <div className="items-center md:p-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
+        <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
+          <div className="w-full">
+            <h2 className="text-2xl font-bold text-primary mb-6 text-center">Login</h2>
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                type="submit"
+                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition duration-300"
+              >
+                Sign In
+              </button>
+            </form>
+            {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+            <div className="text-center mt-4">
+              <Link to="/register" className="text-primary font-bold">
+                Don't have an account yet? Sign up!
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center">
+          <img
+            src="/img/profile-img-meme.jpeg" // Replace with your actual image
+            alt="Login illustration"
+            className="w-full lg:w-3/4 h-auto object-cover rounded-lg"
+          />
+        </div>
+      </div>
     </div>
   );
 };
