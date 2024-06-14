@@ -48,7 +48,7 @@ const Register = () => {
   };
 
   return (
-    <div className="items-center md:p-16">
+    <div className="p-4 md:p-10 lg:p-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">

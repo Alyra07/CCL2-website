@@ -18,7 +18,7 @@ const Login = () => {
   };
 
   return (
-    <div className="items-center md:p-16">
+    <div className="p-4 md:p-10 lg:p-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">
@@ -55,7 +55,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center">
           <img
-            src="/img/profile-img-meme.jpeg" // Replace with your actual image
+            src="/img/profile-img-meme.jpeg"
             alt="Login illustration"
             className="w-full lg:w-3/4 h-auto object-cover rounded-lg"
           />
