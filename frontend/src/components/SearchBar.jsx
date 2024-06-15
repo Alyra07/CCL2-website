@@ -28,39 +28,43 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
   };
 
   return (
-    <div className="">
-      <select value={country} onChange={(e) => setCountry(e.target.value)}
-        className='p-1 rounded-lg'>
-        <option value="all">Just take me away</option>
-        {countries.map((c, index) => (
-          <option key={index} value={c}>{c}</option>
-        ))}
-      </select>
-      <input
-        type="number"
-        placeholder="Guests"
-        value={guests}
-        onChange={(e) => setGuests(e.target.value)}
-        className='p-1 rounded-lg mx-2'
-      />
-      <input
-        type="date"
-        placeholder="Start Date"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-        className='p-1 rounded-lg'
-      />
-      <input
-        type="date"
-        placeholder="End Date"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-        className='p-1 rounded-lg pl-2'
-      />
-      <button onClick={handleSearch}
-      className='p-1 rounded-lg bg-primary hover:bg-secondary ml-2'>
-        Search
-      </button>
+    <div className='text-center p-4 bg-tertiary rounded-lg'>
+      <h3 className='text-lg font-medium mb-4 md:mb-6 sm:mb-6'>Where do you want to go next?</h3>
+      
+      <div className="">
+        <select value={country} onChange={(e) => setCountry(e.target.value)}
+          className='p-2 border-2 border-secondary rounded-lg'>
+          <option value="all">Just take me away</option>
+          {countries.map((c, index) => (
+            <option key={index} value={c}>{c}</option>
+          ))}
+        </select>
+        <input
+          type="number"
+          placeholder="Guests"
+          value={guests}
+          onChange={(e) => setGuests(e.target.value)}
+          className='p-2 border-2 border-secondary rounded-lg ml-2'
+        />
+        <input
+          type="date"
+          placeholder="Start Date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className='p-1 border-2 border-secondary rounded-lg lg:ml-2 md:ml-2 sm:ml-0'
+        />
+        <input
+          type="date"
+          placeholder="End Date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className='p-1 border-2 border-secondary rounded-lg ml-2'
+        />
+        <button onClick={handleSearch}
+        className='text-md text-white p-2 ml-4 rounded-lg bg-accent hover:bg-mid'>
+          Search
+        </button>
+      </div>
     </div>
   );
 };
