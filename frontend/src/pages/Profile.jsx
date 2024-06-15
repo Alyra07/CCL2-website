@@ -16,13 +16,13 @@ const Profile = () => {
   const [newSurname, setNewSurname] = useState('');
   // profile image paths (predefined for simplicity)
   const imagePaths = [
-    '/img/profile-img1.png',
-    '/img/profile-img2.png',
-    '/img/profile-img3.png',
-    '/img/profile-img4.png',
-    '/img/profile-img-cat.png',
-    '/img/profile-img-rabbit.png',
-    '/img/profile-img-meme.jpeg',
+    '/profile/profile-img1.png',
+    '/profile/profile-img2.png',
+    '/profile/profile-img3.png',
+    '/profile/profile-img4.png',
+    '/profile/profile-img-cat.png',
+    '/profile/profile-img-rabbit.png',
+    '/profile/profile-img-meme.jpeg',
   ];
 
   // fetch user profile and listings on user change

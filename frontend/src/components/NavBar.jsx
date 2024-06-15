@@ -7,7 +7,7 @@ const NavBar = () => {
       <div className="flex flex-grow items-center">
         <a href="/">
         <img className="w-10 h-10 mr-2" 
-        src="/img/travel-logo.jpg" 
+        src="/travel-logo.jpg" 
         alt="hotel room icon" />
         </a>
         <Link className="mx-4" to="/list">Find Stays</Link>

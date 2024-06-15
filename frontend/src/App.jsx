@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 // components
 import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 // pages
 import HomePage from './pages/HomePage';
 import Register from './pages/Register';
@@ -19,7 +20,7 @@ const App = () => {
     <Router>
       <div className="flex flex-col h-screen">
         <NavBar />
-        <div className="flex-grow p-4">
+        <div className="flex-grow">
           <Routes>
             <Route exact path="/" element={<HomePage />} />
             <Route path="/list" element={<ListMain />} />
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/profile/listing/:id" element={<DetailsListing />} />
           </Routes>
         </div>
+        {/* <Footer /> */}
       </div>
     </Router>
   );
