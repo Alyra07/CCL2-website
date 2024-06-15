@@ -61,7 +61,7 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
           className='p-1 border-2 border-secondary rounded-lg ml-2'
         />
         <button onClick={handleSearch}
-        className='text-md text-white p-2 ml-4 sm:mt-2 rounded-lg bg-accent hover:bg-red-300'>
+        className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
           Search
         </button>
       </div>

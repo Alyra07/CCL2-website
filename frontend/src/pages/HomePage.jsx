@@ -40,7 +40,8 @@ const HomePage = () => {
   return (
     <div className="flex flex-col items-center">
       <header className="bg-offwhite px-4 lg:px-52 md:px-10 text-center w-full">
-        <h1 className="text-4xl text-red-500 my-10">Hello World!</h1>
+        <h2 className="text-4xl font-semibold text-accent my-10">
+          Hello World!</h2>
         <SearchBar onSearch={handleSearch} countries={countries} />
       </header>
     </div>

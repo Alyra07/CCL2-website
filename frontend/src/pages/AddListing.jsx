@@ -106,7 +106,7 @@ const AddListing = () => {
 
     return (
         <div className="text-center bg-background p-4 md:p-10 lg:p-16">
-            <h1 className="text-3xl font-semibold mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
+            <h1 className="text-3xl font-semibold text-primary mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
             <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                 <div className="flex flex-col p-2">
                     <h2 className="text-xl mb-2">Details</h2>

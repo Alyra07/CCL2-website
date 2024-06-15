@@ -142,13 +142,15 @@ const Profile = () => {
   }
 
   return (
-    <div className="p-4 md:p-10 lg:p-16 text-center">
-      <h2 className="font-semibold text-3xl mb-4">Profile</h2>
+    <div className="p-4 md:p-10 lg:p-16">
+      <div className="text-center">
+      <h2 className="font-semibold text-primary text-3xl mb-4">Profile</h2>
       <p className="text-green-500">{message}</p>
       {/* Profile Picture */}
       <div className="mb-4">
-        <p className="font-semibold">Profile Picture:</p>
-        <img src={profile.image} alt="Profile" className="w-48 h-48 rounded-full mx-auto mb-4" />
+        <img src={profile.image} alt="Profile" 
+        className="w-64 h-64 rounded-lg mx-auto mb-4" />
+
         <label className="block mb-2">Select Profile Picture:</label>
         <select
           value={selectedImage}
@@ -162,53 +164,59 @@ const Profile = () => {
         </select>
         <button
           onClick={handleImageChange}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
         >
           Set Profile Picture
         </button>
       </div>
-      {/* User Data Display with Edit */}
-      <div className="mb-4">
-        <p className="font-semibold">Email: {profile.email}</p>
-        <p className="font-semibold">
-          Name: {isEditingName ? (
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              className="border p-2 rounded"
-            />
-          ) : (
-            profile.name
-          )}
-          <button
-            onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
-            className="ml-2 bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-          >
-            {isEditingName ? 'Save' : 'Edit'}
-          </button>
-        </p>
-        <p className="font-semibold">
-          Surname: {isEditingSurname ? (
-            <input
-              type="text"
-              value={newSurname}
-              onChange={(e) => setNewSurname(e.target.value)}
-              className="border p-2 rounded"
-            />
-          ) : (
-            profile.surname
-          )}
-          <button
-            onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
-            className="ml-2 bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-          >
-            {isEditingSurname ? 'Save' : 'Edit'}
-          </button>
-        </p>
       </div>
+
+      {/* User Data Display with Edit */}
+      <div className="flex justify-center items-center">
+      <div className="flex flex-col mb-4">
+        <div className="justify-center">
+          <p className="text-lg font-semibold">Email: {profile.email}</p>
+          <p className="text-lg font-semibold">
+            Name: {isEditingName ? (
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="border p-2 rounded"
+              />
+            ) : (
+              profile.name
+            )}
+            <button
+              onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+              className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+            >
+              {isEditingName ? 'Save' : 'Edit'}
+            </button>
+          </p>
+          <p className="text-lg font-semibold">
+            Surname: {isEditingSurname ? (
+              <input
+                type="text"
+                value={newSurname}
+                onChange={(e) => setNewSurname(e.target.value)}
+                className="border p-2 rounded"
+              />
+            ) : (
+              profile.surname
+            )}
+            <button
+              onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
+              className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+            >
+              {isEditingSurname ? 'Save' : 'Edit'}
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
       {/* User Listings */}
-      <div className="mb-4">
+      <div className="mb-4 text-center">
         <h2 className="font-bold text-2xl mb-4">Your Places</h2>
         {Array.isArray(listings) && listings.length > 0 ? (
           <div className="flex justify-center">
@@ -243,10 +251,10 @@ const Profile = () => {
         ) : (
           <p className="text-center">You have no listings yet...</p>
         )}
-        <div className="mt-4 text-center">
+        <div className="mt-6 md:mt-8 text-center">
           <Link
             to="/add"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+            className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary transition duration-300"
           >
             Add a listing
           </Link>

@@ -22,7 +22,7 @@ const Login = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">
-            <h2 className="text-2xl font-bold text-primary mb-6 text-center">Login</h2>
+            <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Login</h2>
             <form onSubmit={handleSignIn} className="space-y-4">
               <input
                 type="email"

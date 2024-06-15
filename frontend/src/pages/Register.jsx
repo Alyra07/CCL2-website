@@ -13,10 +13,10 @@ const Register = () => {
   // images on the right side of the form
   useEffect(() => {
     const imageFilenames = 
-    ['profile-img3.png', 
-      'profile-img4.png', 
-      'profile-img1.png', 
-      'profile-img2.png'];
+    ['profile-img4.png', 
+      'profile-img-rabbit.png', 
+      'profile-img2.png',
+      'profile-img-cat.png']; 
     setImages(imageFilenames);
   }, []);
 
@@ -52,7 +52,7 @@ const Register = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">
-            <h2 className="text-2xl font-bold text-primary mb-6 text-center">Register</h2>
+            <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Register</h2>
             <form onSubmit={handleSignUp} className="space-y-4">
               <input
                 type="email"
@@ -89,7 +89,7 @@ const Register = () => {
                 Sign Up
               </button>
             </form>
-            {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+            {message && <p className="mt-4 text-center text-accentred">{message}</p>}
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
