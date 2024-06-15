@@ -36,13 +36,13 @@ const ListMain = () => {
         // Always filter listings based on the current search criteria
         filterListings();
     }, [searchCriteria, listings]);
-    // 
+
     useEffect(() => {
-      if (location.state && location.state.searchCriteria && location.state.filteredListings) {
-          setSearchCriteria(location.state.searchCriteria);
-          setFilteredListings(location.state.filteredListings);
-      }
-  }, [location.state]);
+        if (location.state && location.state.searchCriteria && location.state.filteredListings) {
+            setSearchCriteria(location.state.searchCriteria);
+            setFilteredListings(location.state.filteredListings);
+        }
+    }, [location.state]);
 
     const filterListings = () => {
         const { country, guests, startDate, endDate } = searchCriteria;
@@ -70,23 +70,34 @@ const ListMain = () => {
     };
 
     return (
-        <div>
-            <div className="flex flex-col items-center">
-                <h1 className="text-3xl text-red-500">List Main</h1>
+        <div className='p-4 md:p-10 lg:p-16'>
+            <div className="flex flex-col items-center mb-8">
+                <h1 className="text-3xl font-semibold mb-6">Find Your Perfect Stay</h1>
                 <SearchBar onSearch={setSearchCriteria} countries={countries} initialValues={searchCriteria} />
             </div>
-            <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredListings.length === 0 ? (
-                    <p>No listings available</p>
+                    <p className="col-span-full text-center">No listings available</p>
                 ) : (
                     filteredListings.map((listing, index) => (
-                        <div key={index} className="listing" onClick={() => handleListingClick(listing.id)}>
-                            <h2>{listing.name}</h2>
-                            <p>{listing.address}</p>
-                            <p>{listing.country}</p>
-                            <p>{listing.price}</p>
-                            <p>{listing.guests}</p>
-                            <p>Available from {listing.availability.start} to {listing.availability.end}</p>
+                        <div
+                            key={index}
+                            className="border border-gray-300 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105"
+                            onClick={() => handleListingClick(listing.id)}
+                        >
+                            <img
+                                src={listing.images?.[0] || 'placeholder.jpg'}
+                                alt={listing.name}
+                                className="w-full h-48 object-cover"
+                            />
+                            <div className="p-4">
+                                <h2 className="text-xl font-semibold mb-2">{listing.name}</h2>
+                                <p className="text-gray-700">{listing.address}</p>
+                                <p className="text-gray-700">{listing.country}</p>
+                                <p className="text-gray-700">${listing.price} per night</p>
+                                <p className="text-gray-700">{listing.guests} guests</p>
+                                <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
+                            </div>
                         </div>
                     ))
                 )}

@@ -142,72 +142,115 @@ const Profile = () => {
   }
 
   return (
-    <div>
-      <h2 className='font-bold'>Profile</h2>
-      <p>{message}</p>
+    <div className="p-4 md:p-10 lg:p-16 text-center">
+      <h2 className="font-semibold text-3xl mb-4">Profile</h2>
+      <p className="text-green-500">{message}</p>
       {/* Profile Picture */}
-      <div>
-        <p>Profile Picture:</p>
-        <img src={profile.image} alt="Profile" style={{ width: '300px', height: '300px' }} />
-        <label>Select Profile Picture:</label>
-        <select value={selectedImage} onChange={(e) => setSelectedImage(e.target.value)}>
+      <div className="mb-4">
+        <p className="font-semibold">Profile Picture:</p>
+        <img src={profile.image} alt="Profile" className="w-48 h-48 rounded-full mx-auto mb-4" />
+        <label className="block mb-2">Select Profile Picture:</label>
+        <select
+          value={selectedImage}
+          onChange={(e) => setSelectedImage(e.target.value)}
+          className="border p-2 rounded mb-4"
+        >
           <option value="">Select an image</option>
           {imagePaths.map((path, index) => (
-            <option key={index} value={path}>{index + 1}</option>
+            <option key={index} value={path}>{`Image ${index + 1}`}</option>
           ))}
         </select>
-        <button onClick={handleImageChange}>Set Profile Picture</button>
+        <button
+          onClick={handleImageChange}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        >
+          Set Profile Picture
+        </button>
       </div>
       {/* User Data Display with Edit */}
-      <div>
-        <p>Email: {profile.email}</p>
-        <p>
+      <div className="mb-4">
+        <p className="font-semibold">Email: {profile.email}</p>
+        <p className="font-semibold">
           Name: {isEditingName ? (
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
+              className="border p-2 rounded"
             />
           ) : (
             profile.name
           )}
-          <button onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}>
+          <button
+            onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+            className="ml-2 bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+          >
             {isEditingName ? 'Save' : 'Edit'}
           </button>
         </p>
-        <p>
+        <p className="font-semibold">
           Surname: {isEditingSurname ? (
             <input
               type="text"
               value={newSurname}
               onChange={(e) => setNewSurname(e.target.value)}
+              className="border p-2 rounded"
             />
           ) : (
             profile.surname
           )}
-          <button onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}>
+          <button
+            onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
+            className="ml-2 bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+          >
             {isEditingSurname ? 'Save' : 'Edit'}
           </button>
         </p>
       </div>
       {/* User Listings */}
-      <div>
-        <h2 className='font-bold'>Your Places</h2>
+      <div className="mb-4">
+        <h2 className="font-bold text-2xl mb-4">Your Places</h2>
         {Array.isArray(listings) && listings.length > 0 ? (
-          listings.map(listing => (
-            <div key={listing.id} className="p-4 border-b">
-              <h3>{listing.name}</h3>
-              <p>{listing.address}</p>
-              <p>{listing.country}</p>
-              <p>${listing.price} per night</p>
-              <p>{listing.guests}</p>
-              <Link to={`/profile/listing/${listing.id}`}>View Details</Link>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+              {listings.map((listing) => (
+                <div
+                  key={listing.id}
+                  className="border border-gray-300 rounded-lg overflow-hidden shadow-lg"
+                >
+                  <img
+                    src={listing.images?.[0] || '/img/placeholder2.jpg'}
+                    alt={listing.name}
+                    className="w-full h-52 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-xl font-semibold mb-2">{listing.name}</h3>
+                    <p className="text-gray-700">{listing.address}</p>
+                    <p className="text-gray-700">{listing.country}</p>
+                    <p className="text-gray-700">${listing.price} per night</p>
+                    <p className="text-gray-700">{listing.guests} guests</p>
+                    <Link
+                      to={`/profile/listing/${listing.id}`}
+                      className="text-accent hover:underline"
+                    >
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))
+          </div>
         ) : (
-          <p>You have no listings yet...</p>
+          <p className="text-center">You have no listings yet...</p>
         )}
-        <Link to="/add">Add a listing</Link>
+        <div className="mt-4 text-center">
+          <Link
+            to="/add"
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Add a listing
+          </Link>
+        </div>
       </div>
     </div>
   );

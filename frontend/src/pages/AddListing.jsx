@@ -105,58 +105,60 @@ const AddListing = () => {
     };
 
     return (
-        <div className="flex flex-col items-center">
-            <h1 className="text-3xl text-cyan-900">Publish Your Place</h1>
-            <form className="flex flex-col gap-6 sm:flex-row" onSubmit={handleSubmit}>
-                <div className="flex flex-col md:w-96 p-2">
-                    <h2 className="text-xl">Details</h2>
+        <div className="text-center bg-background p-4 md:p-10 lg:p-16">
+            <h1 className="text-3xl font-semibold mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
+            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+                <div className="flex flex-col p-2">
+                    <h2 className="text-xl mb-2">Details</h2>
                     <hr className="mt-2 mb-4" />
                     <label htmlFor="name">Name:</label>
-                    <input type="text" name="name" id="name" value={form.name} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="name" id="name" value={form.name} onChange={handleChange} />
                     <label htmlFor="address">Address:</label>
-                    <input type="text" name="address" id="address" value={form.address} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="address" id="address" value={form.address} onChange={handleChange} />
                     <label htmlFor="country">Country:</label>
-                    <input type="text" name="country" id="country" value={form.country} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="country" id="country" value={form.country} onChange={handleChange} />
                     <label htmlFor="price">Price/night:</label>
-                    <input type="text" name="price" id="price" value={form.price} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="price" id="price" value={form.price} onChange={handleChange} />
                     <label htmlFor="guests">Guests:</label>
-                    <input type="number" name="guests" id="guests" value={form.guests} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="number" name="guests" id="guests" value={form.guests} onChange={handleChange} />
                     <label htmlFor="description">Description:</label>
-                    <textarea name="description" id="description" value={form.description} onChange={handleChange} />
+                    <textarea className="p-2 mb-2 border-2 border-secondary rounded-lg" name="description" id="description" value={form.description} onChange={handleChange} />
                 </div>
-                <div className="flex flex-col md:w-96 p-2">
-                    <h2 className="text-xl">Images</h2>
+                <div className="flex flex-col md:w-full p-2">
+                    <h2 className="text-xl mb-2">Images</h2>
                     <hr className="mt-2 mb-4" />
                     {form.images.map((image, index) => (
-                        <div key={index}>
+                        <div key={index} className="mb-2">
                             <label htmlFor={`image${index}`}>Image {index + 1}:</label>
-                            <input type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
+                            <input className="p-2 border-2 border-secondary rounded-lg" type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
                         </div>
                     ))}
                 </div>
-                <div className="flex flex-col md:w-96 p-2">
-                    <h2 className="text-xl">Amenities</h2>
+                <div className="flex flex-col md:w-full p-2">
+                    <h2 className="text-xl mb-2">Amenities</h2>
                     <hr className="mt-2 mb-4" />
                     {Object.keys(form.amenities).map(amenity => (
-                        <div key={amenity}>
+                        <div key={amenity} className="mb-2">
                             <label htmlFor={amenity}>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}:</label>
-                            <input type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
+                            <input className="ml-2" type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
                         </div>
                     ))}
                 </div>
-                <div className="flex flex-col md:w-80 p-2">
-                    <h2 className="text-xl">Availability</h2>
+                <div className="flex flex-col md:w-full p-2">
+                    <h2 className="text-xl mb-2">Availability</h2>
                     <hr className="mt-2 mb-4" />
                     <label htmlFor="start">Start Date:</label>
-                    <input type="date" name="start" id="start" value={form.availability.start} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="date" name="start" id="start" value={form.availability.start} onChange={handleChange} />
                     <label htmlFor="end">End Date:</label>
-                    <input type="date" name="end" id="end" value={form.availability.end} onChange={handleChange} />
+                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="date" name="end" id="end" value={form.availability.end} onChange={handleChange} />
                 </div>
-                <button type="submit" className="p-2 bg-cyan-200 rounded-md">
-                    Publish Listing
-                </button>
+                <div className="flex flex-col items-center">
+                    <button type="submit" className="text-md text-white p-2 bg-accent hover:bg-red-300 rounded-lg w-full sm:w-auto">
+                        Publish Listing
+                    </button>
+                    {message && <p className="mt-4 text-red-600">{message}</p>}
+                </div>
             </form>
-            {message && <p>{message}</p>}
         </div>
     );
 };

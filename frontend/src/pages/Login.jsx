@@ -40,12 +40,12 @@ const Login = () => {
               />
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition duration-300"
+                className="w-full bg-accent text-white py-3 rounded-lg hover:bg-red-300 transition duration-300"
               >
                 Sign In
               </button>
             </form>
-            {message && <p className="mt-4 text-center text-red-500">{message}</p>}
+            {message && <p className="mt-4 text-center text-accentred">{message}</p>}
             <div className="text-center mt-4">
               <Link to="/register" className="text-primary font-bold">
                 Don't have an account yet? Sign up!
@@ -55,7 +55,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center">
           <img
-            src="/img/profile-img-meme.jpeg"
+            src="/profile/profile-img-meme.jpeg"
             alt="Login illustration"
             className="w-full lg:w-3/4 h-auto object-cover rounded-lg"
           />

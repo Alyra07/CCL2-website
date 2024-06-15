@@ -14,7 +14,7 @@ const NavBar = () => {
         <Link className="mr-4" to="/add">Become A Host</Link>
       </div>
       <div className='flex flex-row items-center justify-right'>
-        <Link className="mr-4" to="/">Home</Link>
+        {/* <Link className="mr-4" to="/">Home</Link> */}
         <Link className="mr-4" to="/login">Login</Link>
         <Link className="mr-4" to="/register">Register</Link>
         <Link to="/profile">Profile</Link>

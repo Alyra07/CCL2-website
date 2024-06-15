@@ -84,7 +84,7 @@ const Register = () => {
               />
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-3 rounded-lg hover:bg-secondary transition duration-300"
+                className="w-full bg-accent text-white py-3 rounded-lg hover:bg-red-300 transition duration-300"
               >
                 Sign Up
               </button>
@@ -96,7 +96,7 @@ const Register = () => {
           {images.map((image, index) => (
             <img
               key={index}
-              src={`/img/${image}`}
+              src={`/profile/${image}`}
               alt={`Gallery image ${index + 1}`}
               className="w-3/4 h-auto object-cover rounded-lg"
             />
