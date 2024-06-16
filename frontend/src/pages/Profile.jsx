@@ -149,7 +149,7 @@ const Profile = () => {
       {/* Profile Picture */}
       <div className="mb-4">
         <img src={profile.image} alt="Profile" 
-        className="w-64 h-64 rounded-lg mx-auto mb-4" />
+        className="w-64 h-64 border-2 border-tertiary rounded-lg mx-auto mb-4" />
 
         <label className="block mb-2">Select Profile Picture:</label>
         <select

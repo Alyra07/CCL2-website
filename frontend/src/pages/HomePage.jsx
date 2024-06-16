@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
+import Footer from '../components/Footer';
 import { fetchAllListings } from '../assets/listings';
 
 const HomePage = () => {
@@ -52,11 +53,14 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <header className="bg-offwhite px-4 lg:px-52 md:px-10 text-center w-full">
+      <header className="bg-offwhite pt-8 px-4 md:px-10 lg:px-16 text-center w-full">
+        {/* search bar field with heading */}
+        <div className='flex flex-col text-left mt-8'> 
         <h2 className="text-4xl font-semibold text-primary my-10">
-          Hello World!
+          Hello World! This is a travel website.
         </h2>
         <SearchBar onSearch={handleSearch} countries={countries} />
+        </div>
       </header>
       <section className="w-full max-w-screen-lg mx-auto py-8 px-4">
         <h2 className="text-2xl font-semibold mb-6 text-center">Popular Places</h2>
@@ -82,6 +86,7 @@ const HomePage = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </div>
   );
 }
