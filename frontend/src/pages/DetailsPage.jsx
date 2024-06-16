@@ -57,6 +57,7 @@ const DetailsPage = () => {
                 <p className="text-gray-700 mb-2">
                     <span className="font-semibold">Amenities:</span> 
                     {listing.amenities.wifi && ' Wifi'}
+                    {listing.amenities.cooler && ' Cooler'}
                     {listing.amenities.kitchen && ' Kitchen'}
                     {listing.amenities.parking && ' Parking'}
                     {listing.amenities.pool && ' Pool'}
