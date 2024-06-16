@@ -68,7 +68,7 @@ const HomePage = () => {
           {popularCountries.map(({ country }) => (
             <div key={country} className="bg-white shadow-md rounded-lg overflow-hidden">
               <div className="relative">
-                <img src={`https://source.unsplash.com/400x300/?${country}`} alt={country} className="w-full h-48 object-cover" />
+                <img src={`/img/${country}.jpg`} alt={country} className="w-full h-48 object-cover" />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <h3 className="text-2xl text-white font-semibold">{country}</h3>
                 </div>
