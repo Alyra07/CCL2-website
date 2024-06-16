@@ -64,12 +64,6 @@ const DetailsPage = () => {
                     ))}
                 </div>
                 <p className="text-gray-700 mb-4"><span className="font-semibold">Description:</span> {listing.description}</p>
-                {/* <button
-                    onClick={handleBack}
-                    className="bg-accent text-white py-2 px-4 rounded hover:bg-red-300"
-                >
-                    Back
-                </button> */}
             </div>
         </div>
     );

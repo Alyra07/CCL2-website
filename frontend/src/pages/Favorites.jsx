@@ -38,7 +38,7 @@ const Favorites = () => {
         <div className="p-4 md:p-10 lg:p-16">
             <h2 className="font-semibold text-primary text-center text-3xl mb-4">Favorites</h2>
             {favorites.length === 0 ? (
-                <div className="text-center">
+                <div className="text-center mt-2">
                     <p className="text-lg mb-4">No favorite places yet...</p>
                     <button
                         className="bg-primary text-white p-2 rounded-lg hover:bg-secondary transition duration-300"
@@ -48,7 +48,7 @@ const Favorites = () => {
                     </button>
                 </div>
             ) : (
-                <div className="flex flex-wrap justify-center items-center gap-8">
+                <div className="flex flex-wrap justify-center items-center gap-8 my-2">
                     {favorites.map((favorite) => (
                         <div
                             key={favorite.id}

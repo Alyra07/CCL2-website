@@ -3,7 +3,7 @@ import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { useUser } from '../assets/UserContext';
 import { signOut } from '../assets/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faUserCircle, faBuilding } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faUserCircle, faBuilding, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -39,9 +39,15 @@ const NavBar = () => {
           <FontAwesomeIcon icon={faBed} className="text-2xl" />
           <span className="ml-2 hidden sm:inline hidden xs:inline">Find Stays</span>
         </NavLink>
-        <Link to="/favorites" className="ml-4 hidden sm:inline hidden xs:inline">Favorites</Link>
-        {/* <Link to="/register" className='ml-8'>Register</Link> */}
-        {/* <Link to="/login" className='ml-8'>Login</Link> */}
+        {user && (
+          <NavLink
+            to="/favorites"
+            className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
+          >
+            <FontAwesomeIcon icon={faHeart} className="text-2xl" />
+            <span className="ml-2 hidden sm:inline hidden xs:inline">Favorites</span>
+          </NavLink>
+        )}
       </div>
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <Link to="/" className="flex items-center mx-auto">

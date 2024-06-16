@@ -100,7 +100,7 @@ const ListMain = () => {
                                 <p className="text-gray-700">${listing.price} per night</p>
                                 <p className="text-gray-700">{listing.guests} guests</p>
                                 <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
-                                <AddFavorite listingId={listing.id} userId={user.id} />
+                                <AddFavorite listingId={listing.id} userId={user ? user.id : null} />
                             </div>
                         </div>
                     ))

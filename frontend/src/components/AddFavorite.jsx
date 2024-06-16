@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 
 const AddFavorite = ({ listingId, userId }) => {
     const [isFavorite, setIsFavorite] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkFavoriteStatus = async () => {
+            if (!userId) return;
             try {
                 const { data: existingFavorites, error: fetchError } = await supabase
                     .from('favorites')
@@ -30,6 +36,12 @@ const AddFavorite = ({ listingId, userId }) => {
 
     const handleToggleFavorite = async (event) => {
         event.stopPropagation(); // Stop the click event from propagating to parent elements
+
+        if (!userId) {
+            navigate('/login');
+            return;
+        }
+
         try {
             if (isFavorite) {
                 const { error } = await supabase
@@ -64,9 +76,9 @@ const AddFavorite = ({ listingId, userId }) => {
     return (
         <button
             onClick={handleToggleFavorite}
-            className={`p-2 rounded-lg transition duration-300 ${isFavorite ? 'bg-accent text-white' : 'bg-primary text-white hover:bg-secondary'}`}
+            className={`py-2 px-4 rounded-lg transition duration-300 ${isFavorite ? 'bg-accent text-white hover:bg-red-300' : 'bg-primary text-white hover:bg-secondary'}`}
         >
-            {isFavorite ? 'Remove' : 'Add to Favorites'}
+            <FontAwesomeIcon icon={isFavorite ? faHeartSolid : faHeartRegular} className='' />
         </button>
     );
 };

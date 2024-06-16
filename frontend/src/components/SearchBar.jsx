@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useEffect } from 'react';
 
 const SearchBar = ({ onSearch, countries, initialValues }) => {
@@ -60,8 +62,10 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
           onChange={(e) => setEndDate(e.target.value)}
           className='p-1 border-2 border-secondary rounded-lg ml-2'
         />
-        <button onClick={handleSearch}
+        <button 
+        onClick={handleSearch}
         className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+          <FontAwesomeIcon icon={faMagnifyingGlass} className='mr-2' />
           Search
         </button>
       </div>
