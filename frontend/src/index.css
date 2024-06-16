@@ -5,3 +5,19 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+/* Navbar */
+/* .active-link {
+  position: relative;
+  color: #fff;
+}
+
+.active-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background-color: #f6ad55;
+} */

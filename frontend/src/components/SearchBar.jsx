@@ -44,7 +44,7 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
           placeholder="Guests"
           value={guests}
           onChange={(e) => setGuests(e.target.value)}
-          className='p-2 border-2 border-secondary rounded-lg ml-2'
+          className='p-1 border-2 border-secondary rounded-lg ml-2'
         />
         <input
           type="date"

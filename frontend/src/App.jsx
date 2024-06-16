@@ -32,7 +32,7 @@ const App = () => {
             <Route path="/profile/listing/:id" element={<DetailsListing />} />
           </Routes>
         </div>
-        {/* <Footer /> */}
+        <Footer />
       </div>
     </Router>
   );
