@@ -62,7 +62,7 @@ const HomePage = () => {
         <SearchBar onSearch={handleSearch} countries={countries} />
         </div>
       </header>
-      <section className="w-full max-w-screen-lg mx-auto py-8 px-4">
+      <section className="w-full max-w-screen-lg mt-2 mb-8 mx-auto py-8 px-4">
         <h2 className="text-2xl font-semibold mb-6 text-center">Popular Places</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {popularCountries.map(({ country }) => (
