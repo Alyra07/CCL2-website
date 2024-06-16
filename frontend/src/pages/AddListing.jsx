@@ -14,6 +14,7 @@ const AddListing = () => {
         images: ['', '', ''],
         amenities: {
             wifi: false,
+            cooler: false,
             kitchen: false,
             parking: false,
             pool: false
@@ -92,6 +93,7 @@ const AddListing = () => {
                 images: ['', '', ''],
                 amenities: {
                     wifi: false,
+                    cooler: false,
                     kitchen: false,
                     parking: false,
                     pool: false
@@ -105,58 +107,87 @@ const AddListing = () => {
     };
 
     return (
-        <div className="text-center bg-background p-4 md:p-10 lg:p-16">
-            <h1 className="text-3xl font-semibold text-primary mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
-            <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
-                <div className="flex flex-col p-2">
+        <div className="flex flex-col bg-background p-4 md:p-10 lg:p-16">
+            <h1 className="text-center text-3xl font-semibold text-primary mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
+            <p className="text-center text-lg text-accent">
+                {message}
+            </p>
+            <form className="flex flex-col md:flex-row md:gap-6 flex-grow" 
+                    onSubmit={handleSubmit}>
+                {/* Details Section */}
+                <div className="flex flex-col md:w-1/2 mt-2">
                     <h2 className="text-xl mb-2">Details</h2>
-                    <hr className="mt-2 mb-4" />
-                    <label htmlFor="name">Name:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="name" id="name" value={form.name} onChange={handleChange} />
-                    <label htmlFor="address">Address:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="address" id="address" value={form.address} onChange={handleChange} />
-                    <label htmlFor="country">Country:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="country" id="country" value={form.country} onChange={handleChange} />
-                    <label htmlFor="price">Price/night:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="text" name="price" id="price" value={form.price} onChange={handleChange} />
-                    <label htmlFor="guests">Guests:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="number" name="guests" id="guests" value={form.guests} onChange={handleChange} />
-                    <label htmlFor="description">Description:</label>
-                    <textarea className="p-2 mb-2 border-2 border-secondary rounded-lg" name="description" id="description" value={form.description} onChange={handleChange} />
+                    <hr className="mb-4" />
+                    <div className="mb-2">
+                        <label htmlFor="name" className="block mb-1">Name:</label>
+                        <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="name" id="name" value={form.name} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="address" className="block mb-1">Address:</label>
+                        <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="address" id="address" value={form.address} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="country" className="block mb-1">Country:</label>
+                        <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="country" id="country" value={form.country} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="price" className="block mb-1">Price/night:</label>
+                        <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="price" id="price" value={form.price} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="guests" className="block mb-1">Guests:</label>
+                        <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="guests" id="guests" value={form.guests} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label htmlFor="description" className="block mb-1">Description:</label>
+                        <textarea className="p-2 border-2 border-secondary rounded-lg w-full" name="description" id="description" value={form.description} onChange={handleChange} />
+                    </div>
                 </div>
-                <div className="flex flex-col md:w-full p-2">
-                    <h2 className="text-xl mb-2">Images</h2>
-                    <hr className="mt-2 mb-4" />
-                    {form.images.map((image, index) => (
-                        <div key={index} className="mb-2">
-                            <label htmlFor={`image${index}`}>Image {index + 1}:</label>
-                            <input className="p-2 border-2 border-secondary rounded-lg" type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
+                {/* Other Sections */}
+                <div className="flex flex-col md:w-1/2 md:space-y-4 mt-2">
+                    {/* Images Section */}
+                    <div>
+                        <h2 className="text-xl mb-2">Images</h2>
+                        <hr className="mt-2 mb-4" />
+                        {form.images.map((image, index) => (
+                            <div key={index} className="mb-2">
+                                <label htmlFor={`image${index}`} className="block mb-1">Image {index + 1}:</label>
+                                <input className="p-2 border-2 border-secondary rounded-lg w-full" type="file" name={`image${index}`} id={`image${index}`} onChange={(e) => handleImageChange(index, e)} />
+                            </div>
+                        ))}
+                    </div>
+                    {/* Availability Section */}
+                    <div className="my-2">
+                        <h2 className="text-xl mb-2">Availability</h2>
+                        <hr className="mt-2 mb-4" />
+                        <div className="mb-2">
+                            <label htmlFor="start" className="block mb-1">Start Date:</label>
+                            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="date" name="start" id="start" value={form.availability.start} onChange={handleChange} />
                         </div>
-                    ))}
-                </div>
-                <div className="flex flex-col md:w-full p-2">
-                    <h2 className="text-xl mb-2">Amenities</h2>
-                    <hr className="mt-2 mb-4" />
-                    {Object.keys(form.amenities).map(amenity => (
-                        <div key={amenity} className="mb-2">
-                            <label htmlFor={amenity}>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}:</label>
-                            <input className="ml-2" type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
+                        <div className="mb-2">
+                            <label htmlFor="end" className="block mb-1">End Date:</label>
+                            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="date" name="end" id="end" value={form.availability.end} onChange={handleChange} />
                         </div>
-                    ))}
+                    </div>
+                    {/* Amenities Section */}
+                    <div className="my-2">
+                        <h2 className="text-xl mb-2">Amenities</h2>
+                        <hr className="mt-2 mb-4" />
+                        <div className="flex flex-row space-x-2 md:space-x-3">
+                        {Object.keys(form.amenities).map(amenity => (
+                            <div key={amenity} className="mb-2">
+                                <label htmlFor={amenity} className="mb-1">{amenity.charAt(0).toUpperCase() + amenity.slice(1)}:</label>
+                                <input className="ml-2" type="checkbox" name={amenity} id={amenity} checked={form.amenities[amenity]} onChange={handleChange} />
+                            </div>
+                        ))}
+                        </div>
+                    </div>
                 </div>
-                <div className="flex flex-col md:w-full p-2">
-                    <h2 className="text-xl mb-2">Availability</h2>
-                    <hr className="mt-2 mb-4" />
-                    <label htmlFor="start">Start Date:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="date" name="start" id="start" value={form.availability.start} onChange={handleChange} />
-                    <label htmlFor="end">End Date:</label>
-                    <input className="p-2 mb-2 border-2 border-secondary rounded-lg" type="date" name="end" id="end" value={form.availability.end} onChange={handleChange} />
-                </div>
-                <div className="flex flex-col items-center">
+                {/* Publish Button */}
+                <div className="flex justify-center my-auto">
                     <button type="submit" className="text-md text-white p-2 bg-accent hover:bg-red-300 rounded-lg w-full sm:w-auto">
                         Publish Listing
                     </button>
-                    {message && <p className="mt-4 text-red-600">{message}</p>}
                 </div>
             </form>
         </div>

@@ -27,7 +27,7 @@ const HomePage = () => {
           .sort((a, b) => b.count - a.count);
 
         // Select the top 3 countries
-        const topCountries = sortedCountries.slice(0, 3);
+        const topCountries = sortedCountries.slice(0, 4);
         setPopularCountries(topCountries);
       } catch (error) {
         console.error("Error fetching listings:", error);
@@ -55,7 +55,7 @@ const HomePage = () => {
     <div className="flex flex-col items-center">
       <header className="bg-offwhite pt-8 px-4 md:px-10 lg:px-16 text-center w-full">
         {/* search bar field with heading */}
-        <div className='flex flex-col text-left mt-8'> 
+        <div className='flex flex-col text-center mt-8'> 
         <h2 className="text-4xl font-semibold text-primary my-10">
           Hello World! This is a travel website.
         </h2>
@@ -64,11 +64,16 @@ const HomePage = () => {
       </header>
       <section className="w-full max-w-screen-lg mx-auto py-8 px-4">
         <h2 className="text-2xl font-semibold mb-6 text-center">Popular Places</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {popularCountries.map(({ country }) => (
             <div key={country} className="bg-white shadow-md rounded-lg overflow-hidden">
               <div className="relative">
-                <img src={`/img/${country}.jpg`} alt={country} className="w-full h-48 object-cover" />
+              <img 
+                src={`/img/${country}.jpg`} 
+                alt={country} 
+                className="w-full h-48 object-cover" 
+                onError={(e) => e.target.src = '/img/placeholder.jpg'}
+              />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                   <h3 className="text-2xl text-white font-semibold">{country}</h3>
                 </div>
