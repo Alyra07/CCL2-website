@@ -22,12 +22,8 @@ const DetailsPage = () => {
     }, [id]);
 
     const handleBack = () => {
-        navigate(-1, {
-            state: {
-                searchCriteria: location.state.searchCriteria,
-                filteredListings: location.state.filteredListings
-            }
-        });
+        // Navigate back to the previous location
+        navigate(-1);
     };
     
     if (!listing) {
