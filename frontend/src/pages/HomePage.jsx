@@ -52,7 +52,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between min-h-screen bg-white shadow-md overflow-hidden">
+    <div className="">
       <div>
         <header className="text-center w-full">
           <div className="relative">
@@ -62,11 +62,13 @@ const HomePage = () => {
               className="w-full h-64 object-cover" 
               onError={(e) => e.target.src = '/img/bg-bedroom.jpg'}
             />
-            <div className="flex flex-col absolute inset-0 bg-black bg-opacity-50 items-center justify-center">
-              <h1 className="flex flex-col text-center mt-8 text-4xl font-semibold text-white py-10">
+            <div className="flex flex-col p-4 absolute inset-0 bg-black bg-opacity-50 items-center justify-center">
+              <h1 className="flex flex-col text-center mt-8 text-4xl font-semibold text-white py-6 md:py-10">
                 Hello World! This is a travel website.
               </h1>
+              <div className='flex flex-col text-center'> 
               <SearchBar onSearch={handleSearch} countries={countries} />
+              </div>
             </div>
           </div>
         </header>
