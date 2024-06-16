@@ -39,6 +39,7 @@ const NavBar = () => {
           <FontAwesomeIcon icon={faBed} className="text-2xl" />
           <span className="ml-2 hidden sm:inline hidden xs:inline">Find Stays</span>
         </NavLink>
+        <Link to="/favorites" className="ml-4 hidden sm:inline hidden xs:inline">Favorites</Link>
         {/* <Link to="/register" className='ml-8'>Register</Link> */}
         {/* <Link to="/login" className='ml-8'>Login</Link> */}
       </div>

@@ -13,6 +13,7 @@ import ListMain from './pages/ListMain';
 import DetailsPage from './pages/DetailsPage';
 import AddListing from './pages/AddListing';
 import DetailsListing from './pages/DetailsListing';
+import Favorites from './pages/Favorites';
 
 const App = () => {
 
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/add" element={<AddListing />} />
             <Route path="/profile/listing/:id" element={<DetailsListing />} />
+            <Route path="/favorites" element={<Favorites />} />
           </Routes>
         </div>
         {/* <Footer /> */}

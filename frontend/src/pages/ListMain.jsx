@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
+import { useUser } from '../assets/UserContext';
 import SearchBar from '../components/SearchBar';
+import AddFavorite from '../components/AddFavorite';
 
 const ListMain = () => {
+    const { user } = useUser();
     const location = useLocation();
     const navigate = useNavigate();
     const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
@@ -82,7 +85,7 @@ const ListMain = () => {
                     filteredListings.map((listing, index) => (
                         <div
                             key={index}
-                            className="border border-gray-300 rounded-lg overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105"
+                            className="border border-gray-300 rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105"
                             onClick={() => handleListingClick(listing.id)}
                         >
                             <img
@@ -97,6 +100,7 @@ const ListMain = () => {
                                 <p className="text-gray-700">${listing.price} per night</p>
                                 <p className="text-gray-700">{listing.guests} guests</p>
                                 <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
+                                <AddFavorite listingId={listing.id} userId={user.id} />
                             </div>
                         </div>
                     ))
