@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import { signUp } from '../assets/auth';
-import axios from 'axios';
+
+const supabaseUrl = 'https://asfguipgiafjfgqzzoky.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZmd1aXBnaWFmamZncXp6b2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMzU0MDYsImV4cCI6MjAzMzYxMTQwNn0.Q9U0z8vo4BRNII-ufAWi6fjNdrR88aukpB6FD6gx_AY'; // Ensure this is correct and secure
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -30,16 +34,43 @@ const Register = () => {
       const user = data.user;
       if (user && user.id) {
         try {
-          const response = await axios.post('http://localhost:5000/profile', {
-            id: user.id,
-            email: user.email,
-            name: name,
-            surname: surname
-          });
+          const { data: existingProfile, error: fetchError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single();
 
-          setMessage(`Sign up successful: ${user.email}`);
+          if (fetchError && fetchError.code !== 'PGRST116') {
+            throw new Error(`Fetch error: ${fetchError.message}`);
+          }
+
+          let profileMessage;
+          if (existingProfile) {
+            const { data, error } = await supabase
+              .from('users')
+              .update({ name, surname })
+              .eq('email', email);
+
+            if (error) {
+              throw new Error(`Update error: ${error.message}`);
+            }
+
+            profileMessage = 'Profile updated successfully';
+          } else {
+            const { data, error } = await supabase
+              .from('users')
+              .insert([{ id: user.id, email: user.email, name, surname }]);
+
+            if (error) {
+              throw new Error(`Insert error: ${error.message}`);
+            }
+
+            profileMessage = 'Profile created successfully';
+          }
+
+          setMessage(`Sign up successful: ${user.email}. ${profileMessage}`);
         } catch (profileError) {
-          setMessage(`Sign up successful, but profile creation failed: ${profileError.response?.data?.error || profileError.message}`);
+          setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);
         }
       } else {
         setMessage('Sign up successful, but user ID is missing.');

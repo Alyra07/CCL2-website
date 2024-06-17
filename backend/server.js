@@ -22,12 +22,6 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routers
-const usersRoute = require('./routes/users.js');
-
-// Use routers
-app.use('/profile', usersRoute);
-
 app.get('/protected', verifyToken, (req, res) => {
   res.send(`Hello, ${req.user.email}`);
 });
