@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { fetchListingById } from '../assets/listings';
 
 const DetailsPage = () => {
     const { id } = useParams();
-    const location = useLocation();
-    const navigate = useNavigate();
     const [listing, setListing] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getData = async () => {
@@ -58,12 +57,12 @@ const DetailsPage = () => {
                     {listing.amenities.parking && ' Parking'}
                     {listing.amenities.pool && ' Pool'}
                 </p>
+                <p className="text-gray-700 mb-4"><span className="font-semibold">Description:</span> {listing.description}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
                     {listing.images?.map((image, index) => (
                         <img key={index} src={image} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
                     ))}
                 </div>
-                <p className="text-gray-700 mb-4"><span className="font-semibold">Description:</span> {listing.description}</p>
             </div>
         </div>
     );
