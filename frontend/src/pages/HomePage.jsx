@@ -81,7 +81,7 @@ const HomePage = () => {
                   <img 
                     src={`/img/${country}.jpg`} 
                     alt={country} 
-                    className="w-full h-48 object-cover" 
+                    className="w-full h-64 object-cover" 
                     onError={(e) => e.target.src = '/img/placeholder.jpg'}
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">

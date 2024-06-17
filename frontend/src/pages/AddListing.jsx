@@ -161,7 +161,7 @@ const AddListing = () => {
           </div>
           <div className="mb-2">
             <label htmlFor="price" className="block mb-1">Price/night:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="price" id="price" value={listingDetails.price} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} />
           </div>
           <div className="mb-2">
             <label htmlFor="guests" className="block mb-1">Guests:</label>

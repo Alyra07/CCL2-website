@@ -59,7 +59,7 @@ const DetailsListing = () => {
         if (!imageNames || imageNames.length === 0) {
             return;
         }
-
+        // download images from storage
         try {
             const imagePromises = imageNames.map(async (imageName) => {
                 const { data, error } = await supabase.storage
@@ -142,7 +142,6 @@ const DetailsListing = () => {
     };
 
     const handleBack = () => {
-        // Navigate back to the previous location
         navigate(-1);
     };
 

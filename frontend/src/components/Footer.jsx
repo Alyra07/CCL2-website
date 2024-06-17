@@ -10,7 +10,7 @@ const Footer = () => {
           src="/travel-logo.jpg" 
           alt="hotel room icon" />
         </a>
-        <Link className="mx-4 p-2" to="/">CCL</Link>
+        <Link className="mx-4 p-2" to="/">CCL2</Link>
         <Link className="mx-4 p-2" to="/">Project</Link>
         <Link className="mx-4 p-2" to="/">by</Link>
         <Link className="mx-4 p-2" to="/profile">Mirjam McLachlan</Link>

@@ -168,85 +168,85 @@ const Profile = () => {
     }
   };
 
-// default return if user is logged in
-return (
-  <div className="p-4 md:p-10 lg:p-16">
-    <div className="text-center">
-      <h2 className="font-semibold text-primary text-3xl">
-        Profile
-      </h2>
-      <p className="text-green-500">{message}</p>
-    </div>
-    {/* Profile data display */}
-    {profile && (
-      <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
-        {/* Profile image */}
-        <div className="text-center mb-4">
-          <img src={profile.image} alt="Profile"
-            className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4" />
-          <label className="block mb-2">Select Profile Picture:</label>
-          <select
-            value={selectedImage}
-            onChange={(e) => setSelectedImage(e.target.value)}
-            className="border p-2 rounded mb-4"
-          >
-            <option value="">Select an image</option>
-            {profileImages.map((path, index) => (
-              <option key={index} value={path}>{`Image ${index + 1}`}</option>
-            ))}
-          </select>
-          <button
-            onClick={handleImageChange}
-            className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
-          >
-            Set Profile Picture
-          </button>
-        </div>
+  // default return if user is logged in
+  return (
+    <div className="p-4 md:p-10 lg:p-16">
+      <div className="text-center">
+        <h2 className="font-semibold text-primary text-3xl">
+          Profile
+        </h2>
+        <p className="text-green-500">{message}</p>
+      </div>
+      {/* Profile data display */}
+      {profile && (
+        <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
+          {/* Profile image */}
+          <div className="text-center mb-4">
+            <img src={profile.image} alt="Profile"
+              className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4" />
+            <label className="block mb-2">Select Profile Picture:</label>
+            <select
+              value={selectedImage}
+              onChange={(e) => setSelectedImage(e.target.value)}
+              className="border p-2 rounded mb-4"
+            >
+              <option value="">Select an image</option>
+              {profileImages.map((path, index) => (
+                <option key={index} value={path}>{`Image ${index + 1}`}</option>
+              ))}
+            </select>
+            <button
+              onClick={handleImageChange}
+              className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
+            >
+              Set Profile Picture
+            </button>
+          </div>
 
-        {/* User Data Display with Edit */}
-        <div className="flex justify-center items-center mb-4">
-          <div className="flex flex-col">
-            <div className="justify-center">
-              <p className="text-lg font-semibold">Email: {profile.email}</p>
-              <p className="text-lg font-semibold">
-                Name: {isEditingName ? (
-                  <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    className="border p-2 rounded"
-                  />
-                ) : (
-                  profile.name
-                )}
-                <button
-                  onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
-                  className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                >
-                  {isEditingName ? 'Save' : 'Edit'}
-                </button>
-              </p>
-              <p className="text-lg font-semibold">
-                Surname: {isEditingSurname ? (
-                  <input
-                    type="text"
-                    value={newSurname}
-                    onChange={(e) => setNewSurname(e.target.value)}
-                    className="border p-2 rounded"
-                  />
-                ) : (
-                  profile.surname
-                )}
-                <button
-                  onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
-                  className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                >
-                  {isEditingSurname ? 'Save' : 'Edit'}
-                </button>
-              </p>
+          {/* User Data Display with Edit */}
+          <div className="flex justify-center items-center mb-4">
+            <div className="flex flex-col">
+              <div className="justify-center">
+                <p className="text-lg font-semibold">Email: {profile.email}</p>
+                <p className="text-lg font-semibold">
+                  Name: {isEditingName ? (
+                    <input
+                      type="text"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      className="border p-2 rounded"
+                    />
+                  ) : (
+                    profile.name
+                  )}
+                  <button
+                    onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+                    className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                  >
+                    {isEditingName ? 'Save' : 'Edit'}
+                  </button>
+                </p>
+                <p className="text-lg font-semibold">
+                  Surname: {isEditingSurname ? (
+                    <input
+                      type="text"
+                      value={newSurname}
+                      onChange={(e) => setNewSurname(e.target.value)}
+                      className="border p-2 rounded"
+                    />
+                  ) : (
+                    profile.surname
+                  )}
+                  <button
+                    onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
+                    className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                  >
+                    {isEditingSurname ? 'Save' : 'Edit'}
+                  </button>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
           {/* User Listings "Your Places" */}
           <div className="mb-2 text-center">
@@ -283,10 +283,13 @@ return (
             )}
           </div>
 
-          {/* Back to home link */}
-          <div className="text-center mt-6">
-            <Link to="/" className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300">
-              Back to Home
+          {/* Add listing Button */}
+          <div className="mt-8 mb-2 text-center">
+            <Link
+              to="/add"
+              className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
+            >
+              Add a listing
             </Link>
           </div>
         </div>
@@ -294,8 +297,13 @@ return (
 
       {/* If no profile is set */}
       {!profile && (
-        <div className="text-center">
-          <p className="text-red-500">Profile not found. Please log in.</p>
+        <div className="text-center m-8">
+          <p>
+            You are not logged in. Please sign in here: {'  '}
+            <Link to="/login"
+              className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
+            >Login</Link>
+          </p>
         </div>
       )}
     </div>
