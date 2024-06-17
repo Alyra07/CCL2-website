@@ -15,8 +15,9 @@ const Profile = () => {
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
   const [newSurname, setNewSurname] = useState('');
-  // profile image paths (predefined for simplicity)
-  const imagePaths = [
+  const [images, setImages] = useState([]); // State to store listing images
+
+  const profileImages = [
     '/profile/profile-img1.png',
     '/profile/profile-img2.png',
     '/profile/profile-img3.png',
@@ -64,9 +65,41 @@ const Profile = () => {
       }
 
       setListings(data);
+      fetchListingImages(data); // Fetch images for user listings
     } catch (error) {
       console.error('Error fetching listings:', error.message);
       setMessage('Error fetching listings.');
+    }
+  };
+
+  const fetchListingImages = async (listings) => {
+    if (!listings || listings.length === 0) {
+      return;
+    }
+
+    try {
+      const imagePromises = listings.map(async (listing) => {
+        if (listing.images && listing.images.length > 0) {
+          const { data, error } = await supabase.storage
+            .from('images')
+            .download(listing.images[0]); // Fetching only the first image for cover display
+
+          if (error) {
+            throw error;
+          }
+
+          const imageUrl = URL.createObjectURL(data);
+          return { listingId: listing.id, imageUrl };
+        } else {
+          // If no images, use placeholder
+          return { listingId: listing.id, imageUrl: '/img/placeholder2.jpg' };
+        }
+      });
+
+      const fetchedImages = await Promise.all(imagePromises);
+      setImages(fetchedImages);
+    } catch (error) {
+      console.error('Error fetching listing images:', error.message);
     }
   };
 
@@ -135,85 +168,85 @@ const Profile = () => {
     }
   };
 
-  // default return if user is logged in
-  return (
-    <div className="p-4 md:p-10 lg:p-16">
-      <div className="text-center">
-        <h2 className="font-semibold text-primary text-3xl">
-          Profile
-        </h2>
-        <p className="text-green-500">{message}</p>
-      </div>
-      {/* Profile data display */}
-      {profile && (
-        <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
-          {/* Profile image */}
-          <div className="text-center mb-4">
-            <img src={profile.image} alt="Profile"
-              className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4" />
-            <label className="block mb-2">Select Profile Picture:</label>
-            <select
-              value={selectedImage}
-              onChange={(e) => setSelectedImage(e.target.value)}
-              className="border p-2 rounded mb-4"
-            >
-              <option value="">Select an image</option>
-              {imagePaths.map((path, index) => (
-                <option key={index} value={path}>{`Image ${index + 1}`}</option>
-              ))}
-            </select>
-            <button
-              onClick={handleImageChange}
-              className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
-            >
-              Set Profile Picture
-            </button>
-          </div>
+// default return if user is logged in
+return (
+  <div className="p-4 md:p-10 lg:p-16">
+    <div className="text-center">
+      <h2 className="font-semibold text-primary text-3xl">
+        Profile
+      </h2>
+      <p className="text-green-500">{message}</p>
+    </div>
+    {/* Profile data display */}
+    {profile && (
+      <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
+        {/* Profile image */}
+        <div className="text-center mb-4">
+          <img src={profile.image} alt="Profile"
+            className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4" />
+          <label className="block mb-2">Select Profile Picture:</label>
+          <select
+            value={selectedImage}
+            onChange={(e) => setSelectedImage(e.target.value)}
+            className="border p-2 rounded mb-4"
+          >
+            <option value="">Select an image</option>
+            {profileImages.map((path, index) => (
+              <option key={index} value={path}>{`Image ${index + 1}`}</option>
+            ))}
+          </select>
+          <button
+            onClick={handleImageChange}
+            className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
+          >
+            Set Profile Picture
+          </button>
+        </div>
 
-          {/* User Data Display with Edit */}
-          <div className="flex justify-center items-center mb-4">
-            <div className="flex flex-col">
-              <div className="justify-center">
-                <p className="text-lg font-semibold">Email: {profile.email}</p>
-                <p className="text-lg font-semibold">
-                  Name: {isEditingName ? (
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="border p-2 rounded"
-                    />
-                  ) : (
-                    profile.name
-                  )}
-                  <button
-                    onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
-                    className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                  >
-                    {isEditingName ? 'Save' : 'Edit'}
-                  </button>
-                </p>
-                <p className="text-lg font-semibold">
-                  Surname: {isEditingSurname ? (
-                    <input
-                      type="text"
-                      value={newSurname}
-                      onChange={(e) => setNewSurname(e.target.value)}
-                      className="border p-2 rounded"
-                    />
-                  ) : (
-                    profile.surname
-                  )}
-                  <button
-                    onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
-                    className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                  >
-                    {isEditingSurname ? 'Save' : 'Edit'}
-                  </button>
-                </p>
-              </div>
+        {/* User Data Display with Edit */}
+        <div className="flex justify-center items-center mb-4">
+          <div className="flex flex-col">
+            <div className="justify-center">
+              <p className="text-lg font-semibold">Email: {profile.email}</p>
+              <p className="text-lg font-semibold">
+                Name: {isEditingName ? (
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="border p-2 rounded"
+                  />
+                ) : (
+                  profile.name
+                )}
+                <button
+                  onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+                  className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                >
+                  {isEditingName ? 'Save' : 'Edit'}
+                </button>
+              </p>
+              <p className="text-lg font-semibold">
+                Surname: {isEditingSurname ? (
+                  <input
+                    type="text"
+                    value={newSurname}
+                    onChange={(e) => setNewSurname(e.target.value)}
+                    className="border p-2 rounded"
+                  />
+                ) : (
+                  profile.surname
+                )}
+                <button
+                  onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
+                  className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                >
+                  {isEditingSurname ? 'Save' : 'Edit'}
+                </button>
+              </p>
             </div>
           </div>
+        </div>
 
           {/* User Listings "Your Places" */}
           <div className="mb-2 text-center">
@@ -229,7 +262,7 @@ const Profile = () => {
                       onClick={() => handleListingClick(listing.id)}
                     >
                       <img
-                        src={listing.images?.[0] || '/img/placeholder2.jpg'}
+                        src={images.find(img => img.listingId === listing.id)?.imageUrl || '/img/placeholder2.jpg'}
                         alt={listing.name}
                         className="w-full h-52 object-cover"
                       />
@@ -239,40 +272,34 @@ const Profile = () => {
                         <p className="text-gray-700">{listing.country}</p>
                         <p className="text-gray-700">${listing.price} per night</p>
                         <p className="text-gray-700">{listing.guests} guests</p>
+                        <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
-              <p className="text-center">You have no listings yet...</p>
+              <p className="text-gray-700">You have no listings yet.</p>
             )}
+          </div>
+
+          {/* Back to home link */}
+          <div className="text-center mt-6">
+            <Link to="/" className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300">
+              Back to Home
+            </Link>
           </div>
         </div>
       )}
-      <div className="my-4 text-center">
-        <Link
-          to="/add"
-          className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
-        >
-          Add a listing
-        </Link>
-      </div>
+
+      {/* If no profile is set */}
+      {!profile && (
+        <div className="text-center">
+          <p className="text-red-500">Profile not found. Please log in.</p>
+        </div>
+      )}
     </div>
   );
-
-  // if not logged in, display message to sign in
-  if (!profile) {
-    return (
-      <div>
-        <h2 className='font-bold'>Profile</h2>
-        <p>
-          You are not logged in. Please sign in here: 
-          <Link to="/login">Login</Link>
-        </p>
-      </div>
-    );
-  }
 };
 
 export default Profile;
