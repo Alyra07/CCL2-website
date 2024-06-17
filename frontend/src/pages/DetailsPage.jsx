@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchListingById } from '../assets/listings';
+import { fetchListingById } from '../assets/listings'; // Assuming fetchListingById is a function to fetch listing details
+import { supabase } from '../supabaseClient'; // Import Supabase client
 
 const DetailsPage = () => {
     const { id } = useParams();
     const [listing, setListing] = useState(null);
+    const [headerImage, setHeaderImage] = useState('/img/placeholder2.jpg');
+    const [images, setImages] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -12,6 +15,7 @@ const DetailsPage = () => {
             try {
                 const data = await fetchListingById(id);
                 setListing(data);
+                fetchImages(data.images); // Fetch images after listing data is set
             } catch (error) {
                 console.error("Error fetching listing details:", error);
             }
@@ -20,11 +24,48 @@ const DetailsPage = () => {
         getData();
     }, [id]);
 
+    const fetchImages = async (imageNames) => {
+        if (!imageNames || imageNames.length === 0) {
+            return;
+        }
+
+        try {
+            const imagePromises = imageNames.map(async (imageName) => {
+                const { data, error } = await supabase.storage
+                    .from('images')
+                    .download(imageName);
+
+                if (error) {
+                    throw error;
+                }
+
+                const imageUrl = URL.createObjectURL(data); // Create a URL for the downloaded image
+                return { imageName, imageUrl };
+            });
+
+            const fetchedImages = await Promise.all(imagePromises);
+            setImages(fetchedImages);
+
+            // Set header image separately
+            if (imageNames.length > 0) {
+                const { data: headerData, error: headerError } = await supabase.storage
+                    .from('images')
+                    .download(imageNames[0]);
+                if (!headerError) {
+                    const headerImageUrl = URL.createObjectURL(headerData);
+                    setHeaderImage(headerImageUrl);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching images:', error.message);
+        }
+    };
+
     const handleBack = () => {
         // Navigate back to the previous location
         navigate(-1);
     };
-    
+
     if (!listing) {
         return <p>Loading...</p>;
     }
@@ -38,7 +79,7 @@ const DetailsPage = () => {
             </button>
             <div className="mb-4">
                 <img
-                    src={listing.images?.[0] || '/img/placeholder2.jpg'}
+                    src={headerImage}
                     alt={listing.name}
                     className="w-full h-64 object-cover rounded-lg mb-4"
                 />
@@ -59,8 +100,8 @@ const DetailsPage = () => {
                 </p>
                 <p className="text-gray-700 mb-4"><span className="font-semibold">Description:</span> {listing.description}</p>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
-                    {listing.images?.map((image, index) => (
-                        <img key={index} src={image} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
+                    {images.map((image, index) => (
+                        <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
                     ))}
                 </div>
             </div>
