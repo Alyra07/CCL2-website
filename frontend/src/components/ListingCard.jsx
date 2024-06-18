@@ -38,7 +38,7 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
                 <h3 className="text-xl font-semibold mb-2">{listing.name}</h3>
                 <p className="text-gray-700">{listing.address}</p>
                 <p className="text-gray-700">{listing.country}</p>
-                <p className="text-gray-700">${listing.price} per night</p>
+                <p className="text-gray-700">{listing.price} € per night</p>
                 <p className="text-gray-700">{listing.guests} guests</p>
                 {showAddFavorite && (
                     <AddFavorite

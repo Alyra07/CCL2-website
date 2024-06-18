@@ -8,6 +8,8 @@ const DetailsPage = () => {
     const [listing, setListing] = useState(null);
     const [headerImage, setHeaderImage] = useState('/img/placeholder2.jpg');
     const [images, setImages] = useState([]);
+    const [fullImage, setFullImage] = useState(null);
+    const [showFullImage, setShowFullImage] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,7 +64,6 @@ const DetailsPage = () => {
     };
 
     const handleBack = () => {
-        // Navigate back to the previous location
         navigate(-1);
     };
 
@@ -78,11 +79,13 @@ const DetailsPage = () => {
                 Back
             </button>
             <div className="mb-4">
+                {/* Header Image */}
                 <img
                     src={headerImage}
                     alt={listing.name}
                     className="w-full h-64 object-cover rounded-lg mb-4"
                 />
+                {/* Listing Details */}
                 <p className="text-gray-700 mb-2"><span className="font-semibold">Address:</span> {listing.address}</p>
                 <p className="text-gray-700 mb-2"><span className="font-semibold">Country:</span> {listing.country}</p>
                 <p className="text-gray-700 mb-2"><span className="font-semibold">Price:</span> ${listing.price} per night</p>
@@ -98,9 +101,20 @@ const DetailsPage = () => {
                     {listing.amenities.parking && ' Parking'}
                     {listing.amenities.pool && ' Pool'}
                 </p>
+                {/* Listing Images */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-4">
                     {images.map((image, index) => (
-                        <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 lg:h-64 object-cover rounded-lg" />
+                        <img
+                            key={index}
+                            src={image.imageUrl}
+                            alt={`Image ${index + 1}`}
+                            className="w-full h-48 lg:h-64 object-cover rounded-lg cursor-pointer transform transition duration-300 hover:scale-105"
+                            // Open full image on click
+                            onClick={() => {
+                                setFullImage(image.imageUrl);
+                                setShowFullImage(true);
+                            }}
+                        />
                     ))}
                 </div>
                 <p className="text-gray-700">
@@ -108,6 +122,16 @@ const DetailsPage = () => {
                     <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
                 </p>
             </div>
+            {/* Full Image Modal */}
+            {showFullImage && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50" onClick={() => setShowFullImage(false)}>
+                    <img
+                        src={fullImage}
+                        alt="Full Size"
+                        className="max-h-full max-w-full"
+                    />
+                </div>
+            )}
         </div>
     );
 };
