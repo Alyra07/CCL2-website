@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
-const verifyToken = require('./middleware/verifyToken');
 
 const app = express();
 const port = 5000;
@@ -21,10 +20,6 @@ app.use(express.static(path.join(__dirname, '../frontend/dist')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get('/protected', verifyToken, (req, res) => {
-  res.send(`Hello, ${req.user.email}`);
-});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));

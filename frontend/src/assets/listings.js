@@ -49,7 +49,7 @@ export const updateListing = async (id, updatedFields) => {
       throw error;
     }
 
-    return data; // Return updated data if needed
+    return data;
   } catch (error) {
     console.error(`Error updating listing with ID ${id}:`, error.message);
     throw new Error(`Error updating listing with ID ${id}.`);
