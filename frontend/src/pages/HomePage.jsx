@@ -69,7 +69,11 @@ const HomePage = () => {
               <h1 className="flex flex-col text-center mt-8 text-4xl font-bold text-white py-6 md:py-10">
                 Hello World! This is a travel website.
               </h1>
-              <SearchBar onSearch={handleSearch} countries={countries} />
+              <SearchBar 
+              onSearch={handleSearch} 
+              countries={countries}
+              showFilters={false} 
+              />
             </div>
           </div>
         </header>

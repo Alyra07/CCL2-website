@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
-const SearchBar = ({ onSearch, onFilter, countries, initialValues }) => {
+const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }) => {
   const [country, setCountry] = useState(initialValues?.country || 'all');
   const [guests, setGuests] = useState(initialValues?.guests || '');
   const [startDate, setStartDate] = useState(initialValues?.startDate || '');
@@ -54,7 +54,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues }) => {
   return (
     <div className='text-center p-4 bg-tertiary border border-secondary rounded-lg shadow-md'>
       <h3 className='text-lg font-medium mb-4 md:mb-6 sm:mb-6'>Where do you want to go next?</h3>
-
+      {/* main SearchBar filters (HomePage & ListMain) */}
       <div className="">
         <select value={country} onChange={(e) => setCountry(e.target.value)}
           className='p-2 border-2 border-secondary rounded-lg'>
@@ -90,14 +90,17 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues }) => {
           <FontAwesomeIcon icon={faMagnifyingGlass} className='mr-2' />
           Search
         </button>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
-          Toggle Filters
-        </button>
+      {/* Additional filters when showFilters is true (ListMain) */}
+        {showFilters && (
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+            Toggle Filters
+          </button>
+        )}
       </div>
-
-      {isOpen && (
+      {/* open additional filters (toggle filters) */}
+      {showFilters && isOpen && (
         <div className="mt-4">
           <input
             type="number"
