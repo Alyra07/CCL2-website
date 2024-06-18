@@ -16,7 +16,6 @@ const Profile = () => {
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
   const [newSurname, setNewSurname] = useState('');
-  const [images, setImages] = useState([]);
 
   const profileImages = [
     '/profile/profile-img1.png',
@@ -35,6 +34,7 @@ const Profile = () => {
     }
   }, [user]);
 
+  // Fetch user profile data
   const fetchUserProfile = async () => {
     const { data, error } = await supabase
       .from('users')
@@ -65,40 +65,9 @@ const Profile = () => {
       }
 
       setListings(data);
-      fetchListingImages(data);
     } catch (error) {
       console.error('Error fetching listings:', error.message);
       setMessage('Error fetching listings.');
-    }
-  };
-
-  const fetchListingImages = async (listings) => {
-    if (!listings || listings.length === 0) {
-      return;
-    }
-
-    try {
-      const imagePromises = listings.map(async (listing) => {
-        if (listing.images && listing.images.length > 0) {
-          const { data, error } = await supabase.storage
-            .from('images')
-            .download(listing.images[0]);
-
-          if (error) {
-            throw error;
-          }
-
-          const imageUrl = URL.createObjectURL(data);
-          return { listingId: listing.id, imageUrl };
-        } else {
-          return { listingId: listing.id, imageUrl: '/img/placeholder2.jpg' };
-        }
-      });
-
-      const fetchedImages = await Promise.all(imagePromises);
-      setImages(fetchedImages);
-    } catch (error) {
-      console.error('Error fetching listing images:', error.message);
     }
   };
 
@@ -171,6 +140,7 @@ const Profile = () => {
         <h2 className="font-semibold text-primary text-3xl">Profile</h2>
         <p className="text-green-500">{message}</p>
       </div>
+      {/* Profile Picture */}
       {profile && (
         <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
           <div className="text-center mb-4">
@@ -197,12 +167,13 @@ const Profile = () => {
               Set Profile Picture
             </button>
           </div>
-
+          {/* User Data Display */}
           <div className="flex justify-center items-center mb-4">
             <div className="flex flex-col">
               <div className="justify-center">
                 <p className="text-lg font-semibold">Email: {profile.email}</p>
                 <p className="text-lg font-semibold">
+                  {/* Edit name & surname */}
                   Name: {isEditingName ? (
                     <input
                       type="text"
