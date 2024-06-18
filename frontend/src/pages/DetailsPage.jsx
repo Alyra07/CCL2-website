@@ -72,7 +72,7 @@ const DetailsPage = () => {
 
     return (
         <div className="p-4 md:p-10 lg:p-16 text-center">
-            <h1 className="text-3xl font-bold mb-4">{listing.name}</h1>
+            <h1 className="text-3xl text-primary font-bold mb-4">{listing.name}</h1>
             <button onClick={handleBack}
                 className="bg-accent text-white py-2 px-4 my-4 rounded hover:bg-red-300">
                 Back
@@ -98,12 +98,15 @@ const DetailsPage = () => {
                     {listing.amenities.parking && ' Parking'}
                     {listing.amenities.pool && ' Pool'}
                 </p>
-                <p className="text-gray-700 mb-4"><span className="font-semibold">Description:</span> {listing.description}</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-4">
                     {images.map((image, index) => (
-                        <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
+                        <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 lg:h-64 object-cover rounded-lg" />
                     ))}
                 </div>
+                <p className="text-gray-700">
+                    <span className="font-semibold">Description:</span> 
+                    <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                </p>
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill'; // ignore warning in console (update soon)
 import 'react-quill/dist/quill.snow.css';
 
 const AddListing = () => {
@@ -87,7 +87,6 @@ const AddListing = () => {
 
       uploadedImagePaths.push(fileName);
     }
-
     return uploadedImagePaths;
   };
 
@@ -155,31 +154,31 @@ const AddListing = () => {
         {/* Details Section */}
         <div className="flex flex-col md:w-1/2 mt-2">
           <h2 className="text-xl mb-2">Details</h2>
-          <hr className="mb-4" />
+          <hr className="border border-secondary mb-4" />
           <div className="mb-2">
             <label htmlFor="name" className="block mb-1">Name:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="name" id="name" value={listingDetails.name} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="name" id="name" value={listingDetails.name} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="address" className="block mb-1">Address:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="country" className="block mb-1">Country:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="price" className="block mb-1">Price/night:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="guests" className="block mb-1">Guests:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} onChange={handleChange} required/>
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} onChange={handleChange} required/>
           </div>
           <div className="mb-2">
             <label htmlFor="description" className="block mb-1">Description:</label>
-            <ReactQuill
-              className="p-2 border-2 border-secondary rounded-lg w-full"
+            <ReactQuill // Rich text editor
+              className="p-2 border-2 border-tertiary rounded-lg w-full"
               name="description"
               id="description"
               value={listingDetails.description}
@@ -192,26 +191,26 @@ const AddListing = () => {
           {/* Images Section */}
           <div>
             <h2 className="text-xl mb-2">Images</h2>
-            <hr className="mt-2 mb-4" />
+            <hr className="border border-secondary mb-4" />
             <input type="file" multiple onChange={handleImageChange} />
           </div>
           {/* Availability Section */}
           <div className="my-2">
             <h2 className="text-xl mb-2">Availability</h2>
-            <hr className="mt-2 mb-4" />
+            <hr className="border border-secondary mb-4" />
             <div className="mb-2">
               <label htmlFor="start" className="block mb-1">Start Date:</label>
-              <input className="p-2 border-2 border-secondary rounded-lg w-full" type="date" name="start" id="start" value={listingDetails.availability.start} onChange={handleChange} />
+              <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="date" name="start" id="start" value={listingDetails.availability.start} onChange={handleChange} />
             </div>
             <div className="mb-2">
               <label htmlFor="end" className="block mb-1">End Date:</label>
-              <input className="p-2 border-2 border-secondary rounded-lg w-full" type="date" name="end" id="end" value={listingDetails.availability.end} onChange={handleChange} />
+              <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="date" name="end" id="end" value={listingDetails.availability.end} onChange={handleChange} />
             </div>
           </div>
           {/* Amenities Section */}
           <div className="my-2">
             <h2 className="text-xl mb-2">Amenities</h2>
-            <hr className="mt-2 mb-4" />
+            <hr className="border border-secondary mb-4" />
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {Object.keys(listingDetails.amenities).map((amenity) => (
                 <div key={amenity} className="flex items-center">
@@ -231,7 +230,7 @@ const AddListing = () => {
           {/* Submit Button */}
           <div className="mt-4">
             <button
-              className="bg-primary text-white py-2 px-4 rounded-lg w-full"
+              className="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg w-full"
               type="submit"
             >
               Publish Listing
