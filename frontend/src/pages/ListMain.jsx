@@ -14,12 +14,13 @@ const ListMain = () => {
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch all listings from database
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await fetchAllListings();
         setListings(data);
-
+        // Extract unique countries from listings
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
         setCountries(uniqueCountries);
 
@@ -47,7 +48,7 @@ const ListMain = () => {
 
   const filterListings = () => {
     const { country, guests, startDate, endDate } = searchCriteria;
-  
+    // Filter listings based on main search criteria
     const filtered = listings.filter((listing) => {
       const matchesCountry = country === 'all' || (country ? (listing.country?.toLowerCase().includes(country.toLowerCase()) ?? false) : true);
       const matchesGuests = guests ? listing.guests >= guests : true;
@@ -59,21 +60,22 @@ const ListMain = () => {
   
     setFilteredListings(filtered);
   };
-
+  // Filter listings based on price & amenities filter criteria
   const handleApplyFilter = (filterCriteria) => {
-    const { country, minPrice, maxPrice, amenities } = filterCriteria;
+    const { country, priceRange, amenities } = filterCriteria;
+    const [minPrice, maxPrice] = priceRange;
   
     const filtered = listings.filter((listing) => {
       const matchesCountry = country === 'all' || listing.country.toLowerCase() === country.toLowerCase();
       const matchesPriceRange = (!minPrice || listing.price >= minPrice) && (!maxPrice || listing.price <= maxPrice);
       const matchesAmenities = amenities.length === 0 || amenities.every(amenity => listing.amenities[amenity]);
-
+  
       return matchesCountry && matchesPriceRange && matchesAmenities;
     });
-
+  
     setFilteredListings(filtered);
   };
-
+  // Handle click on ListingCard
   const handleListingClick = (id) => {
     navigate(`/list/${id}`);
   };
@@ -94,9 +96,11 @@ const ListMain = () => {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredListings.length === 0 ? (
-          <p className="col-span-full text-center">No listings available</p>
+        {filteredListings.length === 0 ? ( // display message if no listings
+          <p className="col-span-full text-lg text-center">
+            No matches for your search criteria...</p>
         ) : (
+        // Display filtered listingCards
           filteredListings.map((listing, index) => (
             <ListingCard
               key={index}

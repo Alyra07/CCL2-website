@@ -43,19 +43,14 @@ const Register = () => {
           if (fetchError && fetchError.code !== 'PGRST116') {
             throw new Error(`Fetch error: ${fetchError.message}`);
           }
-
+          // profile creation
           let profileMessage;
           if (existingProfile) {
-            const { data, error } = await supabase
-              .from('users')
-              .update({ name, surname })
-              .eq('email', email);
-
+            profileMessage = 'Profile already exists';
             if (error) {
               throw new Error(`Update error: ${error.message}`);
             }
 
-            profileMessage = 'Profile updated successfully';
           } else {
             const { data, error } = await supabase
               .from('users')
