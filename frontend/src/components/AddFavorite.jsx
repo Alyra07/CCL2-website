@@ -66,7 +66,7 @@ const AddFavorite = ({ listingId, userId }) => {
                 }
 
                 setIsFavorite(true);
-                console.log('Added to favorites:', data);
+                console.log('Added to favorites');
             }
         } catch (error) {
             console.error('Error toggling favorite status:', error.message);

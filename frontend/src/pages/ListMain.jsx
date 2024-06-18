@@ -8,11 +8,11 @@ import ListingCard from '../components/ListingCard';
 const ListMain = () => {
     const { user } = useUser();
     const location = useLocation();
-    const navigate = useNavigate();
     const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
     const [listings, setListings] = useState([]);
     const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
     const [countries, setCountries] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getData = async () => {
@@ -50,34 +50,55 @@ const ListMain = () => {
     // Filter listings based on search criteria
     const filterListings = () => {
         const { country, guests, startDate, endDate } = searchCriteria;
-
+      
         const filtered = listings.filter((listing) => {
-            const matchesCountry = country === 'all' || (country ? (listing.country?.toLowerCase().includes(country.toLowerCase()) ?? false) : true);
-            const matchesGuests = guests ? listing.guests >= guests : true;
-            const matchesStartDate = startDate ? new Date(listing.availability.start) <= new Date(startDate) : true;
-            const matchesEndDate = endDate ? new Date(listing.availability.end) >= new Date(endDate) : true;
-
-            return matchesCountry && matchesGuests && matchesStartDate && matchesEndDate;
+          const matchesCountry = country === 'all' || (country ? (listing.country?.toLowerCase().includes(country.toLowerCase()) ?? false) : true);
+          const matchesGuests = guests ? listing.guests >= guests : true;
+          const matchesStartDate = startDate ? new Date(listing.availability.start) <= new Date(startDate) : true;
+          const matchesEndDate = endDate ? new Date(listing.availability.end) >= new Date(endDate) : true;
+      
+          return matchesCountry && matchesGuests && matchesStartDate && matchesEndDate;
         });
-
+      
         setFilteredListings(filtered);
-    };
+      };
+
+      const handleApplyFilter = (filterCriteria) => {
+        const { country, minPrice, maxPrice, amenities } = filterCriteria;
+      
+        const filtered = listings.filter((listing) => {
+          // Filter by country
+          const matchesCountry = country === 'all' || listing.country.toLowerCase() === country.toLowerCase();
+          
+          // Filter by price range
+          const matchesPriceRange = (!minPrice || listing.price >= minPrice) && (!maxPrice || listing.price <= maxPrice);
+          
+          // Filter by amenities
+          const matchesAmenities = amenities.every(amenity => listing.amenities[amenity]);
+      
+          return matchesCountry && matchesPriceRange && matchesAmenities;
+        });
+      
+        setFilteredListings(filtered);
+      };
 
     const handleListingClick = (id) => {
-        // Pass current search criteria and filtered listings to DetailsPage
-        navigate(`/list/${id}`, {
-            state: {
-                searchCriteria,
-                filteredListings
-            }
-        });
+        navigate(`/list/${id}`);
     };
 
     return (
         <div className='p-4 md:p-10 lg:p-16'>
             <div className="flex flex-col items-center mb-8">
                 <h1 className="text-3xl text-primary font-semibold mb-6">Find Your Perfect Stay</h1>
-                <SearchBar onSearch={setSearchCriteria} countries={countries} initialValues={searchCriteria} />
+                <SearchBar
+                onSearch={(criteria) => {
+                    setSearchCriteria(criteria);
+                    filterListings(criteria);
+                }}
+                onFilter={handleApplyFilter}
+                countries={countries}
+                initialValues={searchCriteria}
+                />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {filteredListings.length === 0 ? (
