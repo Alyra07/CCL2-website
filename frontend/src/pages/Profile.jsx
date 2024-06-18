@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
+import ListingCard from '../components/ListingCard';
 import '../index.css';
 
 const Profile = () => {
@@ -15,7 +16,7 @@ const Profile = () => {
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
   const [newSurname, setNewSurname] = useState('');
-  const [images, setImages] = useState([]); // State to store listing images
+  const [images, setImages] = useState([]);
 
   const profileImages = [
     '/profile/profile-img1.png',
@@ -27,7 +28,6 @@ const Profile = () => {
     '/profile/profile-img-meme.jpeg',
   ];
 
-  // fetch user profile and listings on user change
   useEffect(() => {
     if (user) {
       fetchUserProfile();
@@ -65,7 +65,7 @@ const Profile = () => {
       }
 
       setListings(data);
-      fetchListingImages(data); // Fetch images for user listings
+      fetchListingImages(data);
     } catch (error) {
       console.error('Error fetching listings:', error.message);
       setMessage('Error fetching listings.');
@@ -82,7 +82,7 @@ const Profile = () => {
         if (listing.images && listing.images.length > 0) {
           const { data, error } = await supabase.storage
             .from('images')
-            .download(listing.images[0]); // Fetching only the first image for cover display
+            .download(listing.images[0]);
 
           if (error) {
             throw error;
@@ -91,7 +91,6 @@ const Profile = () => {
           const imageUrl = URL.createObjectURL(data);
           return { listingId: listing.id, imageUrl };
         } else {
-          // If no images, use placeholder
           return { listingId: listing.id, imageUrl: '/img/placeholder2.jpg' };
         }
       });
@@ -104,12 +103,10 @@ const Profile = () => {
   };
 
   const handleListingClick = (id) => {
-    // Pass listing id to DetailsListing page
     navigate(`/profile/listing/${id}`);
   };
 
   const handleImageChange = async () => {
-    // Update profile image in the database
     try {
       const { data, error } = await supabase
         .from('users')
@@ -119,7 +116,7 @@ const Profile = () => {
       if (error) {
         throw error;
       }
-      // Update profile image in the state
+
       setMessage('Profile image updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, image: selectedImage }));
     } catch (error) {
@@ -168,22 +165,20 @@ const Profile = () => {
     }
   };
 
-  // default return if user is logged in
   return (
     <div className="p-4 md:p-10 lg:p-16">
       <div className="text-center">
-        <h2 className="font-semibold text-primary text-3xl">
-          Profile
-        </h2>
+        <h2 className="font-semibold text-primary text-3xl">Profile</h2>
         <p className="text-green-500">{message}</p>
       </div>
-      {/* Profile data display */}
       {profile && (
         <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
-          {/* Profile image */}
           <div className="text-center mb-4">
-            <img src={profile.image} alt="Profile"
-              className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4" />
+            <img
+              src={profile.image}
+              alt="Profile"
+              className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4"
+            />
             <label className="block mb-2">Select Profile Picture:</label>
             <select
               value={selectedImage}
@@ -203,7 +198,6 @@ const Profile = () => {
             </button>
           </div>
 
-          {/* User Data Display with Edit */}
           <div className="flex justify-center items-center mb-4">
             <div className="flex flex-col">
               <div className="justify-center">
@@ -219,8 +213,7 @@ const Profile = () => {
                   ) : (
                     profile.name
                   )}
-                  <button
-                    onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+                  <button onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
                     className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
                   >
                     {isEditingName ? 'Save' : 'Edit'}
@@ -255,26 +248,13 @@ const Profile = () => {
               <div className="flex justify-center">
                 <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
                   {listings.map((listing) => (
-                    <div
+                    <ListingCard
                       key={listing.id}
-                      className="w-48 bg-light-gray rounded-lg overflow-hidden shadow-lg 
-                                transform transition-transform duration-300 hover:scale-105"
-                      onClick={() => handleListingClick(listing.id)}
-                    >
-                      <img
-                        src={images.find(img => img.listingId === listing.id)?.imageUrl || '/img/placeholder2.jpg'}
-                        alt={listing.name}
-                        className="w-full h-52 object-cover"
-                      />
-                      <div className="p-4">
-                        <h3 className="text-xl font-semibold mb-2">{listing.name}</h3>
-                        <p className="text-gray-700">{listing.address}</p>
-                        <p className="text-gray-700">{listing.country}</p>
-                        <p className="text-gray-700">${listing.price} per night</p>
-                        <p className="text-gray-700">{listing.guests} guests</p>
-                        <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
-                      </div>
-                    </div>
+                      listing={listing}
+                      user={user}
+                      handleClick={handleListingClick}
+                      showAddFavorite={false} // hide AddFavorite button
+                    />
                   ))}
                 </div>
               </div>
@@ -299,10 +279,13 @@ const Profile = () => {
       {!profile && (
         <div className="text-center m-8">
           <p>
-            You are not logged in. Please sign in here: {'  '}
-            <Link to="/login"
+            You are not logged in. Please sign in here:{' '}
+            <Link
+              to="/login"
               className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
-            >Login</Link>
+            >
+              Login
+            </Link>
           </p>
         </div>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import AddFavorite from './AddFavorite';
 
-const ListingCard = ({ listing, user, handleClick }) => {
+const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => {
     const [imageUrl, setImageUrl] = useState('/img/placeholder2.jpg');
 
     useEffect(() => {
@@ -35,15 +35,18 @@ const ListingCard = ({ listing, user, handleClick }) => {
                 className="w-full h-48 object-cover"
             />
             <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{listing.name}</h2>
+                <h3 className="text-xl font-semibold mb-2">{listing.name}</h3>
                 <p className="text-gray-700">{listing.address}</p>
                 <p className="text-gray-700">{listing.country}</p>
                 <p className="text-gray-700">${listing.price} per night</p>
                 <p className="text-gray-700">{listing.guests} guests</p>
-                <p className="text-gray-700">
-                    Available from {listing.availability.start} to {listing.availability.end}
-                </p>
-                <AddFavorite listingId={listing.id} userId={user ? user.id : null} />
+                {showAddFavorite && (
+                    <AddFavorite
+                        listingId={listing.id}
+                        userId={user.id}
+                        onClick={(e) => e.stopPropagation()} // Prevent click event from propagating to parent div
+                    />
+                )}
             </div>
         </div>
     );

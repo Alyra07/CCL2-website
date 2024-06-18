@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddListing = () => {
   const { user } = useUser();
@@ -50,6 +52,13 @@ const AddListing = () => {
         [name]: value
       });
     }
+  };
+
+  const handleDescriptionChange = (value) => {
+    setListingDetails({
+      ...listingDetails,
+      description: value
+    });
   };
 
   const handleImageChange = (e) => {
@@ -149,27 +158,33 @@ const AddListing = () => {
           <hr className="mb-4" />
           <div className="mb-2">
             <label htmlFor="name" className="block mb-1">Name:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="name" id="name" value={listingDetails.name} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="name" id="name" value={listingDetails.name} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="address" className="block mb-1">Address:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="country" className="block mb-1">Country:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="price" className="block mb-1">Price/night:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="guests" className="block mb-1">Guests:</label>
-            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} onChange={handleChange} />
+            <input className="p-2 border-2 border-secondary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} onChange={handleChange} required/>
           </div>
           <div className="mb-2">
             <label htmlFor="description" className="block mb-1">Description:</label>
-            <textarea className="p-2 border-2 border-secondary rounded-lg w-full" name="description" id="description" value={listingDetails.description} onChange={handleChange} />
+            <ReactQuill
+              className="p-2 border-2 border-secondary rounded-lg w-full"
+              name="description"
+              id="description"
+              value={listingDetails.description}
+              onChange={handleDescriptionChange}
+            />
           </div>
         </div>
         {/* Other Sections */}
