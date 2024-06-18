@@ -28,7 +28,8 @@ const HomePage = () => {
 
         // Select the top 3 countries
         const topCountries = sortedCountries.slice(0, 4);
-        setPopularCountries(topCountries);
+        setCountries(sortedCountries.map(({ country }) => country)); // Set countries for search bar
+        setPopularCountries(topCountries); // Set popular countries for display
       } catch (error) {
         console.error("Error fetching listings:", error);
       }
@@ -38,6 +39,7 @@ const HomePage = () => {
   }, []);
 
   const handleSearch = async (searchCriteria) => {
+    // Handle search criteria and filter listings in ListMain
     const listings = await fetchAllListings();
     const filtered = listings.filter((listing) => {
       const { country, guests, startDate, endDate } = searchCriteria;
