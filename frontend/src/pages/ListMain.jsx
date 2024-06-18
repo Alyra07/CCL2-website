@@ -16,7 +16,7 @@ const ListMain = () => {
 
     useEffect(() => {
         const getData = async () => {
-            try {
+            try { // get all listings from database
                 const data = await fetchAllListings();
                 setListings(data);
 
@@ -47,6 +47,7 @@ const ListMain = () => {
         }
     }, [location.state]);
 
+    // Filter listings based on search criteria
     const filterListings = () => {
         const { country, guests, startDate, endDate } = searchCriteria;
 

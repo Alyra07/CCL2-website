@@ -26,7 +26,7 @@ const Register = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const { data, error } = await signUp(email, password);
+    const { data, error } = await signUp(email, password); // signUp function from auth.js
 
     if (error) {
       setMessage(`Sign up failed: ${error.message}`);
@@ -123,6 +123,7 @@ const Register = () => {
             {message && <p className="mt-4 text-center text-accentred">{message}</p>}
           </div>
         </div>
+        {/* Images */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
           {images.map((image, index) => (
             <img

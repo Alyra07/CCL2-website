@@ -40,7 +40,9 @@ const ListingCard = ({ listing, user, handleClick }) => {
                 <p className="text-gray-700">{listing.country}</p>
                 <p className="text-gray-700">${listing.price} per night</p>
                 <p className="text-gray-700">{listing.guests} guests</p>
-                <p className="text-gray-700">Available from {listing.availability.start} to {listing.availability.end}</p>
+                <p className="text-gray-700">
+                    Available from {listing.availability.start} to {listing.availability.end}
+                </p>
                 <AddFavorite listingId={listing.id} userId={user ? user.id : null} />
             </div>
         </div>
