@@ -30,7 +30,7 @@ const SearchBar = ({ onSearch, countries, initialValues }) => {
   };
 
   return (
-    <div className='text-center p-4 bg-tertiary border border-secondary rounded-lg'>
+    <div className='text-center p-4 bg-tertiary border border-secondary rounded-lg shadow-md'>
       <h3 className='text-lg font-medium mb-4 md:mb-6 sm:mb-6'>Where do you want to go next?</h3>
       
       <div className="">

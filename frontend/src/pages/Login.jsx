@@ -55,7 +55,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center">
           <img
-            src="/profile/profile-img-meme.jpeg"
+            src="/img/bg-illustration-red.jpeg"
             alt="Login illustration"
             className="w-full lg:w-3/4 h-auto object-cover rounded-lg"
           />

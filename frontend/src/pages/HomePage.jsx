@@ -56,24 +56,23 @@ const HomePage = () => {
       <div>
         <header className="text-center w-full">
           <div className="relative">
+            {/* Header image */}
             <img 
-              src="/img/hero.jpg" 
+              src="/img/bg-illustration-red.jpeg" 
               alt="Travel" 
               className="w-full h-64 object-cover" 
               onError={(e) => e.target.src = '/img/bg-bedroom.jpg'}
             />
-            <div className="flex flex-col p-4 absolute inset-0 bg-black bg-opacity-50 items-center justify-center">
-              <h1 className="flex flex-col text-center mt-8 text-4xl font-semibold text-white py-6 md:py-10">
+            <div className="flex flex-col p-4 absolute inset-0 bg-dark-gray bg-opacity-65 items-center justify-center">
+              <h1 className="flex flex-col text-center mt-8 text-4xl font-bold text-white py-6 md:py-10">
                 Hello World! This is a travel website.
               </h1>
-              <div className='flex flex-col text-center'> 
               <SearchBar onSearch={handleSearch} countries={countries} />
-              </div>
             </div>
           </div>
         </header>
-        <section className="w-full max-w-screen-lg mt-2 mb-8 mx-auto py-8 px-4">
-          <h2 className="text-2xl font-semibold mb-6 text-center">Popular Places</h2>
+        <section className="w-full max-w-screen-lg my-6 mb-8 mx-auto py-8 px-4">
+          <h2 className="text-primary text-2xl font-semibold mb-6 text-center">Popular Places</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {popularCountries.map(({ country }) => (
               <div key={country} className="bg-white shadow-md rounded-lg overflow-hidden">

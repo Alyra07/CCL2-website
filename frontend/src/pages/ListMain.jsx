@@ -87,7 +87,7 @@ const ListMain = () => {
                         <ListingCard
                             key={index}
                             listing={listing}
-                            user={user}
+                            user={user ? user : listing.id} // Pass user id if not logged in
                             handleClick={handleListingClick}
                         />
                     ))

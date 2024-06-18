@@ -214,10 +214,8 @@ const DetailsListing = () => {
                                 <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
                             ))}
                         </div>
-                        <p className="text-gray-700">
-                            <span className="font-semibold">Description:</span> 
-                            <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
-                        </p>
+                        <p className="text-gray-700 font-semibold">Description:</p>
+                        <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
                     </>
                 )}
                 {editMode && (

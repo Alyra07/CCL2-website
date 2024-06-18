@@ -235,7 +235,7 @@ const Profile = () => {
           </div>
 
           {/* Add listing Button */}
-          <div className="mt-8 mb-2 text-center">
+          <div className="mt-6 text-center">
             <Link
               to="/add"
               className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
