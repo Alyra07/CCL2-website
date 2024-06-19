@@ -95,46 +95,29 @@ const Profile = () => {
     }
   };
 
-  const handleNameChange = async () => {
+  const handleNameAndSurnameChange = async () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .update({ name: newName })
+        .update({ name: newName, surname: newSurname })
         .eq('email', user.email);
-
+  
       if (error) {
         throw error;
       }
-
-      setProfile(prevProfile => ({ ...prevProfile, name: newName }));
+  
+      setProfile(prevProfile => ({ ...prevProfile, name: newName, surname: newSurname }));
+      setProfileName(newName);
       setIsEditingName(false);
-    } catch (error) {
-      console.error('Error updating profile name:', error.message);
-      setMessage('Error updating profile name.');
-    }
-  };
-
-  const handleSurnameChange = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .update({ surname: newSurname })
-        .eq('email', user.email);
-
-      if (error) {
-        throw error;
-      }
-
-      setProfile(prevProfile => ({ ...prevProfile, surname: newSurname }));
       setIsEditingSurname(false);
     } catch (error) {
-      console.error('Error updating profile surname:', error.message);
-      setMessage('Error updating profile surname.');
+      console.error('Error updating profile:', error.message);
+      setMessage('Error updating profile.');
     }
   };
 
   return (
-    <div className="pt-4 md:pt-10 lg:pt-16 mb-4">
+    <div className="pt-4 md:pt-10 lg:pt-16">
       <div className="text-center">
         <h2 className="font-semibold text-primary text-3xl">
           {profileName ? `${profileName}'s Profile` : 'Profile'}
@@ -142,8 +125,8 @@ const Profile = () => {
       </div>
       {/* Display Profile if profile is set */}
       {profile && (
-        <div className="flex flex-col lg:flex-row items-center mx-4 md:mx-12 justify-center
-              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-xl ">
+        <div className="flex flex-col lg:flex-row mx-4 md:mx-12 justify-center
+              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full ">
           {/* Display Profile Data (lg:left col) */}
           <div className="flex flex-col lg:w-1/4">
             <p className="text-accentred text-center text-lg">{message}</p>
@@ -167,7 +150,7 @@ const Profile = () => {
               </select>
               <button
                 onClick={handleImageChange}
-                className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
+                className="bg-primary text-white p-2 ml-2 md:ml-0 lg:ml-2 rounded-lg hover:bg-secondary transition duration-300"
               >
                 Set Profile Picture
               </button>
@@ -175,50 +158,52 @@ const Profile = () => {
             {/* User email & name */}
             <div className="flex justify-center">
               <div className="flex flex-col">
-                  <p className="text-xl font-semibold">Email: {profile.email}</p>
-                  <p className="text-xl font-semibold">
-                    {/* Edit name & surname */}
-                    Name: {isEditingName ? (
-                      <input
-                        type="text"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                        className="border p-2 rounded"
-                      />
-                    ) : (
-                      profile.name
-                    )}
-                    <button onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
-                      className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                    >
-                      {isEditingName ? 'Save' : 'Edit'}
-                    </button>
-                  </p>
-                  <p className="text-xl font-semibold">
-                    Surname: {isEditingSurname ? (
-                      <input
-                        type="text"
-                        value={newSurname}
-                        onChange={(e) => setNewSurname(e.target.value)}
-                        className="border p-2 rounded"
-                      />
-                    ) : (
-                      profile.surname
-                    )}
-                    <button
-                      onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
-                      className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                    >
-                      {isEditingSurname ? 'Save' : 'Edit'}
-                    </button>
-                  </p>
+                <p className="text-xl"><strong>E-Mail: </strong>{profile.email}</p>
+                <p className="text-xl">
+                  <strong>Name:  </strong>{isEditingName ? (
+                    <input
+                      type="text"
+                      value={newName}
+                      onChange={(e) => setNewName(e.target.value)}
+                      className="border p-2 rounded"
+                    />
+                  ) : (
+                    profile.name
+                  )}
+                </p>
+                <p className="text-xl">
+                <strong>Surname:  </strong>{isEditingSurname ? (
+                    <input
+                      type="text"
+                      value={newSurname}
+                      onChange={(e) => setNewSurname(e.target.value)}
+                      className="border p-2 rounded"
+                    />
+                  ) : (
+                    profile.surname
+                  )}
+                </p>
+                {/* Single Edit/Save Button */}
+                <button
+                  onClick={() => {
+                    if (isEditingName || isEditingSurname) {
+                      handleNameAndSurnameChange();
+                    } else {
+                      setIsEditingName(true);
+                      setIsEditingSurname(true);
+                    }
+                  }}
+                  className="mx-auto bg-accent text-base text-white py-1 px-2 mt-2 rounded-lg hover:bg-red-300"
+                >
+                  {isEditingName || isEditingSurname ? 'Save Name' : 'Edit Name'}
+                </button>
               </div>
             </div>
           </div>
 
           {/* User Listings (lg: right col) */}
           <div className="flex flex-col justify-center items-center mt-4 md:mt-0 mx-auto md:w-2/3">
-            <h2 className="font-bold text-primary text-2xl mb-2">Your Places</h2>
+            <h2 className="font-bold text-primary text-2xl mb-2 mt-2 lg:mt-0">Your Places</h2>
             <hr className="w-1/2 border border-secondary mb-4" />
             {Array.isArray(listings) && listings.length > 0 ? (
               // ListingCard Grid
