@@ -161,19 +161,25 @@ const AddListing = () => {
           </div>
           <div className="mb-2">
             <label htmlFor="address" className="block mb-1">Address:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="address" 
+            id="address" value={listingDetails.address} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="country" className="block mb-1">Country:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="country" 
+            id="country" value={listingDetails.country} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="price" className="block mb-1">Price/night:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="price" 
+            id="price" value={listingDetails.price} min={0}
+            onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="guests" className="block mb-1">Guests:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} onChange={handleChange} required/>
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="guests" 
+            id="guests" value={listingDetails.guests} min={1}
+            onChange={handleChange} required/>
           </div>
           <div className="mb-2">
             <label htmlFor="description" className="block mb-1">Description:</label>

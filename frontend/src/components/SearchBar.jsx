@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+// MUI Components / Icons
 import Slider from '@mui/material/Slider';
+import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 
 const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }) => {
   const [country, setCountry] = useState(initialValues?.country || 'all');
@@ -62,7 +62,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
           Where do you want to go next?</h3>
         {/* main SearchBar filters (HomePage & ListMain) */}
         <select value={country} onChange={(e) => setCountry(e.target.value)}
-          className='p-2 border-2 border-secondary rounded-lg'>
+          className='w-64 p-2 border-2 border-secondary rounded-lg'>
           <option value="all">Just take me away</option>
           {countries.map((c, index) => (
             <option key={index} value={c}>{c}</option>
@@ -71,9 +71,10 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         <input
           type="number"
           placeholder="Guests"
+          min={1}
           value={guests}
           onChange={(e) => setGuests(e.target.value)}
-          className='p-1 border-2 border-secondary rounded-lg ml-2'
+          className='w-24 p-1 border-2 border-secondary rounded-lg ml-2'
         />
         <input
           type="date"
@@ -91,16 +92,16 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         />
         <button
           onClick={handleSearch}
-          className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className='mr-2' />
-          Search
+          className='text-md text-white py-2 px-4 ml-4 mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+          <TravelExploreRoundedIcon fontSize='medium' className='' />
+          
         </button>
         {/* Additional filters when showFilters is true (ListMain) */}
         {showFilters && (
           <button
             onClick={() => setIsOpen(!isOpen)}
             className='text-md text-white py-2 px-4 ml-2 sm:mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
-            Toggle Filters
+            Filters
           </button>
         )}
       </div>

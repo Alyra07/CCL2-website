@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
+// MUI Icons
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded'; // isFavorite
 
 const AddFavorite = ({ listingId, userId }) => {
     const [isFavorite, setIsFavorite] = useState(false);
@@ -22,7 +22,7 @@ const AddFavorite = ({ listingId, userId }) => {
                 if (fetchError) {
                     throw fetchError;
                 }
-
+                // set button to true if listing already isFavorite
                 if (existingFavorites.length > 0) {
                     setIsFavorite(true);
                 }
@@ -34,16 +34,17 @@ const AddFavorite = ({ listingId, userId }) => {
         checkFavoriteStatus();
     }, [listingId, userId]);
 
+    // Add or remove listing from favorites when button is clicked
     const handleToggleFavorite = async (event) => {
         event.stopPropagation(); // Stop the click event from propagating to parent elements
 
         if (!userId) {
-            navigate('/login');
+            navigate('/login');            
             return;
         }
 
         try {
-            if (isFavorite) {
+            if (isFavorite) { // remove if already isFavorite
                 const { error } = await supabase
                     .from('favorites')
                     .delete()
@@ -56,7 +57,7 @@ const AddFavorite = ({ listingId, userId }) => {
 
                 setIsFavorite(false);
                 console.log('Removed from favorites');
-            } else {
+            } else { // Add to favorites in database (user_id & listing_id)
                 const { data, error } = await supabase.from('favorites').insert([
                     { user_id: userId, listing_id: listingId },
                 ]);
@@ -78,7 +79,10 @@ const AddFavorite = ({ listingId, userId }) => {
             onClick={handleToggleFavorite}
             className={`py-2 px-4 rounded-lg transition duration-300 ${isFavorite ? 'bg-accent text-white hover:bg-red-300' : 'bg-primary text-white hover:bg-secondary'}`}
         >
-            <FontAwesomeIcon icon={isFavorite ? faHeartSolid : faHeartRegular} className='' />
+            {isFavorite ? // Display different icons based on favorite status
+            <FavoriteRoundedIcon fontSize='medium' /> // isFavorite
+            : // isFavorite false:
+            <FavoriteBorderRoundedIcon fontSize='medium' />} 
         </button>
     );
 };

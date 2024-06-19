@@ -70,14 +70,14 @@ const HomePage = () => {
                 Hello World! This is a travel website.
               </h1>
               <SearchBar 
-              onSearch={handleSearch} 
-              countries={countries}
-              showFilters={false} 
+                onSearch={handleSearch} 
+                countries={countries} // list of all countries
+                showFilters={false} // no addtional filters
               />
             </div>
           </div>
         </header>
-        <section className="w-full max-w-screen-lg my-6 mb-8 mx-auto py-8 px-4">
+        <section className="w-full max-w-screen-lg mt-4 mb-8 mx-auto py-8 px-4">
           <h2 className="text-primary text-2xl font-semibold mb-6 text-center">Popular Places</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {popularCountries.map(({ country }) => (
@@ -96,6 +96,7 @@ const HomePage = () => {
                 <div className="p-6">
                   <p className="text-gray-700 mb-2">Discover the best places to stay in {country}.</p>
                   <button
+                    // Pass chosen country & empty filteredListings to ListMain
                     onClick={() => navigate('/list', { state: { searchCriteria: { country }, filteredListings: [] } })}
                     className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition-colors duration-300"
                   >

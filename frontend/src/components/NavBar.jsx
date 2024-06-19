@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, NavLink, Link } from 'react-router-dom';
 import { useUser } from '../assets/UserContext';
 import { signOut } from '../assets/auth';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faUserCircle, faBuilding, faHeart } from '@fortawesome/free-solid-svg-icons';
+// Material UI Icons
+import HotelRoundedIcon from '@mui/icons-material/HotelRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -36,7 +39,7 @@ const NavBar = () => {
           to="/list"
           className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
         >
-          <FontAwesomeIcon icon={faBed} className="text-2xl" />
+          <HotelRoundedIcon fontSize='large' />
           <span className="ml-2 hidden sm:inline hidden xs:inline">Find Stays</span>
         </NavLink>
         {user && (
@@ -44,7 +47,7 @@ const NavBar = () => {
             to="/favorites"
             className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
           >
-            <FontAwesomeIcon icon={faHeart} className="text-2xl" />
+            <FavoriteRoundedIcon fontSize='large' />
             <span className="ml-2 hidden sm:inline hidden xs:inline">Favorites</span>
           </NavLink>
         )}
@@ -60,12 +63,12 @@ const NavBar = () => {
             to="/add"
             className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
           >
-            <FontAwesomeIcon icon={faBuilding} className="text-2xl" />
-            <span className="ml-2 hidden sm:inline hidden xs:inline">Publish Listing</span>
+            <MeetingRoomRoundedIcon fontSize='large' />
+            <span className="ml-2 hidden sm:inline hidden xs:inline">Become Host</span>
           </NavLink>
         )}
-        <button onClick={toggleDropdown} className="p-1 focus:outline-none hover:bg-accent relative mx-4 rounded-full">
-          <FontAwesomeIcon icon={faUserCircle} className="text-3xl" />
+        <button onClick={toggleDropdown} className="p-1 focus:outline-none hover:bg-accent relative mx-4 rounded-lg">
+          <AccountCircleRoundedIcon fontSize='large' />
         </button>
         {dropdownOpen && (
           <div className="absolute right-0 top-full mt-2 py-2 w-48 bg-primary rounded-lg shadow-xl z-20">
