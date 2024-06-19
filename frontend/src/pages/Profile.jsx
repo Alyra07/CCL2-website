@@ -12,6 +12,7 @@ const Profile = () => {
   const [listings, setListings] = useState([]);
   const [message, setMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState('');
+  const [profileName, setProfileName] = useState(''); // Display name in heading
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
@@ -47,9 +48,10 @@ const Profile = () => {
       setMessage('Error fetching profile.');
     } else {
       setProfile(data);
+      setProfileName(data.name);
       setNewName(data.name);
       setNewSurname(data.surname);
-      setMessage('Profile fetched successfully');
+      // setMessage('profile fetched successfully');
     }
   };
 
@@ -86,7 +88,6 @@ const Profile = () => {
         throw error;
       }
 
-      setMessage('Profile image updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, image: selectedImage }));
     } catch (error) {
       console.error('Error updating profile image:', error.message);
@@ -105,7 +106,6 @@ const Profile = () => {
         throw error;
       }
 
-      setMessage('Profile name updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, name: newName }));
       setIsEditingName(false);
     } catch (error) {
@@ -125,7 +125,6 @@ const Profile = () => {
         throw error;
       }
 
-      setMessage('Profile surname updated successfully');
       setProfile(prevProfile => ({ ...prevProfile, surname: newSurname }));
       setIsEditingSurname(false);
     } catch (error) {
@@ -137,87 +136,94 @@ const Profile = () => {
   return (
     <div className="p-4 md:p-10 lg:p-16">
       <div className="text-center">
-        <h2 className="font-semibold text-primary text-3xl">Profile</h2>
-        <p className="text-green-500">{message}</p>
+        <h2 className="font-semibold text-primary text-3xl">
+          {profileName ? `${profileName}'s Profile` : 'Profile'}
+        </h2>
       </div>
-      {/* Profile Picture */}
+      {/* Display Profile if profile is set */}
       {profile && (
-        <div className="rounded-lg bg-tertiary p-6 mx-auto w-full md:w-2/3 lg:w-1/2">
-          <div className="text-center mb-4">
-            <img
-              src={profile.image}
-              alt="Profile"
-              className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4"
-            />
-            <label className="block mb-2">Select Profile Picture:</label>
-            <select
-              value={selectedImage}
-              onChange={(e) => setSelectedImage(e.target.value)}
-              className="border p-2 rounded mb-4"
-            >
-              <option value="">Select an image</option>
-              {profileImages.map((path, index) => (
-                <option key={index} value={path}>{`Image ${index + 1}`}</option>
-              ))}
-            </select>
-            <button
-              onClick={handleImageChange}
-              className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
-            >
-              Set Profile Picture
-            </button>
-          </div>
-          {/* User Data Display */}
-          <div className="flex justify-center items-center mb-4">
-            <div className="flex flex-col">
-              <div className="justify-center">
-                <p className="text-lg font-semibold">Email: {profile.email}</p>
-                <p className="text-lg font-semibold">
-                  {/* Edit name & surname */}
-                  Name: {isEditingName ? (
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      className="border p-2 rounded"
-                    />
-                  ) : (
-                    profile.name
-                  )}
-                  <button onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
-                    className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                  >
-                    {isEditingName ? 'Save' : 'Edit'}
-                  </button>
-                </p>
-                <p className="text-lg font-semibold">
-                  Surname: {isEditingSurname ? (
-                    <input
-                      type="text"
-                      value={newSurname}
-                      onChange={(e) => setNewSurname(e.target.value)}
-                      className="border p-2 rounded"
-                    />
-                  ) : (
-                    profile.surname
-                  )}
-                  <button
-                    onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
-                    className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
-                  >
-                    {isEditingSurname ? 'Save' : 'Edit'}
-                  </button>
-                </p>
+        <div className="flex flex-col justify-center lg:flex-row gap-4 md:gap-10 lg:gap-16
+              bg-tertiary p-4 mx-auto my-2 lg:my-4 rounded-lg ">
+          {/* Display Profile Data (lg:left col) */}
+          <div className="flex flex-col justify-center">
+            <p className="text-accentred text-center text-lg">{message}</p>
+            {/* Profile Image */}
+            <div className="text-center mb-4">
+              <img
+                src={profile.image}
+                alt="Profile"
+                className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4"
+              />
+              <label className="block mb-2">Select Profile Picture:</label>
+              <select
+                value={selectedImage}
+                onChange={(e) => setSelectedImage(e.target.value)}
+                className="border p-2 rounded mb-4"
+              >
+                <option value="">Select an image</option>
+                {profileImages.map((path, index) => (
+                  <option key={index} value={path}>{`Image ${index + 1}`}</option>
+                ))}
+              </select>
+              <button
+                onClick={handleImageChange}
+                className="bg-primary text-white p-2 ml-2 rounded-lg hover:bg-secondary transition duration-300"
+              >
+                Set Profile Picture
+              </button>
+            </div>
+            {/* User email & name */}
+            <div className="flex justify-center items-center">
+              <div className="flex flex-col">
+                <div className="justify-center">
+                  <p className="text-lg font-semibold">Email: {profile.email}</p>
+                  <p className="text-lg font-semibold">
+                    {/* Edit name & surname */}
+                    Name: {isEditingName ? (
+                      <input
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        className="border p-2 rounded"
+                      />
+                    ) : (
+                      profile.name
+                    )}
+                    <button onClick={() => (isEditingName ? handleNameChange() : setIsEditingName(true))}
+                      className="mx-4 my-2 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                    >
+                      {isEditingName ? 'Save' : 'Edit'}
+                    </button>
+                  </p>
+                  <p className="text-lg font-semibold">
+                    Surname: {isEditingSurname ? (
+                      <input
+                        type="text"
+                        value={newSurname}
+                        onChange={(e) => setNewSurname(e.target.value)}
+                        className="border p-2 rounded"
+                      />
+                    ) : (
+                      profile.surname
+                    )}
+                    <button
+                      onClick={() => (isEditingSurname ? handleSurnameChange() : setIsEditingSurname(true))}
+                      className="mx-4 bg-accent text-base text-white py-1 px-2 rounded-lg hover:bg-red-300"
+                    >
+                      {isEditingSurname ? 'Save' : 'Edit'}
+                    </button>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* User Listings "Your Places" */}
-          <div className="mb-2 text-center">
-            <h2 className="font-bold text-2xl my-6">Your Places</h2>
+          {/* User Listings (lg: right col) */}
+          <div className="flex flex-col justify-center items-center">
+            <h2 className="font-bold text-2xl mb-4">Your Places</h2>
             {Array.isArray(listings) && listings.length > 0 ? (
-              <div className="flex justify-center">
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-8">
+              // ListingCard Grid
+                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 xl:gap-6">
                   {listings.map((listing) => (
                     <ListingCard
                       key={listing.id}
@@ -228,25 +234,24 @@ const Profile = () => {
                     />
                   ))}
                 </div>
-              </div>
+          
             ) : (
               <p className="text-gray-700">You have no listings yet.</p>
             )}
-          </div>
-
-          {/* Add listing Button */}
-          <div className="mt-6 text-center">
-            <Link
-              to="/add"
-              className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
-            >
-              Add a listing
-            </Link>
+            {/* Add listing Button */}
+            <div className="mt-6 text-center">
+              <Link
+                to="/add"
+                className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
+              >
+                Add a listing
+              </Link>
+            </div>
           </div>
         </div>
       )}
 
-      {/* If no profile is set */}
+      {/* Display if no profile is set (no user logged in) */}
       {!profile && (
         <div className="text-center m-8">
           <p>

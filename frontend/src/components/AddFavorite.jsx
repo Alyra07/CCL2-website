@@ -77,7 +77,8 @@ const AddFavorite = ({ listingId, userId }) => {
     return (
         <button
             onClick={handleToggleFavorite}
-            className={`py-2 px-4 rounded-lg transition duration-300 ${isFavorite ? 'bg-accent text-white hover:bg-red-300' : 'bg-primary text-white hover:bg-secondary'}`}
+            className={`absolute bottom-4 right-4 p-2 rounded-full transition duration-300 
+                ${isFavorite ? 'bg-accent text-white hover:bg-red-300' : 'bg-primary text-white hover:bg-secondary'}`}
         >
             {isFavorite ? // Display different icons based on favorite status
             <FavoriteRoundedIcon fontSize='medium' /> // isFavorite

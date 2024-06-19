@@ -25,8 +25,8 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
     }, [listing.images]);
 
     return (
-        <div
-            className="bg-light-gray border border-gray-300 rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer"
+        <div className="relative bg-light-gray border border-gray-300 rounded-lg overflow-hidden shadow-lg 
+            transform transition-transform duration-300 hover:scale-105 cursor-pointer"
             onClick={() => handleClick(listing.id)}
         >
             <img
