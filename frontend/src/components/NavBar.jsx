@@ -40,15 +40,15 @@ const NavBar = () => {
           className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
         >
           <HotelRoundedIcon fontSize='large' />
-          <span className="ml-2 hidden sm:inline hidden xs:inline">Find Stays</span>
+          <span className="ml-2 hidden md:inline">Find Stays</span>
         </NavLink>
         {user && (
           <NavLink
             to="/favorites"
             className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
           >
-            <FavoriteRoundedIcon fontSize='large' />
-            <span className="ml-2 hidden sm:inline hidden xs:inline">Favorites</span>
+            <FavoriteRoundedIcon fontSize='large'/>
+            <span className="ml-2 hidden md:inline">Favorites</span>
           </NavLink>
         )}
       </div>
@@ -63,12 +63,12 @@ const NavBar = () => {
             to="/add"
             className="flex items-center mx-4 p-1 bg-primary hover:bg-accent rounded-lg"
           >
-            <MeetingRoomRoundedIcon fontSize='large' />
-            <span className="ml-2 hidden sm:inline hidden xs:inline">Become Host</span>
+            <MeetingRoomRoundedIcon fontSize='large'/>
+            <span className="ml-2 hidden md:inline">Become Host</span>
           </NavLink>
         )}
         <button onClick={toggleDropdown} className="p-1 focus:outline-none hover:bg-accent relative mx-4 rounded-lg">
-          <AccountCircleRoundedIcon fontSize='large' />
+          <AccountCircleRoundedIcon fontSize='large'/>
         </button>
         {dropdownOpen && (
           <div className="absolute right-0 top-full mt-2 py-2 w-48 bg-primary rounded-lg shadow-xl z-20">

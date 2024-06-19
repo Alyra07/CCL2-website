@@ -134,7 +134,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-4 md:p-10 lg:p-16">
+    <div className="pt-4 md:pt-10 lg:pt-16 mb-4">
       <div className="text-center">
         <h2 className="font-semibold text-primary text-3xl">
           {profileName ? `${profileName}'s Profile` : 'Profile'}
@@ -142,17 +142,17 @@ const Profile = () => {
       </div>
       {/* Display Profile if profile is set */}
       {profile && (
-        <div className="flex flex-col justify-center lg:flex-row gap-4 md:gap-10 lg:gap-16
-              bg-tertiary p-4 mx-auto my-2 lg:my-4 rounded-lg ">
+        <div className="flex flex-col lg:flex-row items-center mx-4 md:mx-12 justify-center
+              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-xl ">
           {/* Display Profile Data (lg:left col) */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col lg:w-1/4">
             <p className="text-accentred text-center text-lg">{message}</p>
             {/* Profile Image */}
             <div className="text-center mb-4">
               <img
                 src={profile.image}
                 alt="Profile"
-                className="w-64 h-auto border border-secondary rounded-lg mx-auto mb-4"
+                className="w-80 h-auto border border-secondary rounded-lg mx-auto mb-4"
               />
               <label className="block mb-2">Select Profile Picture:</label>
               <select
@@ -173,11 +173,10 @@ const Profile = () => {
               </button>
             </div>
             {/* User email & name */}
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center">
               <div className="flex flex-col">
-                <div className="justify-center">
-                  <p className="text-lg font-semibold">Email: {profile.email}</p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-xl font-semibold">Email: {profile.email}</p>
+                  <p className="text-xl font-semibold">
                     {/* Edit name & surname */}
                     Name: {isEditingName ? (
                       <input
@@ -195,7 +194,7 @@ const Profile = () => {
                       {isEditingName ? 'Save' : 'Edit'}
                     </button>
                   </p>
-                  <p className="text-lg font-semibold">
+                  <p className="text-xl font-semibold">
                     Surname: {isEditingSurname ? (
                       <input
                         type="text"
@@ -213,17 +212,17 @@ const Profile = () => {
                       {isEditingSurname ? 'Save' : 'Edit'}
                     </button>
                   </p>
-                </div>
               </div>
             </div>
           </div>
 
           {/* User Listings (lg: right col) */}
-          <div className="flex flex-col justify-center items-center">
-            <h2 className="font-bold text-2xl mb-4">Your Places</h2>
+          <div className="flex flex-col justify-center items-center mt-4 md:mt-0 mx-auto md:w-2/3">
+            <h2 className="font-bold text-primary text-2xl mb-2">Your Places</h2>
+            <hr className="w-1/2 border border-secondary mb-4" />
             {Array.isArray(listings) && listings.length > 0 ? (
               // ListingCard Grid
-                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 xl:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {listings.map((listing) => (
                     <ListingCard
                       key={listing.id}
