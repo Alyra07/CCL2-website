@@ -90,7 +90,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
     <div>
       <div className="text-center px-6 py-4 bg-tertiary border border-secondary rounded-lg shadow-md">
         <h3 className='text-lg font-medium mb-4'>
-          Where do you want to go next?</h3>
+          Where would you like to go next?</h3>
         {/* main SearchBar filters (HomePage & ListMain) */}
         <select value={country} onChange={(e) => setCountry(e.target.value)}
           className='w-64 p-3 border-2 border-secondary rounded-lg'>

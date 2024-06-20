@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import { signUp } from '../assets/auth';
-
-const supabaseUrl = 'https://asfguipgiafjfgqzzoky.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzZmd1aXBnaWFmamZncXp6b2t5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgwMzU0MDYsImV4cCI6MjAzMzYxMTQwNn0.Q9U0z8vo4BRNII-ufAWi6fjNdrR88aukpB6FD6gx_AY'; // Ensure this is correct and secure
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -13,6 +10,7 @@ const Register = () => {
   const [surname, setSurname] = useState('');
   const [message, setMessage] = useState('');
   const [images, setImages] = useState([]);
+  const navigate = useNavigate();
 
   // images on the right side of the form
   useEffect(() => {
@@ -63,7 +61,8 @@ const Register = () => {
             profileMessage = 'Profile created successfully';
           }
 
-          setMessage(`Sign up successful: ${user.email}. ${profileMessage}`);
+          console.log(`Sign up successful: ${user.email}. ${profileMessage}`);
+          navigate('/login');
         } catch (profileError) {
           setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);
         }
@@ -74,8 +73,8 @@ const Register = () => {
   };
 
   return (
-    <div className="p-4 md:p-10 lg:p-16">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-32">
+    <div className="p-4 md:p-10 lg:p-16 mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">
             <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Register</h2>
@@ -119,7 +118,7 @@ const Register = () => {
           </div>
         </div>
         {/* Images */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-1">
           {images.map((image, index) => (
             <img
               key={index}

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { signIn } from '../assets/auth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -13,12 +14,12 @@ const Login = () => {
     if (error) {
       setMessage(`Sign in failed: ${error.message}`);
     } else {
-      setMessage(`Sign in successful: ${data.user.email}`);
+      navigate("/");
     }
   };
 
   return (
-    <div className="p-4 md:p-10 lg:p-16">
+    <div className="p-4 md:p-10 lg:p-16 mt-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">

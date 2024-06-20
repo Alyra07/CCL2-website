@@ -42,7 +42,7 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
                 <p className="text-dark-gray">{listing.country}</p>
                 {showAddFavorite && (
                 <>
-                    <p className=""><PeopleOutlineRoundedIcon />{listing.guests}</p>
+                    <p className="text-dark-gray"><PeopleOutlineRoundedIcon />{listing.guests}</p>
                     <p className="text-lg mt-2">{listing.price} €<span className='text-sm'> p/n</span></p>
                     <AddFavorite
                         listingId={listing.id}
