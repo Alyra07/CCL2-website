@@ -126,9 +126,9 @@ const Profile = () => {
       {/* Display Profile if profile is set */}
       {profile && (
         <div className="flex flex-col lg:flex-row mx-4 md:mx-12 justify-center
-              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full ">
+              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full">
           {/* Display Profile Data (lg:left col) */}
-          <div className="flex flex-col lg:w-1/4 md:mb-2">
+          <div className="flex flex-col lg:w-1/3 md:mb-2">
             <p className="text-accentred text-center text-lg">{message}</p>
             {/* Profile Image */}
             <div className="text-center mb-4">
@@ -193,7 +193,7 @@ const Profile = () => {
                       setIsEditingSurname(true);
                     }
                   }}
-                  className="mx-auto bg-accent text-base text-white py-1 px-2 mt-2 rounded-lg hover:bg-red-300"
+                  className="mx-auto bg-accent text-base text-white py-1 px-2 mt-4 rounded-lg hover:bg-red-300"
                 >
                   {isEditingName || isEditingSurname ? 'Save Name' : 'Edit Name'}
                 </button>
@@ -202,7 +202,7 @@ const Profile = () => {
           </div>
 
           {/* User Listings (lg: right col) */}
-          <div className="flex flex-col justify-center items-center mt-4 md:mt-0 mx-auto md:w-2/3">
+          <div className="flex flex-col justify-center items-center mt-4 md:mt-0 mx-auto lg:w-2/3">
             <h2 className="font-bold text-primary text-2xl mb-2 mt-2 lg:mt-0">Your Places</h2>
             <hr className="w-1/2 border border-secondary mb-4" />
             {Array.isArray(listings) && listings.length > 0 ? (
@@ -220,15 +220,15 @@ const Profile = () => {
                 </div>
           
             ) : (
-              <p className="text-gray-700">You have no listings yet.</p>
+              <p className="text-lg text-gray-700">You have no listings yet.</p>
             )}
             {/* Add listing Button */}
-            <div className="mt-6 text-center">
+            <div className="mb-4 mt-6 text-center">
               <Link
                 to="/add"
                 className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
               >
-                Add a listing
+                {listings.length > 0 ? "Add Listing" : "Become A Host"}
               </Link>
             </div>
           </div>
@@ -237,7 +237,7 @@ const Profile = () => {
 
       {/* Display if no profile is set (no user logged in) */}
       {!profile && (
-        <div className="text-center m-8">
+        <div className="text-xl text-center m-8">
           <p>
             You are not logged in. Please sign in here:{' '}
             <Link

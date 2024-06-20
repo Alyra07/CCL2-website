@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import AddFavorite from './AddFavorite';
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
+import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 
 const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => {
     const [imageUrl, setImageUrl] = useState('/img/placeholder2.jpg');
@@ -36,16 +38,18 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
             />
             <div className="p-4">
                 <h3 className="text-xl font-semibold mb-2">{listing.name}</h3>
-                <p className="text-gray-700">{listing.address}</p>
-                <p className="text-gray-700">{listing.country}</p>
-                <p className="text-gray-700">{listing.price} € per night</p>
-                <p className="text-gray-700">{listing.guests} guests</p>
+                <p className="text-dark-gray"><PinDropRoundedIcon fontSize='small' />{listing.address}</p>
+                <p className="text-dark-gray">{listing.country}</p>
                 {showAddFavorite && (
+                <>
+                    <p className=""><PeopleOutlineRoundedIcon />{listing.guests}</p>
+                    <p className="text-lg mt-2">{listing.price} €<span className='text-sm'> p/n</span></p>
                     <AddFavorite
                         listingId={listing.id}
                         userId={user.id}
                         onClick={(e) => e.stopPropagation()} // Prevent click event from propagating to parent div
                     />
+                </>
                 )}
             </div>
         </div>
