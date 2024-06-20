@@ -87,7 +87,9 @@ const DetailsPage = () => {
                 <ArrowBackIosRoundedIcon />
             </button>
             <div className="text-left">
+                {/* Header Image */}
                 <img src={headerImage} alt={listing.name} className="w-full h-64 object-cover rounded-lg" />
+                {/* Listing Details */}
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     <div className='flex flex-col justify-center bg-tertiary p-4 gap-4 flex-wrap rounded-lg w-full'>
                         <p className="text-lg text-gray-900 mb-4">
@@ -103,6 +105,7 @@ const DetailsPage = () => {
                             <span className="font-semibold">Price: </span>{listing.price} € per night
                         </p>
                     </div>
+                    {/* Availibility Calendar */}
                     <div>
                         <p className="text-center text-lg text-gray-900 font-semibold my-2">Availability</p>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -119,6 +122,7 @@ const DetailsPage = () => {
                         </LocalizationProvider>
                     </div>
                 </div>
+                {/* Display all Images */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-4">
                     {images.map((image, index) => (
                         <img
@@ -133,6 +137,7 @@ const DetailsPage = () => {
                         />
                     ))}
                 </div>
+                {/* Amenities and Description */}
                 <div className="text-center justify-center">
                     <p className="text-lg text-gray-900 p-4 font-semibold">Amenities</p>
                     <div className='mb-8 gap-4 flex justify-center flex-wrap'>
@@ -147,6 +152,7 @@ const DetailsPage = () => {
                     <div className="mx-4 lg:mx-32 my-4" dangerouslySetInnerHTML={{ __html: listing.description }} />
                 </div>
             </div>
+            {/* Display Full Image */}
             {showFullImage && (
                 <div
                     className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50"

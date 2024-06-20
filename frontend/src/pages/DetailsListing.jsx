@@ -9,6 +9,8 @@ import 'react-quill/dist/quill.snow.css';
 // MUI Icons
 import AmenityIcon from '../components/AmenityIcon';
 import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
 import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 // MUI X Date Picker - for availability calendar
@@ -55,8 +57,8 @@ const DetailsListing = () => {
             if (error) {
                 throw error;
             }
-
             setListing(data);
+            fetchImages(data.images);
             setEditFields({
                 name: data.name,
                 address: data.address,
@@ -67,8 +69,6 @@ const DetailsListing = () => {
                 availabilityEnd: data.availability.end,
             });
             setDescription(data.description);
-
-            fetchImages(data.images);
             setLoading(false);
         } catch (error) {
             console.error('Error fetching listing:', error.message);
@@ -78,18 +78,13 @@ const DetailsListing = () => {
     };
 
     const fetchImages = async (imageNames) => {
-        if (!imageNames || imageNames.length === 0) {
-            return;
-        }
+        if (!imageNames || imageNames.length === 0) return;
+
         try {
             const imagePromises = imageNames.map(async (imageName) => {
-                const { data, error } = await supabase.storage
-                    .from('images')
-                    .download(imageName);
+                const { data, error } = await supabase.storage.from('images').download(imageName);
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
                 const imageUrl = URL.createObjectURL(data);
                 return { imageName, imageUrl };
@@ -99,9 +94,7 @@ const DetailsListing = () => {
             setImages(fetchedImages);
 
             if (imageNames.length > 0) {
-                const { data: headerData, error: headerError } = await supabase.storage
-                    .from('images')
-                    .download(imageNames[0]);
+                const { data: headerData, error: headerError } = await supabase.storage.from('images').download(imageNames[0]);
                 if (!headerError) {
                     const headerImageUrl = URL.createObjectURL(headerData);
                     setHeaderImage(headerImageUrl);
@@ -109,7 +102,6 @@ const DetailsListing = () => {
             }
         } catch (error) {
             console.error('Error fetching images:', error.message);
-            setMessage('Error fetching images.');
         }
     };
 
@@ -136,6 +128,9 @@ const DetailsListing = () => {
     };
 
     const handleDelete = async () => {
+        confirm('Are you sure you want to delete this listing?');
+
+        if (confirm) {
         try {
             const { error } = await supabase
                 .from('listings')
@@ -150,6 +145,7 @@ const DetailsListing = () => {
             console.error('Error deleting listing:', error.message);
             setMessage('Error deleting listing.');
         }
+    }
     };
 
     const handleInputChange = (e) => {
@@ -175,53 +171,46 @@ const DetailsListing = () => {
     if (message) return <ErrorMessage message={message} />;
 
     return (
-        <div className="p-4 md:p-10 lg:p-16 text-center">
-            <div className="text-center items-center mb-4">
-                <h2 className="text-primary text-3xl font-bold mb-2">{listing.name}</h2>
-                <div className='gap-2 lg:gap-6 flex flex-row justify-between my-2'>
+        <div className="p-4 md:p-10 lg:p-16">
+            <h1 className="text-3xl text-center text-primary font-bold">{listing.name}</h1>
+            <div className='gap-2 lg:gap-6 flex flex-row justify-between my-2'>
+                <button onClick={handleBack} className="bg-accent text-white p-2 rounded-lg hover:bg-red-300 transition duration-300">
+                    <ArrowBackIosRoundedIcon />
+                </button>
+                <section>
                     <button
-                        onClick={handleBack}
-                        className="bg-gray-600 text-white p-2 rounded-lg hover:bg-dark-gray"
+                        onClick={editMode ? handleEdit : () => setEditMode(true)}
+                        className="bg-primary text-white p-2 rounded-lg hover:bg-secondary"
                     >
-                        <ArrowBackIosRoundedIcon />
-                        Back to Profile
+                        <ModeEditRoundedIcon />
+                        <span className='ml-2'>{editMode ? "Save" : "Edit"}</span>
                     </button>
-                    <section>
-                        <button
-                            onClick={editMode ? handleEdit : () => setEditMode(true)}
-                            className="bg-primary text-white p-2 rounded-lg hover:bg-secondary"
-                        >
-                            {editMode ? "Save" : "Edit"}
-                        </button>
-                        <button
-                            onClick={handleDelete}
-                            className="bg-accent text-white p-2 rounded-lg hover:bg-red-300"
-                        >
-                            Delete Listing
-                        </button>
-                    </section>
-                </div>
+                    <button
+                        onClick={handleDelete}
+                        className="bg-accentred text-white p-2 rounded-lg ml-4 hover:bg-red-300"
+                    >
+                        <DeleteRoundedIcon />
+                    </button>
+                </section>
             </div>
-            <div className="mb-4">
-                <img
-                    src={headerImage}
-                    alt={listing.name}
-                    className="w-full h-64 object-cover rounded-lg mb-4"
-                />
+            <div className="text-left">
+                <img src={headerImage} alt={listing.name} className="w-full h-64 object-cover rounded-lg" />
                 {!editMode && (
-                    <>
-                        <p className="text-lg text-gray-900 mb-4">
-                            <PinDropRoundedIcon className='md:mr-2' />
-                            <span className="hidden md:inline font-semibold">Address: </span>
-                            {listing.address} - <span className='font-semibold'>{listing.country}</span>
-                        </p>
-                        <p className="text-lg text-gray-900">
-                            <PeopleOutlineRoundedIcon className='mr-2' />
-                            <span className="font-semibold">Guests: </span> {listing.guests}
-                        </p>
-                        <p className="text-lg text-gray-900">
-                            <span className="font-semibold">Price: </span>{listing.price} € per night
-                        </p>
+                    <div className="flex flex-col md:flex-row justify-between items-center">
+                        <div className='flex flex-col justify-center bg-tertiary p-4 gap-4 flex-wrap rounded-lg w-full'>
+                            <p className="text-lg text-gray-900 mb-4">
+                                <PinDropRoundedIcon className='md:mr-2' />
+                                <span className="hidden md:inline font-semibold">Address: </span>
+                                {listing.address} - <span className='font-semibold'>{listing.country}</span>
+                            </p>
+                            <p className="text-lg text-gray-900">
+                                <PeopleOutlineRoundedIcon className='mr-2' />
+                                <span className="font-semibold">Guests: </span> {listing.guests}
+                            </p>
+                            <p className="text-lg text-gray-900">
+                                <span className="font-semibold">Price: </span>{listing.price} € per night
+                            </p>
+                        </div>
                         <div>
                             <p className="text-center text-lg text-gray-900 font-semibold my-2">Availability</p>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -237,22 +226,7 @@ const DetailsListing = () => {
                                 />
                             </LocalizationProvider>
                         </div>
-                        <p className="text-center text-lg text-gray-900 font-semibold my-2">Amenities</p>
-                        <div className='flex justify-center mb-2'>
-                            {Object.keys(listing.amenities).map((amenity) =>
-                                listing.amenities[amenity] && (
-                                    <div className="flex flex-col items-center m-2" key={amenity}>
-                                        <AmenityIcon amenity={amenity} />
-                                        <span className="text-xs">{amenity}</span>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                        <p className="text-lg text-gray-900 font-semibold">Description</p>
-                        <div className="p-4 border rounded-lg text-left text-lg text-gray-800">
-                            <div dangerouslySetInnerHTML={{ __html: listing.description }} />
-                        </div>
-                    </>
+                    </div>
                 )}
                 {editMode && (
                     <div className="mb-4">
@@ -308,54 +282,65 @@ const DetailsListing = () => {
                             name="availabilityEnd"
                             value={editFields.availabilityEnd}
                             onChange={handleInputChange}
-                            placeholder="Availability End"
-                            className="border p-2 rounded mb-2 w-full"
-                        />
-                        <ReactQuill
-                            value={description}
-                            onChange={handleDescriptionChange}
-                            placeholder="Description"
-                            className="mb-2"
-                        />
-                    </div>
-                )}
-            </div>
-            {images.length > 0 && (
+                            placeholder="Availability End" className="border p-2 rounded mb-2 w-full"
+                            />
+                            <ReactQuill
+                                value={description}
+                                onChange={handleDescriptionChange}
+                                placeholder="Description"
+                                className="mb-2"
+                            />
+                        </div>
+                    )}
+                </div>
+                {/* Display Images */}
                 <>
-                    <p className="text-center text-lg text-gray-900 font-semibold my-2">Gallery</p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {images.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-4">
                         {images.map((image, index) => (
                             <img
                                 key={index}
                                 src={image.imageUrl}
                                 alt={`Image ${index + 1}`}
-                                className="w-full h-48 object-cover rounded-lg cursor-pointer"
+                                className="w-full h-48 lg:h-64 object-cover rounded-lg cursor-pointer transform transition duration-300 hover:scale-105"
                                 onClick={() => {
                                     setFullImage(image.imageUrl);
                                     setShowFullImage(true);
                                 }}
-                            />
+                                />
+                            ))}
+                    </div>
+                    )}
+                {/* Amenities and Description */}
+                <div className="text-center justify-center">
+                    <p className="text-lg text-gray-900 pb-4 pt-4 xl:pt-16 font-semibold">Amenities</p>
+                    <div className='mb-8 gap-4 flex justify-center flex-wrap'>
+                        {Object.keys(listing.amenities).filter(amenity => listing.amenities[amenity]).map((amenity) => (
+                            <div key={amenity} className={`p-2 rounded-lg bg-accent text-white`}>
+                                <AmenityIcon amenity={amenity} />
+                                <span className='font-semibold ml-2'>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
+                            </div>
                         ))}
                     </div>
-                </>
-            )}
+                    <p className="text-lg text-gray-900 font-semibold">Description:</p>
+                    <div className="mx-4 lg:mx-32 my-4" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                </div>
+            </>
+            {/* Display Full Image */}
             {showFullImage && (
-                <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-75">
-                    <button
-                        onClick={() => setShowFullImage(false)}
-                        className="absolute top-4 right-4 text-white text-2xl"
-                    >
-                        &times;
-                    </button>
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50"
+                    onClick={() => setShowFullImage(false)}
+                >
                     <img
                         src={fullImage}
                         alt="Full Size"
-                        className="max-w-full max-h-full"
+                        className="max-h-full max-w-full"
                     />
                 </div>
             )}
-        </div>
-    );
-};
-
-export default DetailsListing;
+            </div>
+        );
+    };
+    
+    export default DetailsListing;

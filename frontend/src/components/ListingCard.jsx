@@ -15,7 +15,7 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
                     .download(listing.images[0]); // Fetching only the first image for cover display
 
                 if (error) {
-                    console.error('Error fetching image:', error.message);
+                    setImageUrl('/img/placeholder2.jpg');
                 } else {
                     const url = URL.createObjectURL(data);
                     setImageUrl(url);

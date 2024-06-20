@@ -67,7 +67,7 @@ const AddListing = () => {
 
   const uploadImages = async () => {
     if (images.length === 0) {
-      return ['https://asfguipgiafjfgqzzoky.supabase.co/storage/v1/object/public/images/placeholder2.jpg?t=2024-06-17T16%3A07%3A07.165Z'];
+      return [];
     }
 
     const uploadedImagePaths = [];

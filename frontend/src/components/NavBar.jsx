@@ -54,7 +54,7 @@ const NavBar = () => {
       </div>
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <Link to="/" className="flex items-center mx-auto">
-          <img className="w-14 h-14" src="/travel-logo.jpg" alt="logo" />
+          <img className="w-12 h-full" src="/logo.png" alt="logo" />
         </Link>
       </div>
       <div className="flex items-center ml-auto relative">
