@@ -1,14 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { updateListing } from '../assets/listings';
+import { LoadingSpinner, ErrorMessage } from '../assets/ErrorLoading';
+// Text editor
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+// MUI Icons
+import AmenityIcon from '../components/AmenityIcon';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
+// MUI X Date Picker - for availability calendar
+import dayjs from 'dayjs';
+import { Day } from '../components/DayPicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 const DetailsListing = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [listing, setListing] = useState(null);
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(true);
     const [headerImage, setHeaderImage] = useState('/img/placeholder2.jpg');
     const [images, setImages] = useState([]);
     const [editMode, setEditMode] = useState(false);
@@ -22,8 +37,8 @@ const DetailsListing = () => {
         availabilityEnd: '',
     });
     const [description, setDescription] = useState('');
-    const [message, setMessage] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [fullImage, setFullImage] = useState(null);
+    const [showFullImage, setShowFullImage] = useState(false);
 
     useEffect(() => {
         fetchListing();
@@ -153,28 +168,30 @@ const DetailsListing = () => {
         navigate(-1);
     };
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+    const startDate = useMemo(() => dayjs(listing?.availability.start), [listing]);
+    const endDate = useMemo(() => dayjs(listing?.availability.end), [listing]);
+
+    if (loading) return <LoadingSpinner />;
+    if (message) return <ErrorMessage message={message} />;
 
     return (
         <div className="p-4 md:p-10 lg:p-16 text-center">
             <div className="text-center items-center mb-4">
                 <h2 className="text-primary text-3xl font-bold mb-2">{listing.name}</h2>
-                {message && <p className="text-accent">{message}</p>}
                 <div className='gap-2 lg:gap-6 flex flex-row justify-between my-2'>
                     <button
                         onClick={handleBack}
                         className="bg-gray-600 text-white p-2 rounded-lg hover:bg-dark-gray"
                     >
+                        <ArrowBackIosRoundedIcon />
                         Back to Profile
                     </button>
                     <section>
                         <button
-                            onClick={editMode? handleEdit : () => setEditMode(true)}
+                            onClick={editMode ? handleEdit : () => setEditMode(true)}
                             className="bg-primary text-white p-2 rounded-lg hover:bg-secondary"
                         >
-                            {editMode? "Save" : "Edit"}
+                            {editMode ? "Save" : "Edit"}
                         </button>
                         <button
                             onClick={handleDelete}
@@ -193,28 +210,48 @@ const DetailsListing = () => {
                 />
                 {!editMode && (
                     <>
-                        <p className="text-gray-700 mb-2"><span className="font-semibold">Address:</span> {listing.address}</p>
-                        <p className="text-gray-700 mb-2"><span className="font-semibold">Country:</span> {listing.country}</p>
-                        <p className="text-gray-700 mb-2"><span className="font-semibold">Price:</span> ${listing.price} per night</p>
-                        <p className="text-gray-700 mb-2"><span className="font-semibold">Guests:</span> {listing.guests}</p>
-                        <p className="text-gray-700 mb-2">
-                            <span className="font-semibold">Availability:</span> From {listing.availability.start} to {listing.availability.end}
+                        <p className="text-lg text-gray-900 mb-4">
+                            <PinDropRoundedIcon className='md:mr-2' />
+                            <span className="hidden md:inline font-semibold">Address: </span>
+                            {listing.address} - <span className='font-semibold'>{listing.country}</span>
                         </p>
-                        <p className="text-gray-700 mb-2">
-                            <span className="font-semibold">Amenities:</span>
-                            {listing.amenities?.wifi && ' Wifi'}
-                            {listing.amenities?.cooler && ' Cooler'}
-                            {listing.amenities?.kitchen && ' Kitchen'}
-                            {listing.amenities?.parking && ' Parking'}
-                            {listing.amenities?.pool && ' Pool'}
+                        <p className="text-lg text-gray-900">
+                            <PeopleOutlineRoundedIcon className='mr-2' />
+                            <span className="font-semibold">Guests: </span> {listing.guests}
                         </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                            {images.map((image, index) => (
-                                <img key={index} src={image.imageUrl} alt={`Image ${index + 1}`} className="w-full h-48 object-cover rounded-lg" />
-                            ))}
+                        <p className="text-lg text-gray-900">
+                            <span className="font-semibold">Price: </span>{listing.price} € per night
+                        </p>
+                        <div>
+                            <p className="text-center text-lg text-gray-900 font-semibold my-2">Availability</p>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DateCalendar
+                                    value={startDate}
+                                    minDate={startDate}
+                                    maxDate={endDate}
+                                    slots={{ day: Day }}
+                                    slotProps={{
+                                        day: { start: startDate, end: endDate },
+                                    }}
+                                    readOnly
+                                />
+                            </LocalizationProvider>
                         </div>
-                        <p className="text-gray-700 font-semibold">Description:</p>
-                        <div className="" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                        <p className="text-center text-lg text-gray-900 font-semibold my-2">Amenities</p>
+                        <div className='flex justify-center mb-2'>
+                            {Object.keys(listing.amenities).map((amenity) =>
+                                listing.amenities[amenity] && (
+                                    <div className="flex flex-col items-center m-2" key={amenity}>
+                                        <AmenityIcon amenity={amenity} />
+                                        <span className="text-xs">{amenity}</span>
+                                    </div>
+                                )
+                            )}
+                        </div>
+                        <p className="text-lg text-gray-900 font-semibold">Description</p>
+                        <div className="p-4 border rounded-lg text-left text-lg text-gray-800">
+                            <div dangerouslySetInnerHTML={{ __html: listing.description }} />
+                        </div>
                     </>
                 )}
                 {editMode && (
@@ -283,6 +320,40 @@ const DetailsListing = () => {
                     </div>
                 )}
             </div>
+            {images.length > 0 && (
+                <>
+                    <p className="text-center text-lg text-gray-900 font-semibold my-2">Gallery</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {images.map((image, index) => (
+                            <img
+                                key={index}
+                                src={image.imageUrl}
+                                alt={`Image ${index + 1}`}
+                                className="w-full h-48 object-cover rounded-lg cursor-pointer"
+                                onClick={() => {
+                                    setFullImage(image.imageUrl);
+                                    setShowFullImage(true);
+                                }}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
+            {showFullImage && (
+                <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-75">
+                    <button
+                        onClick={() => setShowFullImage(false)}
+                        className="absolute top-4 right-4 text-white text-2xl"
+                    >
+                        &times;
+                    </button>
+                    <img
+                        src={fullImage}
+                        alt="Full Size"
+                        className="max-w-full max-h-full"
+                    />
+                </div>
+            )}
         </div>
     );
 };

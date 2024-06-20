@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchListingById } from '../assets/listings'; // Assuming fetchListingById is a function to fetch listing details
-import { supabase } from '../supabaseClient'; // Import Supabase client
+import { LoadingSpinner, ErrorMessage } from '../assets/ErrorLoading';
+import { fetchListingById } from '../assets/listings';
+import { supabase } from '../supabaseClient';
 // MUI Icons
-import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
-import WifiIcon from '@mui/icons-material/Wifi';
-import KitchenIcon from '@mui/icons-material/Kitchen';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import PoolIcon from '@mui/icons-material/Pool';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
-// Importing MUI DateCalendar components
+import AmenityIcon from '../components/AmenityIcon';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
+import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
+// MUI X Date Picker - for availability calendar
 import dayjs from 'dayjs';
-import { Day } from '../assets/DayPicker';
+import { Day } from '../components/DayPicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
@@ -23,6 +22,8 @@ const DetailsPage = () => {
     const [images, setImages] = useState([]);
     const [fullImage, setFullImage] = useState(null);
     const [showFullImage, setShowFullImage] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -30,9 +31,11 @@ const DetailsPage = () => {
             try {
                 const data = await fetchListingById(id);
                 setListing(data);
-                fetchImages(data.images); // Fetch images after listing data is set
+                fetchImages(data.images);
+                setLoading(false);
             } catch (error) {
-                console.error("Error fetching listing details:", error);
+                setError('Error fetching listing details.');
+                setLoading(false);
             }
         };
 
@@ -40,32 +43,23 @@ const DetailsPage = () => {
     }, [id]);
 
     const fetchImages = async (imageNames) => {
-        if (!imageNames || imageNames.length === 0) {
-            return;
-        }
+        if (!imageNames || imageNames.length === 0) return;
 
         try {
             const imagePromises = imageNames.map(async (imageName) => {
-                const { data, error } = await supabase.storage
-                    .from('images')
-                    .download(imageName);
+                const { data, error } = await supabase.storage.from('images').download(imageName);
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
-                const imageUrl = URL.createObjectURL(data); // Create a URL for the downloaded image
+                const imageUrl = URL.createObjectURL(data);
                 return { imageName, imageUrl };
             });
 
             const fetchedImages = await Promise.all(imagePromises);
             setImages(fetchedImages);
 
-            // Set header image separately
             if (imageNames.length > 0) {
-                const { data: headerData, error: headerError } = await supabase.storage
-                    .from('images')
-                    .download(imageNames[0]);
+                const { data: headerData, error: headerError } = await supabase.storage.from('images').download(imageNames[0]);
                 if (!headerError) {
                     const headerImageUrl = URL.createObjectURL(headerData);
                     setHeaderImage(headerImageUrl);
@@ -76,63 +70,41 @@ const DetailsPage = () => {
         }
     };
 
-    const getAmenityIcon = (amenity) => {
-        switch (amenity) {
-          case 'wifi':
-            return <WifiIcon fontSize='medium' />;
-          case 'cooler':
-            return <AcUnitIcon fontSize='medium' />;
-          case 'kitchen':
-            return <KitchenIcon fontSize='medium' />;
-          case 'parking':
-            return <LocalParkingIcon fontSize='medium' />;
-          case 'pool':
-            return <PoolIcon fontSize='medium' />;
-          default:
-            return <WhereToVoteRoundedIcon fontSize='medium' />;
-        }
-      };
-
     const handleBack = () => {
         navigate(-1);
     };
 
-    if (!listing) {
-        return <p>Loading...</p>;
-    }
+    const startDate = useMemo(() => dayjs(listing?.availability.start), [listing]);
+    const endDate = useMemo(() => dayjs(listing?.availability.end), [listing]);
 
-    const startDate = dayjs(listing.availability.start);
-    const endDate = dayjs(listing.availability.end);
+    if (loading) return <LoadingSpinner />;
+    if (error) return <ErrorMessage message={error} />;
 
     return (
         <div className="p-4 md:p-10 lg:p-16">
             <h1 className="text-3xl text-center text-primary font-bold">{listing.name}</h1>
-            <button onClick={handleBack}
-                className="bg-accent text-white py-2 px-4 mb-4 rounded hover:bg-red-300">
-                Back
+            <button onClick={handleBack} className="bg-accent text-white p-2 mb-2 rounded-lg hover:bg-red-300 transition duration-300">
+                <ArrowBackIosRoundedIcon />
             </button>
-            <div className="mb-4 text-left">
-                {/* Header Image */}
-                <img
-                    src={headerImage}
-                    alt={listing.name}
-                    className="w-full h-64 object-cover rounded-lg mb-4"
-                />
-                {/* Listing Details */}
-                <div className="flex justify-between items-center mb-4">
-                    <div>
-                        <p className="text-base mb-2"><span className="font-semibold">Address:</span> {listing.address}</p>
-                        <p className="text-base mb-2"><span className="font-semibold">Country:</span> {listing.country}</p>
-                        <p className="text-base mb-2"><span className="font-semibold">Guests:</span> {listing.guests}</p>
-                        <p className="text-base mb-2"><span className="font-semibold">Price:</span> ${listing.price} per night</p>
-                        <p className="text-base mb-4">
-                            <span className="font-semibold">Availability:</span>
-                            From {listing.availability.start}
-                            to {listing.availability.end}
+            <div className="text-left">
+                <img src={headerImage} alt={listing.name} className="w-full h-64 object-cover rounded-lg" />
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                    <div className='flex flex-col justify-center bg-tertiary p-4 gap-4 flex-wrap rounded-lg w-full'>
+                        <p className="text-lg text-gray-900 mb-4">
+                            <PinDropRoundedIcon className='md:mr-2' />
+                            <span className="hidden md:inline font-semibold">Address: </span>
+                            {listing.address} - <span className='font-semibold'>{listing.country}</span>
+                        </p>
+                        <p className="text-lg text-gray-900">
+                            <PeopleOutlineRoundedIcon className='mr-2' />
+                            <span className="font-semibold">Guests: </span> {listing.guests}
+                        </p>
+                        <p className="text-lg text-gray-900">
+                            <span className="font-semibold">Price: </span>{listing.price} € per night
                         </p>
                     </div>
-                    {/* Date Calendar */}
-                    <div className="ml-4">
+                    <div>
+                        <p className="text-center text-lg text-gray-900 font-semibold my-2">Availability</p>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DateCalendar
                                 value={startDate}
@@ -140,17 +112,13 @@ const DetailsPage = () => {
                                 maxDate={endDate}
                                 slots={{ day: Day }}
                                 slotProps={{
-                                    day: {
-                                        start: startDate,
-                                        end: endDate,
-                                    },
+                                    day: { start: startDate, end: endDate },
                                 }}
                                 readOnly
                             />
                         </LocalizationProvider>
                     </div>
                 </div>
-                {/* Listing Images */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 mb-4">
                     {images.map((image, index) => (
                         <img
@@ -158,7 +126,6 @@ const DetailsPage = () => {
                             src={image.imageUrl}
                             alt={`Image ${index + 1}`}
                             className="w-full h-48 lg:h-64 object-cover rounded-lg cursor-pointer transform transition duration-300 hover:scale-105"
-                            // Open full image on click
                             onClick={() => {
                                 setFullImage(image.imageUrl);
                                 setShowFullImage(true);
@@ -166,25 +133,24 @@ const DetailsPage = () => {
                         />
                     ))}
                 </div>
-                <div className="my-4 text-center justify-center">
-                    <p className="text-base p-4 font-semibold">Amenities</p>
+                <div className="text-center justify-center">
+                    <p className="text-lg text-gray-900 p-4 font-semibold">Amenities</p>
                     <div className='mb-8 gap-4 flex justify-center flex-wrap'>
                         {Object.keys(listing.amenities).filter(amenity => listing.amenities[amenity]).map((amenity) => (
                             <div key={amenity} className={`p-2 rounded-lg bg-accent text-white`}>
-                                {getAmenityIcon(amenity)}
+                                <AmenityIcon amenity={amenity} />
                                 <span className='font-semibold ml-2'>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
                             </div>
                         ))}
                     </div>
-                    <p className="font-semibold">Description:</p>
-                    <div className="mx-4 lg:mx-32 my-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                    <p className="text-lg text-gray-900 font-semibold">Description:</p>
+                    <div className="mx-4 lg:mx-32 my-4" dangerouslySetInnerHTML={{ __html: listing.description }} />
                 </div>
             </div>
-            {/* Full Image Modal */}
             {showFullImage && (
-                <div 
-                className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50" 
-                onClick={() => setShowFullImage(false)}
+                <div
+                    className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50"
+                    onClick={() => setShowFullImage(false)}
                 >
                     <img
                         src={fullImage}

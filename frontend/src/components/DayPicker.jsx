@@ -12,8 +12,8 @@ const CustomPickersDay = styled(PickersDay, {
   ...(isSelected && {
     backgroundColor: '#a8dadc', // Custom color for selected days
     color: '#333333',
-    '&:hover, &:focus': {
-      backgroundColor: '#a8dadc',
+    '&:hover': {
+      backgroundColor: '#F5F5F5',
     },
   }),
 }));
