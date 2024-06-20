@@ -67,7 +67,7 @@ const HomePage = () => {
             />
             <div className="flex flex-col p-4 absolute inset-0 bg-dark-gray bg-opacity-65 items-center justify-center">
               <h1 className="flex flex-col text-center mt-8 text-4xl font-bold text-white py-6 md:py-10">
-                Hello World! This is a travel website.
+                Hello World! This is my travel website.
               </h1>
               <SearchBar 
                 onSearch={handleSearch} 

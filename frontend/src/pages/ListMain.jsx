@@ -17,7 +17,7 @@ const ListMain = () => {
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const listingsPerPage = 10; // Define how many listings per page
+  const listingsPerPage = 9; // Define how many listings per page
   const lastPage = Math.ceil(filteredListings.length / listingsPerPage);
 
   // Fetch all listings from database

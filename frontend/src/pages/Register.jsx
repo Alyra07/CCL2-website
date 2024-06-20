@@ -62,7 +62,7 @@ const Register = () => {
           }
 
           console.log(`Sign up successful: ${user.email}. ${profileMessage}`);
-          navigate('/login');
+          navigate('/');
         } catch (profileError) {
           setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);
         }
