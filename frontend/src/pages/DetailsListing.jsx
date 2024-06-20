@@ -112,7 +112,6 @@ const DetailsListing = () => {
                 },
                 description: description,
             });
-            setMessage('Listing updated successfully');
             setEditMode(false);
             fetchListing();
         } catch (error) {
@@ -163,27 +162,27 @@ const DetailsListing = () => {
             <div className="text-center items-center mb-4">
                 <h2 className="text-primary text-3xl font-bold mb-2">{listing.name}</h2>
                 {message && <p className="text-accent">{message}</p>}
-                <div className='gap-2 lg:gap-6 flex flex-row-reverse my-2'>
+                <div className='gap-2 lg:gap-6 flex flex-row justify-between my-2'>
                     <button
                         onClick={handleBack}
                         className="bg-gray-600 text-white p-2 rounded-lg hover:bg-dark-gray"
                     >
                         Back to Profile
                     </button>
-                    {!editMode && (
+                    <section>
                         <button
-                            onClick={() => setEditMode(true)}
+                            onClick={editMode? handleEdit : () => setEditMode(true)}
                             className="bg-primary text-white p-2 rounded-lg hover:bg-secondary"
                         >
-                            Edit Listing
+                            {editMode? "Save" : "Edit"}
                         </button>
-                    )}
-                    <button
-                        onClick={handleDelete}
-                        className="bg-accent text-white p-2 rounded-lg hover:bg-red-300"
-                    >
-                        Delete Listing
-                    </button>
+                        <button
+                            onClick={handleDelete}
+                            className="bg-accent text-white p-2 rounded-lg hover:bg-red-300"
+                        >
+                            Delete Listing
+                        </button>
+                    </section>
                 </div>
             </div>
             <div className="mb-4">
@@ -215,7 +214,7 @@ const DetailsListing = () => {
                             ))}
                         </div>
                         <p className="text-gray-700 font-semibold">Description:</p>
-                        <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                        <div className="" dangerouslySetInnerHTML={{ __html: listing.description }} />
                     </>
                 )}
                 {editMode && (
@@ -281,18 +280,6 @@ const DetailsListing = () => {
                             placeholder="Description"
                             className="mb-2"
                         />
-                        <button
-                            onClick={handleEdit}
-                            className="bg-primary text-white py-2 px-4 mr-2 rounded-lg hover:bg-secondary transition duration-300"
-                        >
-                            Save Changes
-                        </button>
-                        <button
-                            onClick={() => setEditMode(false)}
-                            className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-dark-gray"
-                        >
-                            Cancel
-                        </button>
                     </div>
                 )}
             </div>

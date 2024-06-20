@@ -4,6 +4,7 @@ import { fetchAllListings } from '../assets/listings';
 import { useUser } from '../assets/UserContext';
 import SearchBar from '../components/SearchBar';
 import ListingCard from '../components/ListingCard';
+import Pagination from '@mui/material/Pagination';
 
 const ListMain = () => {
   const { user } = useUser();
@@ -13,6 +14,11 @@ const ListMain = () => {
   const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const listingsPerPage = 10; // Define how many listings per page
+  const lastPage = Math.ceil(filteredListings.length / listingsPerPage);
 
   // Fetch all listings from database
   useEffect(() => {
@@ -54,31 +60,42 @@ const ListMain = () => {
       const matchesGuests = guests ? listing.guests >= guests : true;
       const matchesStartDate = startDate ? new Date(listing.availability.start) <= new Date(startDate) : true;
       const matchesEndDate = endDate ? new Date(listing.availability.end) >= new Date(endDate) : true;
-  
+
       return matchesCountry && matchesGuests && matchesStartDate && matchesEndDate;
     });
-  
+
     setFilteredListings(filtered);
   };
+
   // Filter listings based on price & amenities filter criteria
   const handleApplyFilter = (filterCriteria) => {
     const { country, priceRange, amenities } = filterCriteria;
     const [minPrice, maxPrice] = priceRange;
-  
+
     const filtered = listings.filter((listing) => {
       const matchesCountry = country === 'all' || listing.country.toLowerCase() === country.toLowerCase();
       const matchesPriceRange = (!minPrice || listing.price >= minPrice) && (!maxPrice || listing.price <= maxPrice);
       const matchesAmenities = amenities.length === 0 || amenities.every(amenity => listing.amenities[amenity]);
-  
+
       return matchesCountry && matchesPriceRange && matchesAmenities;
     });
-  
+
     setFilteredListings(filtered);
   };
+
   // Handle click on ListingCard
   const handleListingClick = (id) => {
     navigate(`/list/${id}`);
   };
+
+  // Pagination change handler
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  // Calculate listings to display for current page
+  const startIndex = (currentPage - 1) * listingsPerPage;
+  const currentListings = filteredListings.slice(startIndex, startIndex + listingsPerPage);
 
   return (
     <div className='p-4 md:p-10 lg:p-16'>
@@ -96,12 +113,12 @@ const ListMain = () => {
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {filteredListings.length === 0 ? ( // display message if no listings
+        {currentListings.length === 0 ? (
           <p className="col-span-full text-lg text-center">
-            No matches for your search criteria...</p>
+            No matches for your search criteria...
+          </p>
         ) : (
-        // Display filtered listingCards
-          filteredListings.map((listing, index) => (
+          currentListings.map((listing, index) => (
             <ListingCard
               key={index}
               listing={listing}
@@ -111,6 +128,16 @@ const ListMain = () => {
           ))
         )}
       </div>
+      {filteredListings.length > listingsPerPage && (
+        <div className="flex justify-center mt-8">
+          <Pagination
+            count={lastPage}
+            page={currentPage}
+            onChange={handlePageChange}
+            shape="rounded"
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -118,7 +118,7 @@ const DetailsPage = () => {
                     ))}
                 </div>
                 <p className="text-gray-700 font-semibold">Description:</p>
-                <div className="px-4 py-2" dangerouslySetInnerHTML={{ __html: listing.description }} />
+                <div className="" dangerouslySetInnerHTML={{ __html: listing.description }} />
             </div>
             {/* Full Image Modal */}
             {showFullImage && (

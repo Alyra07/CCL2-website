@@ -128,7 +128,7 @@ const Profile = () => {
         <div className="flex flex-col lg:flex-row mx-4 md:mx-12 justify-center
               bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full ">
           {/* Display Profile Data (lg:left col) */}
-          <div className="flex flex-col lg:w-1/4">
+          <div className="flex flex-col lg:w-1/4 md:mb-2">
             <p className="text-accentred text-center text-lg">{message}</p>
             {/* Profile Image */}
             <div className="text-center mb-4">
