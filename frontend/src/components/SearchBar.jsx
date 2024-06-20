@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-// MUI Components / Icons
+// MUI Components
 import Slider from '@mui/material/Slider';
 import Popper from '@mui/material/Popper';
+// MUI Icons
 import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
+import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
+import WifiIcon from '@mui/icons-material/Wifi';
+import KitchenIcon from '@mui/icons-material/Kitchen';
+import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import PoolIcon from '@mui/icons-material/Pool';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }) => {
   const [country, setCountry] = useState(initialValues?.country || 'all');
@@ -39,19 +46,35 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
     setOpen((prevOpen) => !prevOpen);
   };
 
-  // Handler for price range slider changes
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
   };
-  // Handler for amenity checkbox changes
-  const handleAmenityChange = (e, amenity) => {
-    if (e.target.checked) {
-      setSelectedAmenities([...selectedAmenities, amenity]);
-    } else {
-      setSelectedAmenities(selectedAmenities.filter(item => item !== amenity));
+
+  const getAmenityIcon = (amenity) => {
+    switch (amenity) {
+      case 'wifi':
+        return <WifiIcon fontSize='medium' />;
+      case 'cooler':
+        return <AcUnitIcon fontSize='medium' />;
+      case 'kitchen':
+        return <KitchenIcon fontSize='medium' />;
+      case 'parking':
+        return <LocalParkingIcon fontSize='medium' />;
+      case 'pool':
+        return <PoolIcon fontSize='medium' />;
+      default:
+        return <WhereToVoteRoundedIcon fontSize='medium' />;
     }
   };
-  // Handle additional filters in popper
+
+  const handleAmenityChange = (amenity) => {
+    if (selectedAmenities.includes(amenity)) {
+      setSelectedAmenities(selectedAmenities.filter(item => item !== amenity));
+    } else {
+      setSelectedAmenities([...selectedAmenities, amenity]);
+    }
+  };
+
   const handleApplyFilter = () => {
     const filterCriteria = { country, priceRange, amenities: selectedAmenities };
     onFilter(filterCriteria);
@@ -100,7 +123,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         />
         <button
           onClick={handleSearch}
-          className='text-md text-white py-2 px-4 ml-4 mt-2 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+          className='text-md text-white py-2 px-4 ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
           <TravelExploreRoundedIcon fontSize='medium' className='' />
           
         </button>
@@ -110,7 +133,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
           <button // Filter button toggles Popper
             type='button'
             onClick={handlePopperClick}
-            className='text-md text-white px-2 py-2 mt-4 rounded-lg bg-primary hover:bg-secondary  transition duration-300'>
+            className='text-md text-white p-2 mt-4 rounded-lg bg-primary hover:bg-secondary transition duration-300'>
             <TuneRoundedIcon fontSize='medium' />
             <p className='hidden md:inline'> {open? "Close" : "Filter"}</p>
           </button>
@@ -128,41 +151,36 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
                 sx={{ // styles for slider
                   '& .MuiSlider-thumb': {
                     color: '#f07167',
-                  },
-                  '& .MuiSlider-track': {
-                    color: '#00afb9',
-                  },
-                  '& .MuiSlider-rail': {
-                    color: '#a8dadc',
-                  },
-                }}
-                className='p-4 mb-4 mt-2'
-              />
+                    },
+                    '& .MuiSlider-track': {
+                      color: '#00afb9',
+                    },
+                    '& .MuiSlider-rail': {
+                      color: '#a8dadc',
+                    },
+                  }}
+                  className='p-4 mb-4 mt-2'
+                />
 
-              <label className="">Amenities</label>
-              <div className='my-4 gap-2'>
-                <input type="checkbox" id="wifi" value="wifi" 
-                onChange={(e) => handleAmenityChange(e, 'wifi')} />
-                <label htmlFor="wifi">Wifi</label>
-                <input type="checkbox" id="cooler" value="cooler" 
-                onChange={(e) => handleAmenityChange(e, 'cooler')} />
-                <label htmlFor="cooler">Cooler</label>
-                <input type="checkbox" id="kitchen" value="kitchen" 
-                onChange={(e) => handleAmenityChange(e, 'kitchen')} />
-                <label htmlFor="kitchen">Kitchen</label>
-                <input type="checkbox" id="parking" value="parking" 
-                onChange={(e) => handleAmenityChange(e, 'parking')} />
-                <label htmlFor="parking">Parking</label>
-                <input type="checkbox" id="pool" value="pool" 
-                onChange={(e) => handleAmenityChange(e, 'pool')} />
-                <label htmlFor="pool">Pool</label>
-                {/* Add more checkboxes for other amenities */}
-              </div>
-              
-              <button
-                onClick={handleApplyFilter}
-                className='text-white py-2 px-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
-                Apply
+                <label className="">Amenities</label>
+                <div className='my-4 gap-4 flex flex-wrap'>
+                  {['wifi', 'cooler', 'kitchen', 'parking', 'pool'].map((amenity) => (
+                    <button
+                      key={amenity}
+                      onClick={() => handleAmenityChange(amenity)}
+                      className={`p-4 rounded-lg transition duration-300 
+                        ${selectedAmenities.includes(amenity) ? 'bg-primary text-white' : 'bg-tertiary text-gray-700 hover:bg-secondary hover:text-white'}`}
+                    >
+                      {getAmenityIcon(amenity)}
+                      <span className='hidden md:inline ml-2'>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleApplyFilter}
+                  className='text-white p-2 mt-4 lg:mt-6 rounded-lg bg-accent hover:bg-red-300 transition duration-300 mx-auto'>
+                  Apply
               </button>
             </div>
           </Popper>
