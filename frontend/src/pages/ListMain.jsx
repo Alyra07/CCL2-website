@@ -47,8 +47,8 @@ const ListMain = () => {
 
   useEffect(() => {
     if (location.state && location.state.searchCriteria && location.state.filteredListings) {
-      setSearchCriteria(location.state.searchCriteria);
-      setFilteredListings(location.state.filteredListings);
+      setSearchCriteria(searchCriteria);
+      setFilteredListings(filteredListings);
     }
   }, [location.state]);
 
@@ -83,7 +83,7 @@ const ListMain = () => {
     setFilteredListings(filtered);
   };
 
-  // Handle click on ListingCard
+  // Handle click on ListingCard (pass listing with id to DetailsPage)
   const handleListingClick = (id) => {
     navigate(`/list/${id}`);
   };
@@ -124,6 +124,7 @@ const ListMain = () => {
               listing={listing}
               user={user ? user : listing.id}
               handleClick={handleListingClick}
+              filtered={filteredListings}
             />
           ))
         )}

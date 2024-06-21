@@ -4,27 +4,28 @@ import AddFavorite from './AddFavorite';
 import PeopleOutlineRoundedIcon from '@mui/icons-material/PeopleOutlineRounded';
 import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 
-const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => {
+const ListingCard = ({ listing, user, handleClick, showAddFavorite = true, filtered }) => {
     const [imageUrl, setImageUrl] = useState('/img/placeholder2.jpg');
 
     useEffect(() => {
-        const fetchImage = async () => {
-            if (listing.images && listing.images.length > 0) {
-                const { data, error } = await supabase.storage
-                    .from('images')
-                    .download(listing.images[0]); // Fetching only the first image for cover display
-
-                if (error) {
-                    setImageUrl('/img/placeholder2.jpg');
-                } else {
-                    const url = URL.createObjectURL(data);
-                    setImageUrl(url);
-                }
-            }
-        };
-
         fetchImage();
-    }, [listing.images]);
+    }, [listing.images, filtered]);
+
+    const fetchImage = async () => {
+        if (listing.images && listing.images.length > 0) {
+            const { data, error } = await supabase.storage
+                .from('images')
+                .download(listing.images[0]); // Fetching only the first image for cover display
+
+            if (error) {
+                console.error('Error downloading image:', error);
+                setImageUrl('/img/placeholder2.jpg');
+            } else {
+                const url = URL.createObjectURL(data);
+                setImageUrl(url);
+            }
+        }
+    };
 
     return (
         <div className="relative bg-light-gray border border-gray-300 rounded-lg overflow-hidden shadow-lg 

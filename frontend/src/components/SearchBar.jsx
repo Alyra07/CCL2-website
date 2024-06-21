@@ -3,14 +3,9 @@ import React, { useState, useEffect } from 'react';
 import Slider from '@mui/material/Slider';
 import Popper from '@mui/material/Popper';
 // MUI Icons
+import AmenityIcon from './AmenityIcon';
 import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
-import WhereToVoteRoundedIcon from '@mui/icons-material/WhereToVoteRounded';
-import WifiIcon from '@mui/icons-material/Wifi';
-import KitchenIcon from '@mui/icons-material/Kitchen';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
-import PoolIcon from '@mui/icons-material/Pool';
-import AcUnitIcon from '@mui/icons-material/AcUnit';
 
 const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }) => {
   const [country, setCountry] = useState(initialValues?.country || 'all');
@@ -48,23 +43,6 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
 
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
-  };
-
-  const getAmenityIcon = (amenity) => {
-    switch (amenity) {
-      case 'wifi':
-        return <WifiIcon fontSize='medium' />;
-      case 'cooler':
-        return <AcUnitIcon fontSize='medium' />;
-      case 'kitchen':
-        return <KitchenIcon fontSize='medium' />;
-      case 'parking':
-        return <LocalParkingIcon fontSize='medium' />;
-      case 'pool':
-        return <PoolIcon fontSize='medium' />;
-      default:
-        return <WhereToVoteRoundedIcon fontSize='medium' />;
-    }
   };
 
   const handleAmenityChange = (amenity) => {
@@ -123,7 +101,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         />
         <button
           onClick={handleSearch}
-          className='text-md text-white py-2 px-4 ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+          className='text-md text-white py-2 px-4 ml-4 md:ml-0 lg:ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
           <TravelExploreRoundedIcon fontSize='medium' className='' />
           
         </button>
@@ -171,7 +149,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
                       className={`p-4 rounded-lg transition duration-300 
                         ${selectedAmenities.includes(amenity) ? 'bg-primary text-white' : 'bg-tertiary text-gray-700 hover:bg-secondary hover:text-white'}`}
                     >
-                      {getAmenityIcon(amenity)}
+                      <AmenityIcon amenity={amenity} />
                       <span className='hidden md:inline ml-2'>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
                     </button>
                   ))}

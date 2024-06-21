@@ -20,14 +20,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
+// DetailsListing page (reached from Profile page)
+// This is for displaying a single listing uploaded by a user
 const DetailsListing = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [listing, setListing] = useState(null);
+    const [listing, setListing] = useState(null); // full listing data from supabase
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
+    // Images
     const [headerImage, setHeaderImage] = useState('/img/placeholder2.jpg');
     const [images, setImages] = useState([]);
+    const [fullImage, setFullImage] = useState(null);
+    const [showFullImage, setShowFullImage] = useState(false);
+    // Edit mode and fields
     const [editMode, setEditMode] = useState(false);
     const [editFields, setEditFields] = useState({
         name: '',
@@ -39,8 +45,6 @@ const DetailsListing = () => {
         availabilityEnd: '',
     });
     const [description, setDescription] = useState('');
-    const [fullImage, setFullImage] = useState(null);
-    const [showFullImage, setShowFullImage] = useState(false);
 
     useEffect(() => {
         fetchListing();
