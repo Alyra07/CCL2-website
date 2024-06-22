@@ -60,7 +60,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
   };
 
   const handleSearch = () => {
-    onSearch({ country, guests, startDate, endDate });
+    onSearch({ country, guests, startDate, endDate, amenities: selectedAmenities });
   };
 
 

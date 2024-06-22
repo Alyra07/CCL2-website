@@ -118,9 +118,9 @@ const ListMain = () => {
             No matches for your search criteria...
           </p>
         ) : (
-          currentListings.map((listing, index) => (
+          currentListings.map((listing) => (
             <ListingCard
-              key={index}
+              key={listing.id} // Use listing.id as the key
               listing={listing}
               user={user ? user : listing.id}
               handleClick={handleListingClick}
