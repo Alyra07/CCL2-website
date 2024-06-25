@@ -37,7 +37,7 @@ const ListingCard = ({ listing, user, handleClick, showAddFavorite = true }) => 
     };
 
     return (
-        <div className="relative bg-light-gray border border-gray-300 rounded-lg overflow-hidden shadow-lg 
+        <div className="flex flex-col h-full relative bg-light-gray border border-gray-300 rounded-lg overflow-hidden shadow-lg 
             transform transition-transform duration-300 hover:scale-105 cursor-pointer"
             onClick={() => handleClick(listing.id)}
         >

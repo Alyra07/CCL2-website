@@ -136,8 +136,10 @@ const Profile = () => {
     let newPage = currentPage + increment;
     if (newPage >= totalPages) {
       newPage = 0; // Loop back to the first page if we go over
+      setSlideDirection('left');
     } else if (newPage < 0) {
       newPage = totalPages - 1; // Loop to the last page if we go below 0
+      setSlideDirection('right');
     }
     setCurrentPage(newPage);
   };
@@ -234,57 +236,64 @@ const Profile = () => {
             <hr className="w-1/2 border border-secondary mb-4" />
             {/* ListingCard gallery with arrow buttons */}
             {Array.isArray(listings) && listings.length > 0 ? (
-              <Box
-                className="listing-grid"
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }, // Updated for 2x2 grid on mobile and 1 row of 4 listings on large screens
-                  gap: 2,
-                }}
-              >
-                <Box
+                <Box // 2x2 grid on mobile and 1 row of 4 listings on large screens
+                  className="listing-grid"
                   sx={{
-                    gridColumn: { xs: '1 / span 2', lg: '1 / span 4' }, // Updated to span 4 columns on large screens
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
+                    gap: 2,
                   }}
                 >
-                  <IconButton onClick={() => handleArrowClick('left')}>
-                    <ArrowBackIosRoundedIcon />
-                  </IconButton>
-                  <Box
+                  <Box // span 4 columns on large screens
                     sx={{
-                      display: 'grid',
-                      gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }, // Repeated for consistency
-                      gap: 2,
-                      width: '100%',
+                      gridColumn: { xs: '1 / span 2', lg: '1 / span 4' },
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                   >
-                    {listingsToDisplay.map((listing) => (
-                      <Slide
-                        key={listing.id}
-                        in={slideIn}
-                        direction={slideDirection}
-                        mountOnEnter
-                        unmountOnExit
-                      >
-                        <Box>
-                          <ListingCard
-                            listing={listing}
-                            user={user}
-                            handleClick={handleListingClick}
-                            showAddFavorite={false}
-                          />
-                        </Box>
-                      </Slide>
-                    ))}
+                    {/* Hide the left arrow if on the first page */}
+                    {currentPage > 0 && (
+                      <IconButton onClick={() => handleArrowClick('left')}>
+                        <ArrowBackIosRoundedIcon />
+                      </IconButton>
+                    )}
+                    <Box
+                      sx={{
+                        display: 'grid',
+                        gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
+                        gap: 2,
+                        width: '100%',
+                      }}
+                    >
+                      {listingsToDisplay.map((listing) => (
+                        <Slide
+                          key={listing.id}
+                          in={slideIn}
+                          direction={slideDirection}
+                          mountOnEnter
+                          unmountOnExit
+                        >
+                          <Box
+                            className= 'md:max-w-64'>
+                            <ListingCard
+                              listing={listing}
+                              user={user}
+                              handleClick={handleListingClick}
+                              showAddFavorite={false}
+                            />
+                          </Box>
+                        </Slide>
+                      ))}
+                    </Box>
+                    {/* Hide the right arrow if on the last page */}
+                    {currentPage < totalPages - 1 && (
+                      <IconButton onClick={() => handleArrowClick('right')}>
+                        <ArrowForwardIosRoundedIcon />
+                      </IconButton>
+                    )}
                   </Box>
-                  <IconButton onClick={() => handleArrowClick('right')}>
-                    <ArrowForwardIosRoundedIcon />
-                  </IconButton>
                 </Box>
-              </Box>
             ) : (
               <p className="text-lg text-gray-700">You have no listings yet.</p>
             )}
