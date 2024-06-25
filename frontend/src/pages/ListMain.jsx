@@ -10,38 +10,38 @@ const ListMain = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
-  const initialSearchCriteria = location.state?.searchCriteria || {};
-  const initialFilteredListings = location.state?.filteredListings || [];
 
+  const getInitialState = (key) => {
+    try {
+      const stateFromLocation = location.state ? location.state[key] : null;
+      const stateFromStorage = localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : null;
+      return stateFromLocation || stateFromStorage || {};
+    } catch (error) {
+      console.error(`Error parsing ${key} from localStorage`, error);
+      return {};
+    }
+  };
+
+  const [searchCriteria, setSearchCriteria] = useState(() => getInitialState('searchCriteria'));
+  const [filteredListings, setFilteredListings] = useState(() => getInitialState('filteredListings'));
   const [listings, setListings] = useState([]);
   const [countries, setCountries] = useState([]);
-  const [searchCriteria, setSearchCriteria] = useState(() => {
-    // Initialize from state if available, otherwise from localStorage
-    const savedCriteria = localStorage.getItem('searchCriteria');
-    return Object.keys(initialSearchCriteria).length ? initialSearchCriteria : savedCriteria ? JSON.parse(savedCriteria) : {};
-  });
-  const [filteredListings, setFilteredListings] = useState(() => {
-    // Initialize from state if available, otherwise from localStorage
-    const savedFilteredListings = localStorage.getItem('filteredListings');
-    return initialFilteredListings.length ? initialFilteredListings : savedFilteredListings ? JSON.parse(savedFilteredListings) : [];
-  });
-
-  const listingsPerPage = 9; // Define how many listings per page
+  const listingsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const lastPage = Math.ceil(filteredListings.length / listingsPerPage);
 
-  // Fetch all listings from database
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await fetchAllListings();
         setListings(data);
-        // Extract unique countries from listings
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
         setCountries(uniqueCountries);
 
         if (!filteredListings.length) {
           setFilteredListings(data);
+        } else {
+          filterListings(data, searchCriteria);
         }
       } catch (error) {
         console.error("Error fetching listings:", error);
@@ -52,19 +52,16 @@ const ListMain = () => {
   }, []);
 
   useEffect(() => {
-    filterListings();
+    filterListings(listings, searchCriteria);
   }, [searchCriteria, listings]);
 
   useEffect(() => {
-    // Save to localStorage whenever filteredListings or searchCriteria changes
     localStorage.setItem('filteredListings', JSON.stringify(filteredListings));
     localStorage.setItem('searchCriteria', JSON.stringify(searchCriteria));
   }, [filteredListings, searchCriteria]);
 
-  // Filter listings based on main SearchBar criteria
-  const filterListings = () => {
-    const { country, guests, startDate, endDate } = searchCriteria;
-    // Filter listings based on main search criteria
+  const filterListings = (listings, criteria) => {
+    const { country, guests, startDate, endDate } = criteria;
     const filtered = listings.filter((listing) => {
       const matchesCountry = country === 'all' || (country ? (listing.country?.toLowerCase().includes(country.toLowerCase()) ?? false) : true);
       const matchesGuests = guests ? listing.guests >= guests : true;
@@ -78,7 +75,6 @@ const ListMain = () => {
     localStorage.setItem('filteredListings', JSON.stringify(filtered));
   };
 
-  // Filter listings based on price & amenities filter criteria
   const handleApplyFilter = (filterCriteria) => {
     const { country, priceRange, amenities } = filterCriteria;
     const [minPrice, maxPrice] = priceRange;
@@ -96,17 +92,14 @@ const ListMain = () => {
     localStorage.setItem('searchCriteria', JSON.stringify(filterCriteria));
   };
 
-  // Handle click on ListingCard (pass listing with id to DetailsPage)
   const handleListingClick = (id) => {
     navigate(`/list/${id}`);
   };
 
-  // Pagination change handler
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  // Calculate listings to display for current page
   const startIndex = (currentPage - 1) * listingsPerPage;
   const currentListings = filteredListings.slice(startIndex, startIndex + listingsPerPage);
 
@@ -117,7 +110,7 @@ const ListMain = () => {
         <SearchBar
           onSearch={(criteria) => {
             setSearchCriteria(criteria);
-            filterListings(criteria);
+            filterListings(listings, criteria);
           }}
           showFilters={true}
           onFilter={handleApplyFilter}
@@ -133,11 +126,10 @@ const ListMain = () => {
         ) : (
           currentListings.map((listing) => (
             <ListingCard
-              key={listing.id} // Use listing.id as the key
+              key={listing.id}
               listing={listing}
               user={user ? user : listing.id}
               handleClick={handleListingClick}
-              filtered={filteredListings}
             />
           ))
         )}
