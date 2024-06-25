@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
 import { useUser } from '../assets/UserContext';
 import SearchBar from '../components/SearchBar';
@@ -8,16 +8,26 @@ import Pagination from '@mui/material/Pagination';
 
 const ListMain = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const initialSearchCriteria = location.state?.searchCriteria || {};
+  const initialFilteredListings = location.state?.filteredListings || [];
+
   const [listings, setListings] = useState([]);
   const [countries, setCountries] = useState([]);
-  const navigate = useNavigate();
-  // SearchBar criteria states
-  const [searchCriteria, setSearchCriteria] = useState({});
-  const [filteredListings, setFilteredListings] = useState([]);
+  const [searchCriteria, setSearchCriteria] = useState(() => {
+    // Initialize from state if available, otherwise from localStorage
+    const savedCriteria = localStorage.getItem('searchCriteria');
+    return Object.keys(initialSearchCriteria).length ? initialSearchCriteria : savedCriteria ? JSON.parse(savedCriteria) : {};
+  });
+  const [filteredListings, setFilteredListings] = useState(() => {
+    // Initialize from state if available, otherwise from localStorage
+    const savedFilteredListings = localStorage.getItem('filteredListings');
+    return initialFilteredListings.length ? initialFilteredListings : savedFilteredListings ? JSON.parse(savedFilteredListings) : [];
+  });
 
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
   const listingsPerPage = 9; // Define how many listings per page
+  const [currentPage, setCurrentPage] = useState(1);
   const lastPage = Math.ceil(filteredListings.length / listingsPerPage);
 
   // Fetch all listings from database
@@ -30,7 +40,7 @@ const ListMain = () => {
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
         setCountries(uniqueCountries);
 
-        if (!filteredListings) {
+        if (!filteredListings.length) {
           setFilteredListings(data);
         }
       } catch (error) {
@@ -39,11 +49,17 @@ const ListMain = () => {
     };
 
     getData();
-  }, [filteredListings]);
+  }, []);
 
   useEffect(() => {
     filterListings();
   }, [searchCriteria, listings]);
+
+  useEffect(() => {
+    // Save to localStorage whenever filteredListings or searchCriteria changes
+    localStorage.setItem('filteredListings', JSON.stringify(filteredListings));
+    localStorage.setItem('searchCriteria', JSON.stringify(searchCriteria));
+  }, [filteredListings, searchCriteria]);
 
   // Filter listings based on main SearchBar criteria
   const filterListings = () => {

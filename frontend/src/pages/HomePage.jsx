@@ -97,7 +97,7 @@ const HomePage = () => {
                   <p className="text-gray-700 mb-2">Discover the best places to stay in {country}.</p>
                   <button
                     // Pass chosen country & empty filteredListings to ListMain
-                    onClick={() => navigate('/list', { state: { searchCriteria: { country }, filteredListings: [] } })}
+                    onClick={() => navigate('/list', { state: { searchCriteria: { country: country.toLowerCase() }, filteredListings: [] } })}
                     className="bg-primary text-white py-2 px-4 rounded hover:bg-secondary transition-colors duration-300"
                   >
                     Explore {country}
