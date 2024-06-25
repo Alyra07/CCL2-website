@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // Removed useHistory
 import { fetchAllListings } from '../assets/listings';
 import { useUser } from '../assets/UserContext';
 import SearchBar from '../components/SearchBar';
@@ -10,29 +10,29 @@ const ListMain = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
-
+  // Helper function to get initial state from location.state
   const getInitialState = (key) => {
     try {
       const stateFromLocation = location.state ? location.state[key] : null;
-      const stateFromStorage = localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : null;
-      return stateFromLocation || stateFromStorage || {};
+      return stateFromLocation || {};
     } catch (error) {
-      console.error(`Error parsing ${key} from localStorage`, error);
+      console.error(`Error parsing ${key} from location.state`, error);
       return {};
     }
   };
-
+  // Initialize searchCriteria & filteredListings with values from location.state or empty objects
   const [searchCriteria, setSearchCriteria] = useState(() => getInitialState('searchCriteria'));
-  const [filteredListings, setFilteredListings] = useState(() => getInitialState('filteredListings'));
+  const [filteredListings, setFilteredListings] = useState([]);
   const [listings, setListings] = useState([]);
   const [countries, setCountries] = useState([]);
+  // Pagination
   const listingsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const lastPage = Math.ceil(filteredListings.length / listingsPerPage);
 
   useEffect(() => {
     const getData = async () => {
-      try {
+      try { // get all listings from supabase
         const data = await fetchAllListings();
         setListings(data);
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
@@ -51,15 +51,29 @@ const ListMain = () => {
     getData();
   }, []);
 
+  // Update displayed listings when search criteria or listings change
   useEffect(() => {
     filterListings(listings, searchCriteria);
   }, [searchCriteria, listings]);
 
+  // Hook for updating location state when navigating (e.g. back from DetailsPage)
   useEffect(() => {
-    localStorage.setItem('filteredListings', JSON.stringify(filteredListings));
-    localStorage.setItem('searchCriteria', JSON.stringify(searchCriteria));
-  }, [filteredListings, searchCriteria]);
+    // update location state with new search criteria and filtered listings
+    const newState = {
+      ...location.state,
+      searchCriteria,
+      filteredListings,
+    };
+    // Only navigate if the new state is different from the current state
+    if (JSON.stringify(location.state) !== JSON.stringify(newState)) {
+      navigate(location.pathname, {
+        state: newState,
+        replace: true,
+      });
+    }
+  }, [searchCriteria, filteredListings, navigate, location]);
 
+  // Filter listings based on main search criteria
   const filterListings = (listings, criteria) => {
     const { country, guests, startDate, endDate } = criteria;
     const filtered = listings.filter((listing) => {
@@ -72,9 +86,9 @@ const ListMain = () => {
     });
 
     setFilteredListings(filtered);
-    localStorage.setItem('filteredListings', JSON.stringify(filtered));
   };
 
+  // Filter listings based on filter criteria (onFilter from SearchBar)
   const handleApplyFilter = (filterCriteria) => {
     const { country, priceRange, amenities } = filterCriteria;
     const [minPrice, maxPrice] = priceRange;
@@ -88,8 +102,6 @@ const ListMain = () => {
     });
 
     setFilteredListings(filtered);
-    localStorage.setItem('filteredListings', JSON.stringify(filtered));
-    localStorage.setItem('searchCriteria', JSON.stringify(filterCriteria));
   };
 
   const handleListingClick = (id) => {

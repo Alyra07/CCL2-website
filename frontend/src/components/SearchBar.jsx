@@ -43,13 +43,13 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
       setSelectedAmenities([...selectedAmenities, amenity]);
     }
   };
-
+  // onClick handler for Apply button in Popper
   const handleApplyFilter = () => {
     const filterCriteria = { country, priceRange, amenities: selectedAmenities };
     onFilter(filterCriteria);
     setOpen(false);
   };
-
+  // onClick handler for main Search button
   const handleSearch = () => {
     onSearch({ country, guests, startDate, endDate, amenities: selectedAmenities });
   };
