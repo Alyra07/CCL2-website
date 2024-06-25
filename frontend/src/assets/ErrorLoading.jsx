@@ -1,13 +1,15 @@
 import React from 'react';
+import LinearProgress from '@mui/material/LinearProgress';
 
+// Placeholder if data in DetailsPage is still loading
 export const LoadingSpinner = () => (
-    <div className="flex justify-center items-center h-64">
-        <div className="loader"></div>
+    <div className="flex justify-center items-center">
+      <LinearProgress color="inherit" />
     </div>
 );
 
 export const ErrorMessage = ({ message }) => (
-    <div className="text-red-600 text-center">
+    <div className="text-accentred text-center">
         <p>{message}</p>
     </div>
 );

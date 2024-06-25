@@ -46,6 +46,7 @@ const DetailsListing = () => {
     });
     const [description, setDescription] = useState('');
 
+    // Fetch listing data by id from supabase
     useEffect(() => {
         fetchListing();
     }, []);
@@ -83,7 +84,7 @@ const DetailsListing = () => {
 
     const fetchImages = async (imageNames) => {
         if (!imageNames || imageNames.length === 0) return;
-
+        // Fetch images from Supabase storage
         try {
             const imagePromises = imageNames.map(async (imageName) => {
                 const { data, error } = await supabase.storage.from('images').download(imageName);
@@ -98,6 +99,7 @@ const DetailsListing = () => {
             setImages(fetchedImages);
 
             if (imageNames.length > 0) {
+                // Fetch header image
                 const { data: headerData, error: headerError } = await supabase.storage.from('images').download(imageNames[0]);
                 if (!headerError) {
                     const headerImageUrl = URL.createObjectURL(headerData);
@@ -111,6 +113,7 @@ const DetailsListing = () => {
 
     const handleEdit = async () => {
         try {
+            // Update listing with new data (using updateListing function from assets/listings.js)
             await updateListing(id, {
                 name: editFields.name,
                 address: editFields.address,
@@ -168,9 +171,11 @@ const DetailsListing = () => {
         navigate(-1);
     };
 
+    // Calculate start and end date for availability calendar
     const startDate = useMemo(() => dayjs(listing?.availability.start), [listing]);
     const endDate = useMemo(() => dayjs(listing?.availability.end), [listing]);
 
+    // Display loading spinner while fetching data
     if (loading) return <LoadingSpinner />;
     if (message) return <ErrorMessage message={message} />;
 
@@ -182,6 +187,7 @@ const DetailsListing = () => {
                     <ArrowBackIosRoundedIcon />
                 </button>
                 <section>
+                    {/* editMode Button */}
                     <button
                         onClick={editMode ? handleEdit : () => setEditMode(true)}
                         className="bg-primary text-white p-2 rounded-lg hover:bg-secondary"
@@ -189,6 +195,7 @@ const DetailsListing = () => {
                         <ModeEditRoundedIcon />
                         <span className='ml-2'>{editMode ? "Save" : "Edit"}</span>
                     </button>
+                    {/* Delete Button */}
                     <button
                         onClick={handleDelete}
                         className="bg-accentred text-white p-2 rounded-lg ml-4 hover:bg-red-300"
@@ -199,6 +206,7 @@ const DetailsListing = () => {
             </div>
             <div className="text-left">
                 <img src={headerImage} alt={listing.name} className="w-full h-64 object-cover rounded-lg" />
+                {/* Listing Details Display*/}
                 {!editMode && (
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <div className='flex flex-col justify-center bg-tertiary p-4 gap-4 flex-wrap rounded-lg w-full'>
@@ -217,12 +225,13 @@ const DetailsListing = () => {
                         </div>
                         <div>
                             <p className="text-center text-lg text-gray-900 font-semibold my-2">Availability</p>
+                            {/* Availibility Calendar */}
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DateCalendar
                                     value={startDate}
                                     minDate={startDate}
                                     maxDate={endDate}
-                                    slots={{ day: Day }}
+                                    slots={{ day: Day }} // custom DayPicker component
                                     slotProps={{
                                         day: { start: startDate, end: endDate },
                                     }}
@@ -232,6 +241,7 @@ const DetailsListing = () => {
                         </div>
                     </div>
                 )}
+                {/* Edit Mode input fields */}
                 {editMode && (
                     <div className="mb-4">
                         <input
@@ -326,11 +336,12 @@ const DetailsListing = () => {
                             </div>
                         ))}
                     </div>
+                    {/* description set as text from html (text editor) */}
                     <p className="text-lg text-gray-900 font-semibold">Description:</p>
                     <div className="mx-4 lg:mx-32 my-4" dangerouslySetInnerHTML={{ __html: listing.description }} />
                 </div>
             </>
-            {/* Display Full Image */}
+            {/* Full image display on image click */}
             {showFullImage && (
                 <div
                     className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50"

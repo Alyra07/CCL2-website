@@ -17,18 +17,19 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 
 const DetailsPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    // Listing states
     const [listing, setListing] = useState(null);
     const [headerImage, setHeaderImage] = useState('/img/placeholder2.jpg');
     const [images, setImages] = useState([]);
     const [fullImage, setFullImage] = useState(null);
     const [showFullImage, setShowFullImage] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const getData = async () => {
-            try {
+            try { // Fetch listing details from supabase by listing.id
                 const data = await fetchListingById(id);
                 setListing(data);
                 fetchImages(data.images);
@@ -46,6 +47,7 @@ const DetailsPage = () => {
         if (!imageNames || imageNames.length === 0) return;
 
         try {
+            // Fetch all images from Supabase storage
             const imagePromises = imageNames.map(async (imageName) => {
                 const { data, error } = await supabase.storage.from('images').download(imageName);
 
@@ -59,6 +61,7 @@ const DetailsPage = () => {
             setImages(fetchedImages);
 
             if (imageNames.length > 0) {
+                // Fetch header image from Supabase storage
                 const { data: headerData, error: headerError } = await supabase.storage.from('images').download(imageNames[0]);
                 if (!headerError) {
                     const headerImageUrl = URL.createObjectURL(headerData);
@@ -70,13 +73,15 @@ const DetailsPage = () => {
         }
     };
 
+    // Go back to previous page (button click handler)
     const handleBack = () => {
         navigate(-1);
     };
-
+    // Calculate start and end date for availability calendar
     const startDate = useMemo(() => dayjs(listing?.availability.start), [listing]);
     const endDate = useMemo(() => dayjs(listing?.availability.end), [listing]);
 
+    // Display loading spinner while fetching data
     if (loading) return <LoadingSpinner />;
     if (error) return <ErrorMessage message={error} />;
 
@@ -113,7 +118,7 @@ const DetailsPage = () => {
                                 value={startDate}
                                 minDate={startDate}
                                 maxDate={endDate}
-                                slots={{ day: Day }}
+                                slots={{ day: Day }} // custom DayPicker component
                                 slotProps={{
                                     day: { start: startDate, end: endDate },
                                 }}
@@ -148,6 +153,7 @@ const DetailsPage = () => {
                             </div>
                         ))}
                     </div>
+                    {/* description set as text from html (text editor) */}
                     <p className="text-lg text-gray-900 font-semibold">Description:</p>
                     <div className="mx-4 lg:mx-32 my-4" dangerouslySetInnerHTML={{ __html: listing.description }} />
                 </div>

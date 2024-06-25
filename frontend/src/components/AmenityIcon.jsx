@@ -7,6 +7,7 @@ import LocalParkingIcon from '@mui/icons-material/LocalParking';
 import PoolIcon from '@mui/icons-material/Pool';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 
+// Provides the appropriate icon for each amenity (easier access for multiple pages)
 const AmenityIcon = ({ amenity }) => {
     const icons = {
         wifi: <WifiIcon fontSize='medium' />,

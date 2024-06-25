@@ -32,6 +32,7 @@ const Register = () => {
       const user = data.user;
       if (user && user.id) {
         try {
+          // check if profile already exists
           const { data: existingProfile, error: fetchError } = await supabase
             .from('users')
             .select('*')
@@ -41,14 +42,15 @@ const Register = () => {
           if (fetchError && fetchError.code !== 'PGRST116') {
             throw new Error(`Fetch error: ${fetchError.message}`);
           }
-          // profile creation
+
           let profileMessage;
           if (existingProfile) {
             profileMessage = 'Profile already exists';
             if (error) {
               throw new Error(`Update error: ${error.message}`);
             }
-
+            
+          // profile creation in users table for new user
           } else {
             const { data, error } = await supabase
               .from('users')
@@ -73,10 +75,11 @@ const Register = () => {
   };
 
   return (
-    <div className="p-4 md:p-10 lg:p-16 mt-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
+    <div className="p-4 md:p-10 lg:p-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-24">
+        {/* Register Form */}
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
-          <div className="w-full">
+          <div>
             <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Register</h2>
             <form onSubmit={handleSignUp} className="space-y-4">
               <input
@@ -117,14 +120,14 @@ const Register = () => {
             {message && <p className="mt-4 text-center text-accentred">{message}</p>}
           </div>
         </div>
-        {/* Images */}
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 gap-1">
+        {/* Images on right side of the form */}
+        <div className="grid grid-cols-2 gap-4">
           {images.map((image, index) => (
             <img
               key={index}
               src={`/profile/${image}`}
               alt={`Gallery image ${index + 1}`}
-              className="w-3/4 h-auto object-cover rounded-lg"
+              className="h-auto object-cover rounded-lg"
             />
           ))}
         </div>

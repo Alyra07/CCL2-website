@@ -9,12 +9,13 @@ const Favorites = () => {
     const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
 
+    // Fetch favorites for the current user from database
     useEffect(() => {
         if (user) {
             fetchFavorites();
         }
     }, [user]);
-    // Fetch favorites for the current user from database
+
     const fetchFavorites = async () => {
         try {
             const { data, error } = await supabase
@@ -31,6 +32,7 @@ const Favorites = () => {
             console.error('Error fetching favorites:', error.message);
         }
     };
+    
     // pass listing id to navigate to details page
     const handleListingClick = (id) => {
         navigate(`/list/${id}`);
@@ -58,6 +60,7 @@ const Favorites = () => {
                             listing={favorite.listings}
                             user={user}
                             handleClick={handleListingClick}
+                        // AddFavoriteButton is true per default to delete favorites
                         />
                     ))}
                 </div>

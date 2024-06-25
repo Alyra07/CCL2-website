@@ -7,17 +7,18 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Get user session on mount
     const getUserSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         setUser(session.user);
       }
-
+      // Listen for changes on auth state (logged in, signed out, etc.)
       const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
         setUser(session?.user || null);
       });
-
       return () => {
+        // Unsubscribe from auth listener on unmount
         authListener.subscription.unsubscribe();
       };
     };
@@ -25,6 +26,7 @@ export const UserProvider = ({ children }) => {
     getUserSession();
   }, []);
 
+  // Provide user context to all children components (allows access to user state)
   return (
     <UserContext.Provider value={{ user }}>
       {children}
@@ -32,4 +34,5 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUser = () => useContext(UserContext);
+// Custom hook to access user context: const { user } = useUser();
+export const useUser = () => useContext(UserContext); 

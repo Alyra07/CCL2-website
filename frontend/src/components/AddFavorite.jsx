@@ -12,7 +12,7 @@ const AddFavorite = ({ listingId, userId }) => {
     useEffect(() => {
         const checkFavoriteStatus = async () => {
             if (!userId) return;
-            try {
+            try { // Check if listingId is already in favorites for current user
                 const { data: existingFavorites, error: fetchError } = await supabase
                     .from('favorites')
                     .select('*')
@@ -61,7 +61,6 @@ const AddFavorite = ({ listingId, userId }) => {
                 const { data, error } = await supabase.from('favorites').insert([
                     { user_id: userId, listing_id: listingId },
                 ]);
-
                 if (error) {
                     throw error;
                 }

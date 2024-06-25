@@ -28,7 +28,7 @@ const Profile = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const maxListingsPerPage = 4;
   const totalPages = Math.ceil(listings.length / maxListingsPerPage);
-
+  // predefined profile images to choose from in a dropdown menu
   const profileImages = [
     '/profile/profile-img1.png',
     '/profile/profile-img2.png',

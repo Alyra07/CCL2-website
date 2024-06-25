@@ -8,6 +8,7 @@ const Login = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  // sign in with assets/auth.js function on form submit
   const handleSignIn = async (e) => {
     e.preventDefault();
     const { data, error } = await signIn(email, password);
@@ -19,8 +20,9 @@ const Login = () => {
   };
 
   return (
-    <div className="p-4 md:p-10 lg:p-16 mt-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-32">
+    <div className="p-4 md:p-10 lg:p-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-24">
+        {/* Login Form */}
         <div className="bg-white rounded-lg shadow-lg p-10 flex items-center justify-center">
           <div className="w-full">
             <h2 className="text-3xl font-semibold text-primary mb-6 text-center">Login</h2>
@@ -46,7 +48,9 @@ const Login = () => {
                 Sign In
               </button>
             </form>
+
             {message && <p className="mt-4 text-center text-accentred">{message}</p>}
+
             <div className="text-center mt-4">
               <Link to="/register" className="text-primary font-bold">
                 Don't have an account yet? Sign up!
@@ -54,6 +58,7 @@ const Login = () => {
             </div>
           </div>
         </div>
+        {/* Image on right side of the form */}
         <div className="flex items-center justify-center">
           <img
             src="/img/bg-illustration-red.jpeg"

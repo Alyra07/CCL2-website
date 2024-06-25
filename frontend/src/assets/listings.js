@@ -1,5 +1,6 @@
 import { supabase } from "../supabaseClient";
 
+// Fetch all listings from supabase (ListMain)
 export const fetchAllListings = async () => {
     try {
       const response = await supabase
@@ -18,6 +19,7 @@ export const fetchAllListings = async () => {
     }
 };
 
+// Fetch a single listing from supabase by ID (DetailsPage)
 export const fetchListingById = async (id) => {
   try {
       const { data, error } = await supabase
@@ -38,6 +40,7 @@ export const fetchListingById = async (id) => {
   }
 };
 
+// Update a listing data in supabase by ID (DetailsListing)
 export const updateListing = async (id, updatedFields) => {
   try {
     const { data, error } = await supabase

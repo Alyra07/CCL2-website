@@ -20,6 +20,7 @@ const App = () => {
     <Router>
       <div className="flex flex-col min-h-screen">
         <NavBar />
+      {/* pages always fill the space underneath NavBar */}
         <div className="flex-grow">
           <Routes>
             <Route exact path="/" element={<HomePage />} />

@@ -104,6 +104,7 @@ const ListMain = () => {
     setFilteredListings(filtered);
   };
 
+  // Handle click on ListingCard - navigate to DetailsPage
   const handleListingClick = (id) => {
     navigate(`/list/${id}`);
   };
@@ -111,7 +112,7 @@ const ListMain = () => {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-
+  // Calculate the index of the first listing on the current page
   const startIndex = (currentPage - 1) * listingsPerPage;
   const currentListings = filteredListings.slice(startIndex, startIndex + listingsPerPage);
 
@@ -130,6 +131,7 @@ const ListMain = () => {
           initialValues={searchCriteria}
         />
       </div>
+      {/* ListingCard grid 3 cols - max 9 listings per page */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {currentListings.length === 0 ? (
           <p className="col-span-full text-lg text-center">
@@ -146,6 +148,7 @@ const ListMain = () => {
           ))
         )}
       </div>
+      {/* Pagination */}
       {filteredListings.length > listingsPerPage && (
         <div className="flex justify-center mt-8">
           <Pagination
