@@ -3,7 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
 import ListingCard from '../components/ListingCard';
-import '../index.css';
+// MUI Icons & components
+import Slide from '@mui/material/Slide';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 const Profile = () => {
   const { user } = useUser();
@@ -17,6 +22,12 @@ const Profile = () => {
   const [isEditingSurname, setIsEditingSurname] = useState(false);
   const [newName, setNewName] = useState('');
   const [newSurname, setNewSurname] = useState('');
+  // ListingCard slider states
+  const [slideIn, setSlideIn] = useState(true);
+  const [slideDirection, setSlideDirection] = useState('right');
+  const [currentPage, setCurrentPage] = useState(0);
+  const maxListingsPerPage = 4;
+  const totalPages = Math.ceil(listings.length / maxListingsPerPage);
 
   const profileImages = [
     '/profile/profile-img1.png',
@@ -51,10 +62,10 @@ const Profile = () => {
       setProfileName(data.name);
       setNewName(data.name);
       setNewSurname(data.surname);
-      // setMessage('profile fetched successfully');
     }
   };
 
+  // Fetch user listings
   const fetchUserListings = async () => {
     try {
       const { data, error } = await supabase
@@ -73,10 +84,12 @@ const Profile = () => {
     }
   };
 
+  // Navigate to listing details page
   const handleListingClick = (id) => {
     navigate(`/profile/listing/${id}`);
   };
 
+  // Update profile image
   const handleImageChange = async () => {
     try {
       const { data, error } = await supabase
@@ -95,17 +108,18 @@ const Profile = () => {
     }
   };
 
+  // Handle name and surname change
   const handleNameAndSurnameChange = async () => {
     try {
       const { data, error } = await supabase
         .from('users')
         .update({ name: newName, surname: newSurname })
         .eq('email', user.email);
-  
+
       if (error) {
         throw error;
       }
-  
+
       setProfile(prevProfile => ({ ...prevProfile, name: newName, surname: newSurname }));
       setProfileName(newName);
       setIsEditingName(false);
@@ -116,6 +130,22 @@ const Profile = () => {
     }
   };
 
+  // Handle arrow click for sliding listings
+  const handleArrowClick = (direction) => {
+    const increment = direction === 'left' ? -1 : 1;
+    let newPage = currentPage + increment;
+    if (newPage >= totalPages) {
+      newPage = 0; // Loop back to the first page if we go over
+    } else if (newPage < 0) {
+      newPage = totalPages - 1; // Loop to the last page if we go below 0
+    }
+    setCurrentPage(newPage);
+  };
+  // set ListingCard slider states - Listings to display on current page
+  const startIndex = currentPage * maxListingsPerPage;
+  const endIndex = startIndex + maxListingsPerPage;
+  const listingsToDisplay = listings.slice(startIndex, endIndex);
+
   return (
     <div className="pt-4 md:pt-10 lg:pt-16">
       <div className="text-center">
@@ -125,10 +155,8 @@ const Profile = () => {
       </div>
       {/* Display Profile if profile is set */}
       {profile && (
-        <div className="flex flex-col lg:flex-row mx-4 md:mx-12 justify-center
-              bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full">
-          {/* Display Profile Data (lg:left col) */}
-          <div className="flex flex-col lg:w-1/3 md:mb-2">
+        <div className="flex flex-col lg:flex-row md:mx-12 justify-center bg-tertiary p-2 lg:p-8 my-2 lg:my-4 rounded-xl lg:rounded-full">
+          <div className="flex flex-col lg:w-2/5 md:mb-2 justify-center">
             <p className="text-accentred text-center text-lg">{message}</p>
             {/* Profile Image */}
             <div className="text-center mb-4">
@@ -172,7 +200,7 @@ const Profile = () => {
                   )}
                 </p>
                 <p className="text-xl">
-                <strong>Surname:  </strong>{isEditingSurname ? (
+                  <strong>Surname:  </strong>{isEditingSurname ? (
                     <input
                       type="text"
                       value={newSurname}
@@ -183,7 +211,7 @@ const Profile = () => {
                     profile.surname
                   )}
                 </p>
-                {/* Single Edit/Save Button */}
+                {/* Edit/Save Name Button */}
                 <button
                   onClick={() => {
                     if (isEditingName || isEditingSurname) {
@@ -200,35 +228,74 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
-          {/* User Listings (lg: right col) */}
+          {/* User Listings */}
           <div className="flex flex-col justify-center items-center mt-4 md:mt-0 mx-auto lg:w-2/3">
             <h2 className="font-bold text-primary text-2xl mb-2 mt-2 lg:mt-0">Your Places</h2>
             <hr className="w-1/2 border border-secondary mb-4" />
+            {/* ListingCard gallery with arrow buttons */}
             {Array.isArray(listings) && listings.length > 0 ? (
-              // ListingCard Grid
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  {listings.map((listing) => (
-                    <ListingCard
-                      key={listing.id}
-                      listing={listing}
-                      user={user}
-                      handleClick={handleListingClick}
-                      showAddFavorite={false} // hide AddFavorite button
-                    />
-                  ))}
-                </div>
-          
+              <Box
+                className="listing-grid"
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }, // Updated for 2x2 grid on mobile and 1 row of 4 listings on large screens
+                  gap: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    gridColumn: { xs: '1 / span 2', lg: '1 / span 4' }, // Updated to span 4 columns on large screens
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <IconButton onClick={() => handleArrowClick('left')}>
+                    <ArrowBackIosRoundedIcon />
+                  </IconButton>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: { xs: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }, // Repeated for consistency
+                      gap: 2,
+                      width: '100%',
+                    }}
+                  >
+                    {listingsToDisplay.map((listing) => (
+                      <Slide
+                        key={listing.id}
+                        in={slideIn}
+                        direction={slideDirection}
+                        mountOnEnter
+                        unmountOnExit
+                      >
+                        <Box>
+                          <ListingCard
+                            listing={listing}
+                            user={user}
+                            handleClick={handleListingClick}
+                            showAddFavorite={false}
+                          />
+                        </Box>
+                      </Slide>
+                    ))}
+                  </Box>
+                  <IconButton onClick={() => handleArrowClick('right')}>
+                    <ArrowForwardIosRoundedIcon />
+                  </IconButton>
+                </Box>
+              </Box>
             ) : (
               <p className="text-lg text-gray-700">You have no listings yet.</p>
             )}
+
             {/* Add listing Button */}
             <div className="mb-4 mt-6 text-center">
               <Link
                 to="/add"
                 className="bg-accent text-white py-2 px-4 rounded-lg hover:bg-red-300 transition duration-300"
               >
-                {listings.length > 0 ? "Add Listing" : "Become A Host"}
+                {listings.length > 0 ? 'Add Listing' : 'Become A Host'}
               </Link>
             </div>
           </div>
