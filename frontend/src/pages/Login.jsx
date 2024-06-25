@@ -15,7 +15,8 @@ const Login = () => {
     if (error) {
       setMessage(`Sign in failed: ${error.message}`);
     } else {
-      navigate("/");
+      // Redirect to previous page after successful login
+      navigate(-1); 
     }
   };
 

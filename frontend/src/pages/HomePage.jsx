@@ -12,6 +12,7 @@ const HomePage = () => {
   useEffect(() => {
     const getData = async () => {
       try {
+        // Fetch all listings from supabase (auth.js)
         const data = await fetchAllListings();
 
         // Extract countries and count listings per country
@@ -54,21 +55,25 @@ const HomePage = () => {
   };
 
   return (
-    <div className="">
+    <div>
       <div>
+        {/* Header with image */}
         <header className="text-center w-full">
           <div className="relative">
-            {/* Header image */}
             <img 
               src="/img/bg-illustration-red.jpeg" 
               alt="Travel" 
               className="w-full h-64 object-cover" 
               onError={(e) => e.target.src = '/img/bg-bedroom.jpg'}
             />
+            {/* Website title with SearchBar */}
             <div className="flex flex-col p-4 absolute inset-0 bg-dark-gray bg-opacity-65 items-center justify-center">
-              <h1 className="flex flex-col text-center mt-8 text-4xl font-bold text-white py-6 md:py-10">
-                Hello World! This is my travel website.
+              <h1 className="flex flex-col text-center mt-12 mb-6 text-4xl font-bold text-white">
+                Welcome to Lodgify!
               </h1>
+              <p className="hidden md:block text-white text-lg mb-6">
+                Find your stay on this awesome travel platform.
+              </p>
               <SearchBar 
                 onSearch={handleSearch} 
                 countries={countries} // list of all countries
@@ -77,8 +82,10 @@ const HomePage = () => {
             </div>
           </div>
         </header>
+        {/* Popular places section */}
         <section className="w-full max-w-screen-lg mt-4 mb-8 mx-auto py-8 px-4">
-          <h2 className="text-primary text-2xl font-semibold mb-6 text-center">Popular Places</h2>
+          <h2 className="text-primary text-2xl font-semibold mb-4 text-center">Popular Places</h2>
+          {/* popularCountries grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {popularCountries.map(({ country }) => (
               <div key={country} className="bg-white shadow-md rounded-lg overflow-hidden">
@@ -88,6 +95,7 @@ const HomePage = () => {
                     alt={country} 
                     className="w-full h-64 object-cover" 
                     onError={(e) => e.target.src = '/img/placeholder.jpg'}
+                    // predefined images for some example countries, but use a placeholder image if needed
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <h3 className="text-2xl text-white font-semibold">{country}</h3>
@@ -108,6 +116,7 @@ const HomePage = () => {
           </div>
         </section>
       </div>
+      {/* Footer component only on HomePage just for styles :) */}
       <Footer />
     </div>
   );

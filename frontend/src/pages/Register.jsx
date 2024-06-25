@@ -64,7 +64,7 @@ const Register = () => {
           }
 
           console.log(`Sign up successful: ${user.email}. ${profileMessage}`);
-          navigate('/');
+          navigate('/profile'); // Redirect to profile page after successful sign up
         } catch (profileError) {
           setMessage(`Sign up successful, but profile creation failed: ${profileError.message}`);
         }

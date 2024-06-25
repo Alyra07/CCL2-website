@@ -73,14 +73,14 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
           min={1}
           value={guests}
           onChange={(e) => setGuests(e.target.value)}
-          className='w-24 p-1 border-2 border-secondary rounded-lg ml-2'
+          className='w-24 p-1 border-2 border-secondary rounded-lg md:ml-2'
         />
         <input
           type="date"
           placeholder="Start Date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          className='p-1 border-2 border-secondary rounded-lg lg:ml-2 md:ml-2'
+          className='p-1 border-2 border-secondary rounded-lg md:ml-2'
         />
         <input
           type="date"
@@ -91,7 +91,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         />
         <button
           onClick={handleSearch}
-          className='text-md text-white py-2 px-4 ml-4 md:ml-0 lg:ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
+          className='text-md text-white py-2 px-4 ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
           <TravelExploreRoundedIcon fontSize='medium' className='' />
           
         </button>
