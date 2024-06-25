@@ -8,15 +8,16 @@ import TravelExploreRoundedIcon from '@mui/icons-material/TravelExploreRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 
 const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }) => {
-  const [country, setCountry] = useState(initialValues?.country || 'all');
-  const [guests, setGuests] = useState(initialValues?.guests || '');
-  const [startDate, setStartDate] = useState(initialValues?.startDate || '');
-  const [endDate, setEndDate] = useState(initialValues?.endDate || '');
+  // Initialize state with values from localStorage or default values
+  const [country, setCountry] = useState(localStorage.getItem('country') || initialValues?.country || 'all');
+  const [guests, setGuests] = useState(localStorage.getItem('guests') || initialValues?.guests || '');
+  const [startDate, setStartDate] = useState(localStorage.getItem('startDate') || initialValues?.startDate || '');
+  const [endDate, setEndDate] = useState(localStorage.getItem('endDate') || initialValues?.endDate || '');
   // Filter states (in Popper)
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [priceRange, setPriceRange] = useState(JSON.parse(localStorage.getItem('priceRange')) || [0, 1000]);
+  const [selectedAmenities, setSelectedAmenities] = useState(JSON.parse(localStorage.getItem('selectedAmenities')) || []);
   
   // Handle initialization of country when countries array changes
   useEffect(() => {
@@ -24,16 +25,16 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
       setCountry('all');
     }
   }, [countries]);
-  
-  // Update state when initialValues change
-  useEffect(() => {
-    if (initialValues) {
-      setCountry(initialValues.country || 'all');
-      setGuests(initialValues.guests || '');
-      setStartDate(initialValues.startDate || '');
-      setEndDate(initialValues.endDate || '');
-    }
-  }, [initialValues]);
+
+    // Save to localStorage on update
+    useEffect(() => {
+      localStorage.setItem('country', country);
+      localStorage.setItem('guests', guests);
+      localStorage.setItem('startDate', startDate);
+      localStorage.setItem('endDate', endDate);
+      localStorage.setItem('priceRange', JSON.stringify(priceRange));
+      localStorage.setItem('selectedAmenities', JSON.stringify(selectedAmenities));
+    }, [country, guests, startDate, endDate, priceRange, selectedAmenities]);
   
   // Handler for filter Popper open/close
   const handlePopperClick = (event) => {

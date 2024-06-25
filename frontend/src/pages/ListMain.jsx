@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchAllListings } from '../assets/listings';
 import { useUser } from '../assets/UserContext';
 import SearchBar from '../components/SearchBar';
@@ -8,12 +8,12 @@ import Pagination from '@mui/material/Pagination';
 
 const ListMain = () => {
   const { user } = useUser();
-  const location = useLocation();
-  const [searchCriteria, setSearchCriteria] = useState(location.state?.searchCriteria || {});
   const [listings, setListings] = useState([]);
-  const [filteredListings, setFilteredListings] = useState(location.state?.filteredListings || []);
   const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
+  // SearchBar criteria states
+  const [searchCriteria, setSearchCriteria] = useState({});
+  const [filteredListings, setFilteredListings] = useState([]);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ const ListMain = () => {
         const uniqueCountries = [...new Set(data.map(listing => listing.country).filter(Boolean))];
         setCountries(uniqueCountries);
 
-        if (!location.state?.filteredListings) {
+        if (!filteredListings) {
           setFilteredListings(data);
         }
       } catch (error) {
@@ -39,19 +39,13 @@ const ListMain = () => {
     };
 
     getData();
-  }, [location.state?.filteredListings]);
+  }, [filteredListings]);
 
   useEffect(() => {
     filterListings();
   }, [searchCriteria, listings]);
 
-  useEffect(() => {
-    if (location.state && location.state.searchCriteria && location.state.filteredListings) {
-      setSearchCriteria(searchCriteria);
-      setFilteredListings(filteredListings);
-    }
-  }, [location.state]);
-
+  // Filter listings based on main SearchBar criteria
   const filterListings = () => {
     const { country, guests, startDate, endDate } = searchCriteria;
     // Filter listings based on main search criteria
@@ -65,6 +59,7 @@ const ListMain = () => {
     });
 
     setFilteredListings(filtered);
+    localStorage.setItem('filteredListings', JSON.stringify(filtered));
   };
 
   // Filter listings based on price & amenities filter criteria
@@ -81,6 +76,8 @@ const ListMain = () => {
     });
 
     setFilteredListings(filtered);
+    localStorage.setItem('filteredListings', JSON.stringify(filtered));
+    localStorage.setItem('searchCriteria', JSON.stringify(filterCriteria));
   };
 
   // Handle click on ListingCard (pass listing with id to DetailsPage)
