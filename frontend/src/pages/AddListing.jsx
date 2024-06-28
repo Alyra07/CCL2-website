@@ -1,44 +1,38 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useUser } from '../assets/UserContext.jsx';
+import AmenityIcon from '../components/AmenityIcon.jsx';
 import ReactQuill from 'react-quill'; // ignore warning in console (update soon)
 import 'react-quill/dist/quill.snow.css';
 
 const AddListing = () => {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const [listingDetails, setListingDetails] = useState({
+  const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const amenitiesList = ['wifi', 'cooler', 'kitchen', 'parking', 'pool'];
+  // initial form state
+  const initialListingDetails = {
     name: '',
     address: '',
     country: '',
     price: '',
     guests: '',
     description: '',
-    amenities: {
-      wifi: false,
-      cooler: false,
-      kitchen: false,
-      parking: false,
-      pool: false
-    },
+    amenities: amenitiesList.reduce((acc, amenity) => ({ ...acc, [amenity]: false }), {}),
     availability: {
       start: '',
       end: ''
     }
-  });
-  const [message, setMessage] = useState('');
+  };
+  const [listingDetails, setListingDetails] = useState(initialListingDetails);
 
+  // Handle various form input changes
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (name in listingDetails.amenities) {
-      setListingDetails({
-        ...listingDetails,
-        amenities: {
-          ...listingDetails.amenities,
-          [name]: checked
-        }
-      });
-    } else if (name === "start" || name === "end") {
+    const { name, value } = e.target;
+    if (name === "start" || name === "end") {
       setListingDetails({
         ...listingDetails,
         availability: {
@@ -52,6 +46,16 @@ const AddListing = () => {
         [name]: value
       });
     }
+  };
+
+  const handleAmenityChange = (amenity) => {
+    setListingDetails((prevDetails) => ({
+      ...prevDetails,
+      amenities: {
+        ...prevDetails.amenities,
+        [amenity]: !prevDetails.amenities[amenity]
+      }
+    }));
   };
 
   const handleDescriptionChange = (value) => {
@@ -73,9 +77,10 @@ const AddListing = () => {
     const uploadedImagePaths = [];
 
     for (const image of images) {
+      // Generate random filename for each image
       const fileExt = image.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`; // Generate a unique file name
-
+      const fileName = `${Math.random()}.${fileExt}`;
+      // Upload image to Supabase storage
       const { data, error } = await supabase.storage
         .from('images')
         .upload(fileName, image);
@@ -93,19 +98,24 @@ const AddListing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // can't submit if user is not logged in
     if (!user) {
       setMessage('User is not logged in.');
+      setIsSuccess(false);
       return;
     }
 
     setMessage('Uploading images...');
+    setIsSuccess(false);
+    // Upload images first
     try {
       const imagePaths = await uploadImages();
       if (!imagePaths) {
         setMessage('Error uploading images.');
+        setIsSuccess(false);
         return;
       }
-
+      // Add listing details to Supabase
       const { data, error } = await supabase
         .from('listings')
         .insert([
@@ -118,38 +128,24 @@ const AddListing = () => {
 
       console.log('Listing added:', data);
       setMessage('Listing added successfully.');
-      setListingDetails({
-        name: '',
-        address: '',
-        country: '',
-        price: '',
-        guests: '',
-        description: '',
-        amenities: {
-          wifi: false,
-          cooler: false,
-          kitchen: false,
-          parking: false,
-          pool: false
-        },
-        availability: {
-          start: '',
-          end: ''
-        }
-      });
+      setIsSuccess(true);
+      setListingDetails(initialListingDetails); // Reset form fields after upload
       setImages([]);
+
+      // Redirect to /profile after a few seconds
+      setTimeout(() => {
+        navigate('/profile');
+      }, 2000);
     } catch (error) {
       console.error('Error adding listing:', error.message);
       setMessage('Error adding listing.');
+      setIsSuccess(false);
     }
   };
 
   return (
     <div className="flex flex-col bg-background p-4 md:p-10 lg:p-16">
       <h1 className="text-center text-3xl font-semibold text-primary mb-4 md:mb-6 sm:mb-6">Publish Your Place</h1>
-      <p className="text-center text-lg text-accent">
-        {message}
-      </p>
       <form className="flex flex-col md:flex-row md:gap-6 flex-grow" onSubmit={handleSubmit}>
         {/* Details Section */}
         <div className="flex flex-col md:w-1/2 mt-2">
@@ -161,29 +157,23 @@ const AddListing = () => {
           </div>
           <div className="mb-2">
             <label htmlFor="address" className="block mb-1">Address:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="address" 
-            id="address" value={listingDetails.address} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="address" id="address" value={listingDetails.address} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="country" className="block mb-1">Country:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="country" 
-            id="country" value={listingDetails.country} onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="text" name="country" id="country" value={listingDetails.country} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="price" className="block mb-1">Price/night:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="price" 
-            id="price" value={listingDetails.price} min={0}
-            onChange={handleChange} required />
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="price" id="price" value={listingDetails.price} min={0} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="guests" className="block mb-1">Guests:</label>
-            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="guests" 
-            id="guests" value={listingDetails.guests} min={1}
-            onChange={handleChange} required/>
+            <input className="p-2 border-2 border-tertiary rounded-lg w-full" type="number" name="guests" id="guests" value={listingDetails.guests} min={1} onChange={handleChange} required />
           </div>
           <div className="mb-2">
             <label htmlFor="description" className="block mb-1">Description:</label>
-            <ReactQuill // Rich text editor
+            <ReactQuill // Rich text editor for description
               className="p-2 border-2 border-tertiary rounded-lg w-full"
               name="description"
               id="description"
@@ -217,26 +207,30 @@ const AddListing = () => {
           <div className="my-2">
             <h2 className="text-xl mb-2">Amenities</h2>
             <hr className="border border-secondary mb-4" />
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {Object.keys(listingDetails.amenities).map((amenity) => (
-                <div key={amenity} className="flex items-center">
-                  <input
-                    className="mr-2"
-                    type="checkbox"
-                    name={amenity}
-                    id={amenity}
-                    checked={listingDetails.amenities[amenity]}
-                    onChange={handleChange}
-                  />
-                  <label htmlFor={amenity} className="capitalize">{amenity}</label>
-                </div>
+            <div className='my-4 gap-4 flex flex-wrap'>
+              {amenitiesList.map((amenity) => (
+                <button
+                  key={amenity}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAmenityChange(amenity);
+                  }}
+                  className={`p-4 rounded-lg transition duration-300 
+                    ${listingDetails.amenities[amenity] ? 'bg-primary text-white' : 'bg-tertiary text-gray-700 hover:bg-secondary hover:text-white'}`}
+                >
+                  <AmenityIcon amenity={amenity} />
+                  <span className='hidden md:inline ml-2'>{amenity.charAt(0).toUpperCase() + amenity.slice(1)}</span>
+                </button>
               ))}
             </div>
           </div>
+          <p className={`text-center text-lg ${isSuccess ? 'text-green-500' : 'text-accentred'}`}>
+            {message}
+          </p>
           {/* Submit Button */}
           <div className="mt-4">
             <button
-              className="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg w-full"
+              className="bg-accent hover:bg-red-300 text-white py-2 px-4 rounded-lg w-full"
               type="submit"
             >
               Publish Listing

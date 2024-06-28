@@ -31,7 +31,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
     setAnchorEl(event.currentTarget);
     setOpen((prevOpen) => !prevOpen);
   };
-
+  // Handler for Price Range Slider
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
   };
@@ -62,9 +62,15 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
         {/* main SearchBar filters (HomePage & ListMain) */}
         <select value={country} onChange={(e) => setCountry(e.target.value)}
           className='w-64 p-3 border-2 border-secondary rounded-lg'>
-          <option value="all">Just take me away</option>
+          <option // default option (all countries)
+          value="all" className='bg-background'>
+            Just take me away
+          </option>
+          {/* map other countries in dropdown menu */}
           {countries.map((c, index) => (
-            <option key={index} value={c}>{c}</option>
+            <option key={index} value={c} className='bg-background'> 
+              {c} 
+            </option>
           ))}
         </select>
         <input
@@ -89,11 +95,11 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
           onChange={(e) => setEndDate(e.target.value)}
           className='p-1 border-2 border-secondary rounded-lg lg:ml-2'
         />
+        {/* Main Search button */}
         <button
           onClick={handleSearch}
           className='text-md text-white py-2 px-4 ml-4 rounded-lg bg-accent hover:bg-red-300 transition duration-300'>
           <TravelExploreRoundedIcon fontSize='medium' className='' />
-          
         </button>
         {/* Additional filters when showFilters is true (ListMain) */}
         {showFilters && (
@@ -129,7 +135,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
                   }}
                   className='p-4 mb-4 mt-2'
                 />
-
+                {/* Amenity filter */}
                 <label className="">Amenities</label>
                 <div className='my-4 gap-4 flex flex-wrap'>
                   {['wifi', 'cooler', 'kitchen', 'parking', 'pool'].map((amenity) => (
@@ -144,7 +150,7 @@ const SearchBar = ({ onSearch, onFilter, countries, initialValues, showFilters }
                     </button>
                   ))}
                 </div>
-
+                {/* Filter button (in Popper) */}
                 <button
                   onClick={handleApplyFilter}
                   className='text-white p-2 mt-4 lg:mt-6 rounded-lg bg-accent hover:bg-red-300 transition duration-300 mx-auto'>
